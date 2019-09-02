@@ -6,6 +6,7 @@ application up and running.
 Things you may want to cover:
 
 * Ruby version
+	ruby-2.5.1
 
 * System dependencies
 
@@ -21,4 +22,6 @@ Things you may want to cover:
 
 * Deployment instructions
 
+* Postman Collection
+	https://documenter.getpostman.com/view/4204999/SVfTNSj4 
 * ...
