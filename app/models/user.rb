@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+	rolify
 	# encrypt password}
 	has_secure_password
 
