@@ -22,7 +22,15 @@ class UsersController < ApplicationController
   def user_params
   	params.permit(
   		:name, 
-  		:email, 
+  		:email,
+      :approved,
+      :dob,
+      :gender,
+      :identity_image,
+      :identity_number,
+      :organizational_status,
+      :phone,
+      :selfie_image,
   		:password, 
   		:password_confirmation
 	)
