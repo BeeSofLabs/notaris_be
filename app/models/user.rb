@@ -4,13 +4,16 @@
 #
 #  id                    :bigint(8)        not null, primary key
 #  approved              :boolean          default(FALSE)
+#  dob                   :date
 #  email                 :string
 #  gender                :integer
+#  identity_image        :string
 #  identity_number       :string
 #  name                  :string
 #  organizational_status :integer          default("perorangan")
 #  password_digest       :string
 #  phone                 :string
+#  selfie_image          :string
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
 #
