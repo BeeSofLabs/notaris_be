@@ -29,7 +29,7 @@ gem 'bcrypt', '~> 3.1.7'
 gem 'jwt'
 gem 'dotenv-rails'
 gem "rolify"
-
+gem 'rails_admin', '~> 2.0'
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 
