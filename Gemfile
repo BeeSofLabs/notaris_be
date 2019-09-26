@@ -30,6 +30,7 @@ gem 'jwt'
 gem 'dotenv-rails'
 gem "rolify"
 gem 'rails_admin', '~> 2.0'
+gem 'httparty'
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 
