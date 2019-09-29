@@ -31,6 +31,8 @@ gem 'dotenv-rails'
 gem "rolify"
 gem 'rails_admin', '~> 2.0'
 gem 'httparty'
+gem 'carrierwave', '~> 2.0'
+gem 'mini_magick'
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 
