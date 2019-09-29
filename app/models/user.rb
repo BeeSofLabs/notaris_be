@@ -25,7 +25,7 @@ class User < ApplicationRecord
 	has_secure_password
 
 	# Validations
-	validates_presence_of :name, :email, :password_digest
+	validates_presence_of :name, :email, :phone, :password_digest
 	validates_uniqueness_of :email
 	validates_uniqueness_of :phone
 
