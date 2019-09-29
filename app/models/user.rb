@@ -13,6 +13,7 @@
 #  organizational_status :integer          default("perorangan")
 #  password_digest       :string
 #  phone                 :string
+#  privy_token           :string
 #  selfie_image          :string
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
@@ -32,4 +33,8 @@ class User < ApplicationRecord
 
 	mount_uploader :identity_image, ImageUploader 
 	mount_uploader :selfie_image, 	ImageUploader
+
+	def insert_privy_token(privy_token)
+		update!(privy_token: privy_token)
+	end
 end

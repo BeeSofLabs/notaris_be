@@ -13,6 +13,7 @@
 #  organizational_status :integer          default("perorangan")
 #  password_digest       :string
 #  phone                 :string
+#  privy_token           :string
 #  selfie_image          :string
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
