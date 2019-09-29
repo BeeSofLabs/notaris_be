@@ -29,4 +29,7 @@ class User < ApplicationRecord
 
 	enum organizational_status: ["perorangan", "perusahaan"]
 	enum gender: ["laki-laki", "perempuan"]
+
+	mount_uploader :identity_image, ImageUploader 
+	mount_uploader :selfie_image, 	ImageUploader
 end
