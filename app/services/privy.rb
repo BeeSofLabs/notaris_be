@@ -6,18 +6,19 @@ class Privy
 				:identity,
 				:name,
 				:dob,
-				:token
+				:token,
+				:user
 
 
-	def initialize(opts)
-		@email 		= opts[:email]
-		@phone 		= opts[:phone]
-		@selfie_image 	= opts[:selfie_image] 
-		@identity_image	= opts[:identity_image]
-		@identity 	= opts[:identity]
-		@name 		= opts[:name]
-		@dob 		= opts[:dob],
-		@token		= opts[:token]
+	def initialize(user)
+		@user 				= user
+		@email 				= user.email
+		@phone 				= user.phone
+		@selfie_image 		= user.selfie_image 
+		@identity_image		= user.identity_image
+		@identity 			= user.identity_number
+		@dob 				= user.dob
+		@name 				= user.name
 	end
 
 	def headers
@@ -36,15 +37,14 @@ class Privy
 			selfie: selfie_image,
 			ktp: identity_image,
 			identity: {
-				"nik": identity,
-				"nama": name,
-				"tanggalLahir": dob
+				nik: identity,
+				nama: name,
+				tanggalLahir: dob.present? ? dob.strftime("%Y-%m-%d") : dob
 			}
 		}
-
 		data = HTTParty.post(
 			"#{ENV["PRIVY_REGISTRATION_URL"]}",
-			body: body,
+			body: body.as_json,
 			headers: headers
 		)
 	end
