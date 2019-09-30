@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  require 'rest-client'
   include Response
   include ExceptionHandler
   protect_from_forgery unless: -> { request.format.json? }
