@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_01_231100) do
+ActiveRecord::Schema.define(version: 2019_10_01_233308) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,6 +19,26 @@ ActiveRecord::Schema.define(version: 2019_10_01_231100) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "fidusia_orders", force: :cascade do |t|
+    t.string "proof_of_ownership"
+    t.string "owner"
+    t.string "on_behalf_of"
+    t.string "number_of_evidence"
+    t.datetime "publication_date"
+    t.string "machine_number"
+    t.string "chassis_number"
+    t.string "brand"
+    t.string "tipe"
+    t.string "seri"
+    t.string "collateral_value"
+    t.string "binding_value"
+    t.string "imageable_type"
+    t.bigint "imageable_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["imageable_type", "imageable_id"], name: "index_fidusia_orders_on_imageable_type_and_imageable_id"
   end
 
   create_table "orders", force: :cascade do |t|
