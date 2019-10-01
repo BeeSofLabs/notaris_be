@@ -9,6 +9,21 @@ class UsersController < ApplicationController
 		json_response(response, :created)
 	end
 
+  def privy_status
+    unless current_user.approved == true
+      unless current_user.privy_token.present?
+        response = {msg: "privy token not found", privy: {}}
+      else
+        res = Privy.new(current_user).registration_status
+        current_user.privy_approved if privy_approved?(res)
+        response = {msg: res["data"]["status"], privy: res}
+      end
+    else
+      response = {msg: "approved", privy: {}}
+    end
+    json_response(response, :ok)
+  end
+
 	def show
 		json_response(current_user)
 	end
@@ -45,6 +60,10 @@ class UsersController < ApplicationController
   		:password_confirmation, 
   		:address
 	)
+  end
+
+  def privy_approved?(res)
+    res["code"] == 201 && res["data"]["status"] ==  "verified"
   end
 
 end

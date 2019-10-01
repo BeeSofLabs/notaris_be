@@ -38,4 +38,8 @@ class User < ApplicationRecord
 	def insert_privy_token(privy_token)
 		update!(privy_token: privy_token)
 	end
+
+	def privy_approved
+		update!(approved: true)
+	end
 end
