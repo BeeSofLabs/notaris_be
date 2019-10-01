@@ -6,7 +6,7 @@ class Privy
 				:identity,
 				:name,
 				:dob,
-				:token,
+				:privy_token,
 				:user
 
 
@@ -19,6 +19,7 @@ class Privy
 		@identity 			= user.identity_number
 		@dob 				= user.dob
 		@name 				= user.name
+		@privy_token		= user.privy_token
 	end
 
 	def headers
@@ -52,7 +53,7 @@ class Privy
 	def registration_status
 		# check registration status goes here!
 		body = {
-			"token": token
+			"token": privy_token
 		}
 		data = HTTParty.post(
 			"#{ENV["PRIVY_REGISTRATION_STATUS_URL"]}",
