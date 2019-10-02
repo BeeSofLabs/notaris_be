@@ -17,4 +17,5 @@
 
 class Order < ApplicationRecord
 	has_one :fidusia_order
+	has_one :skmht_order
 end
