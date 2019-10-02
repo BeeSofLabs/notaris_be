@@ -15,4 +15,5 @@
 
 class Collateral < ApplicationRecord
 	belongs_to :order
+	enum :collateral_type => ["bergerak", "tidak bergerak"]
 end
