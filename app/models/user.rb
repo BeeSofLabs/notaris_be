@@ -35,6 +35,8 @@ class User < ApplicationRecord
 	mount_uploader :identity_image, ImageUploader 
 	mount_uploader :selfie_image, 	ImageUploader
 
+	has_many :orders
+
 	def insert_privy_token(privy_token)
 		update!(privy_token: privy_token)
 	end

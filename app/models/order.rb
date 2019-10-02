@@ -21,6 +21,7 @@ class Order < ApplicationRecord
 	has_one :fidusia_order
 	has_one :skmht_order
 	has_many :collaterals
+	belongs_to :notary, class_name: "User", foreign_key: :notary_id
 
 	enum :order_type => ["fidusia", "skmht", "apht", "skmht and apht"]
 end
