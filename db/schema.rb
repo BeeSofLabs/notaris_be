@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_02_224449) do
+ActiveRecord::Schema.define(version: 2019_10_02_225256) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,6 +19,31 @@ ActiveRecord::Schema.define(version: 2019_10_02_224449) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "apht_orders", force: :cascade do |t|
+    t.string "proof_of_ownership"
+    t.string "collateral_value"
+    t.string "owner"
+    t.string "on_behalf_of"
+    t.string "certificate_number"
+    t.datetime "publication_date"
+    t.string "province"
+    t.string "city"
+    t.string "district"
+    t.string "village"
+    t.string "street"
+    t.string "surface_area"
+    t.string "letter_of_measurement"
+    t.datetime "tanggal_gs_su"
+    t.string "land_area_identification_number"
+    t.string "building_land_tax"
+    t.string "nop"
+    t.string "binding_value"
+    t.integer "order_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_apht_orders_on_order_id"
   end
 
   create_table "collaterals", force: :cascade do |t|
