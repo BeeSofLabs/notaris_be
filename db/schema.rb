@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_02_011908) do
+ActiveRecord::Schema.define(version: 2019_10_02_223909) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -56,6 +56,8 @@ ActiveRecord::Schema.define(version: 2019_10_02_011908) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "order_type"
+    t.integer "notary_id"
+    t.index ["notary_id"], name: "index_orders_on_notary_id"
   end
 
   create_table "roles", force: :cascade do |t|

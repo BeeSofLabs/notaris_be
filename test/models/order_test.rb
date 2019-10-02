@@ -8,6 +8,11 @@
 #  status      :integer
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
+#  notary_id   :integer
+#
+# Indexes
+#
+#  index_orders_on_notary_id  (notary_id)
 #
 
 require 'test_helper'
