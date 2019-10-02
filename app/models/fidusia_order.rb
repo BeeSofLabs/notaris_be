@@ -27,5 +27,5 @@
 #
 
 class FidusiaOrder < ApplicationRecord
-	has_one :orderable, as: :orderable
+	belongs_to :order
 end

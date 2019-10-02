@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_02_002204) do
+ActiveRecord::Schema.define(version: 2019_10_02_005926) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,6 +49,7 @@ ActiveRecord::Schema.define(version: 2019_10_02_002204) do
     t.string "orderable_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "order_type"
     t.index ["orderable_type", "orderable_id"], name: "index_orders_on_orderable_type_and_orderable_id"
   end
 
