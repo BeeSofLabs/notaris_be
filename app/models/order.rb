@@ -16,5 +16,5 @@
 #
 
 class Order < ApplicationRecord
-	belongs_to :orderable, polymorphic: true
+	has_one :fidusia_order
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_01_233308) do
+ActiveRecord::Schema.define(version: 2019_10_02_000058) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,6 +38,7 @@ ActiveRecord::Schema.define(version: 2019_10_01_233308) do
     t.bigint "imageable_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "order_id"
     t.index ["imageable_type", "imageable_id"], name: "index_fidusia_orders_on_imageable_type_and_imageable_id"
   end
 

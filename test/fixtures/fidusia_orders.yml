@@ -19,6 +19,7 @@
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  imageable_id       :bigint(8)
+#  order_id           :integer
 #
 # Indexes
 #
