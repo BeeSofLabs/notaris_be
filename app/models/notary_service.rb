@@ -15,5 +15,7 @@
 #
 
 class NotaryService < ApplicationRecord
-	enum :service_type => ["fidusia", "skmht", "apht", "skmht and apht"] 
+	enum :service_type => ["fidusia", "skmht", "apht", "skmht and apht"]
+
+	belongs_to :user 
 end
