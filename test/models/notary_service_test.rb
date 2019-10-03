@@ -7,6 +7,11 @@
 #  service_type :integer
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  user_id      :integer
+#
+# Indexes
+#
+#  index_notary_services_on_user_id  (user_id)
 #
 
 require 'test_helper'
