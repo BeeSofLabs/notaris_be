@@ -36,7 +36,7 @@ class User < ApplicationRecord
 	mount_uploader :selfie_image, 	ImageUploader
 
 	has_many :orders
-	has_one :notary_service
+	has_many :notary_services
 
 	def insert_privy_token(privy_token)
 		update!(privy_token: privy_token)
