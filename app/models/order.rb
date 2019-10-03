@@ -25,4 +25,14 @@ class Order < ApplicationRecord
 	belongs_to :notary, class_name: "User", foreign_key: :notary_id
 
 	enum :order_type => ["fidusia", "skmht", "apht", "skmht and apht"]
+	enum :status => ["cancelled", "pending", "completed", "expired"]
+
+	after_create :assign_default_status
+
+
+	private
+
+		def assign_default_status
+			self.status = "pending" if self.status.blank?
+		end
 end
