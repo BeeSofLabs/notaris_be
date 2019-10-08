@@ -29,6 +29,35 @@ class Order < ApplicationRecord
 
 	after_create :assign_default_status
 
+	def self.fidusia_order(current_user, opts, fidusia_params)
+		ActiveRecord::Base.transaction do
+			order = parent_order(current_user, opts)
+			order.create_fidusia_order!(fidusia_params)
+		end
+	end
+
+	def self.skmht_order(current_user, opts, skmht_params)
+		ActiveRecord::Base.transaction do
+			order = parent_order(current_user, opts)
+			order.create_skmht_order!(skmht_params)
+		end
+	end
+
+	def self.apht_order(current_user, opts, apht_params)
+		ActiveRecord::Base.transaction do
+			order = parent_order(current_user, opts)
+			order.create_apht_order!(apht_params)
+		end
+	end
+
+	def self.parent_order(current_user, opts)
+		Order.create!(
+			order_type: opts[:order_type],
+			notary_id: opts[:notary_id],
+			grand_total: opts[:notary_service_price],
+			user_id: current_user.id
+		)
+	end
 
 	private
 
