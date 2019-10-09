@@ -6,16 +6,28 @@ class V1::OrdersController < ApplicationController
   def create
       case params[:order_type].downcase
       when "fidusia"
-        order = Order.fidusia_order(current_user, opts, fidusia_params)
-        json_response({message: "order created!", order: order}, :created)
+        if "fidusia" == @notary_service.service_type
+          order = Order.fidusia_order(current_user, opts, fidusia_params)
+          json_response({message: "order created!", order: order}, :created)
+        else
+          json_response({message: "Invalid service", order: {}}, :ok)
+        end
         # relate with fidusia
       when "skmht"
-        order = Order.skmht_order(current_user, opts, skmht_params)
-      	json_response({message: "order created!", order: order}, :created)
+        if "skmht" == @notary_service.service_type
+          order = Order.skmht_order(current_user, opts, skmht_params)
+          json_response({message: "order created!", order: order}, :created)
+        else
+          json_response({message: "Invalid service", order: {}}, :ok)
+        end
         # related with skhmt
       when "apht"
-        order = Order.apht_order(current_user, opts, apht_params)
-        json_response({message: "order created!", order: order}, :created)
+        if "apht" == @notary_service.service_type
+          order = Order.apht_order(current_user, opts, apht_params)
+          json_response({message: "order created!", order: order}, :created)
+        else
+          json_response({message: "Invalid service", order: {}}, :ok)
+        end
         # related with apht
       else
         json_response({message: "invalid order_type", order: {}}, :not_found)
