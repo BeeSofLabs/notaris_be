@@ -33,6 +33,7 @@ class Order < ApplicationRecord
 		ActiveRecord::Base.transaction do
 			order = parent_order(current_user, opts)
 			order.create_fidusia_order!(fidusia_params)
+			return order
 		end
 	end
 
@@ -40,6 +41,7 @@ class Order < ApplicationRecord
 		ActiveRecord::Base.transaction do
 			order = parent_order(current_user, opts)
 			order.create_skmht_order!(skmht_params)
+			return order
 		end
 	end
 
@@ -47,6 +49,7 @@ class Order < ApplicationRecord
 		ActiveRecord::Base.transaction do
 			order = parent_order(current_user, opts)
 			order.create_apht_order!(apht_params)
+			return order
 		end
 	end
 

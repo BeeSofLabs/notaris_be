@@ -28,7 +28,7 @@ class V1::OrdersController < ApplicationController
       {
         order_type: params[:order_type],
         notary_id: @notary.id,
-        notary_servic_price: @notary_service.id
+        notary_service_price: @notary_service.id
       }
     end
 
