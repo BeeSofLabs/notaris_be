@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_25_161835) do
+ActiveRecord::Schema.define(version: 2019_09_29_161243) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,6 +45,7 @@ ActiveRecord::Schema.define(version: 2019_09_25_161835) do
     t.date "dob"
     t.string "identity_image"
     t.string "selfie_image"
+    t.string "privy_token"
   end
 
   create_table "users_roles", force: :cascade do |t|

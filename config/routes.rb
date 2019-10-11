@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   get "sayhello", to: "application#hello"
 	post 'auth/login', to: 'authentication#authenticate'
 	post 'signup', to: 'users#create'
+	post 'privy/status', to: "users#privy_status"
 
 
 end

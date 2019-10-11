@@ -3,9 +3,26 @@ class UsersController < ApplicationController
   	def create
 		user = User.create!(user_params)
 		auth_token = AuthenticateUser.new(user.email, user.password).call
-		response = { message: Message.account_created, auth_token: auth_token}
+    res = Privy.new(user).registration
+    user.insert_privy_token(res["data"]["userToken"]) if res["code"] == 201 && res["data"]["userToken"].present?
+    response = { message: Message.account_created, auth_token: auth_token, privy: res}
 		json_response(response, :created)
 	end
+
+  def privy_status
+    unless current_user.approved == true
+      unless current_user.privy_token.present?
+        response = {msg: "privy token not found", privy: {}}
+      else
+        res = Privy.new(current_user).registration_status
+        current_user.privy_approved if privy_approved?(res)
+        response = {msg: res["data"]["status"], privy: res}
+      end
+    else
+      response = {msg: "approved", privy: {}}
+    end
+    json_response(response, :ok)
+  end
 
 	def show
 		json_response(current_user)
@@ -44,4 +61,9 @@ class UsersController < ApplicationController
   		:address
 	)
   end
+
+  def privy_approved?(res)
+    res["code"] == 201 && res["data"]["status"] ==  "verified"
+  end
+
 end
