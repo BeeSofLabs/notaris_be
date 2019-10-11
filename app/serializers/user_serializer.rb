@@ -19,30 +19,6 @@
 #  updated_at            :datetime         not null
 #
 
-class User < ApplicationRecord
-	rolify
-	# encrypt password}
-	has_secure_password
-
-	# Validations
-	validates_presence_of :name, :email, :phone, :password_digest
-	validates_uniqueness_of :email
-	validates_uniqueness_of :phone
-
-	enum organizational_status: ["perorangan", "perusahaan"]
-	enum gender: ["laki-laki", "perempuan"]
-
-	mount_uploader :identity_image, ImageUploader 
-	mount_uploader :selfie_image, 	ImageUploader
-
-	has_many :orders
-	has_many :notary_services
-
-	def insert_privy_token(privy_token)
-		update!(privy_token: privy_token)
-	end
-
-	def privy_approved
-		update!(approved: true)
-	end
+class UserSerializer < ActiveModel::Serializer
+  attributes :id
 end

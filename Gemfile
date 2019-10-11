@@ -34,6 +34,7 @@ gem 'httparty'
 gem 'carrierwave', '~> 2.0'
 gem 'mini_magick'
 gem 'rest-client'
+gem 'active_model_serializers', '~> 0.10.0'
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 
