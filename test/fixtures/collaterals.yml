@@ -4,6 +4,7 @@
 #
 #  id              :bigint(8)        not null, primary key
 #  collateral_type :integer
+#  price           :decimal(, )      default(0.0)
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  order_id        :integer
