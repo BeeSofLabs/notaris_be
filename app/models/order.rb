@@ -70,7 +70,7 @@ class Order < ApplicationRecord
 	private
 
 		def assign_default_status
-			self.status = "pending" if self.status.blank?
+			self.status = "pending"
 		end
 
 end
