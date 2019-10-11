@@ -126,7 +126,7 @@ class V1::OrdersController < ApplicationController
 
   def collateral_params
     params.permit(
-      :collaterals
+      :collaterals => []
       )
   end
 
