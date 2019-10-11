@@ -53,4 +53,8 @@ class User < ApplicationRecord
 		collateral_owner
 		)
 	end
+
+	def self.notaris
+		user = User.where(roles: "notaris")
+	end
 end
