@@ -6,6 +6,7 @@ Rails.application.routes.draw do
 	post 'auth/login', to: 'authentication#authenticate'
 	post 'signup', to: 'users#create'
 	post 'privy/status', to: "users#privy_status"
+	get 'users/roles', to: "users#roles"
 	namespace :v1 do
 	    post 'orders/create'
 	end
