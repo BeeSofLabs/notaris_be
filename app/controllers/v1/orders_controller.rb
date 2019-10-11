@@ -7,7 +7,7 @@ class V1::OrdersController < ApplicationController
       case params[:order_type].downcase
       when "fidusia"
         if "fidusia" == @notary_service.service_type
-          order = Order.fidusia_order(current_user, opts, fidusia_params)
+          order = Order.fidusia_order(current_user, opts, fidusia_params, collateral_params)
           json_response({message: "order created!", order: order}, :created)
         else
           json_response({message: "Invalid service", order: {}}, :ok)
@@ -15,7 +15,7 @@ class V1::OrdersController < ApplicationController
         # relate with fidusia
       when "skmht"
         if "skmht" == @notary_service.service_type
-          order = Order.skmht_order(current_user, opts, skmht_params)
+          order = Order.skmht_order(current_user, opts, skmht_params, collateral_params)
           json_response({message: "order created!", order: order}, :created)
         else
           json_response({message: "Invalid service", order: {}}, :ok)
@@ -23,7 +23,7 @@ class V1::OrdersController < ApplicationController
         # related with skhmt
       when "apht"
         if "apht" == @notary_service.service_type
-          order = Order.apht_order(current_user, opts, apht_params)
+          order = Order.apht_order(current_user, opts, apht_params, collateral_params)
           json_response({message: "order created!", order: order}, :created)
         else
           json_response({message: "Invalid service", order: {}}, :ok)
@@ -122,6 +122,12 @@ class V1::OrdersController < ApplicationController
       :tanggal_gs_su,
       :village
     )
+  end
+
+  def collateral_params
+    params.permit(
+      :collaterals
+      )
   end
 
 end

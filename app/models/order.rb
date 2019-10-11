@@ -29,26 +29,29 @@ class Order < ApplicationRecord
 
 	after_create :assign_default_status
 
-	def self.fidusia_order(current_user, opts, fidusia_params)
+	def self.fidusia_order(current_user, opts, fidusia_params, collateral_params)
 		ActiveRecord::Base.transaction do
 			order = parent_order(current_user, opts)
 			order.create_fidusia_order!(fidusia_params)
+			order.collaterals.create!(collateral_params)
 			return order
 		end
 	end
 
-	def self.skmht_order(current_user, opts, skmht_params)
+	def self.skmht_order(current_user, opts, skmht_params, collateral_params)
 		ActiveRecord::Base.transaction do
 			order = parent_order(current_user, opts)
 			order.create_skmht_order!(skmht_params)
+			order.collaterals.create!(collateral_params)
 			return order
 		end
 	end
 
-	def self.apht_order(current_user, opts, apht_params)
+	def self.apht_order(current_user, opts, apht_params, collateral_params)
 		ActiveRecord::Base.transaction do
 			order = parent_order(current_user, opts)
 			order.create_apht_order!(apht_params)
+			order.collaterals.create!(collateral_params)
 			return order
 		end
 	end
