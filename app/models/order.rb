@@ -2,14 +2,15 @@
 #
 # Table name: orders
 #
-#  id          :bigint(8)        not null, primary key
-#  grand_total :integer
-#  order_type  :integer
-#  status      :integer
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  notary_id   :integer
-#  user_id     :integer
+#  id           :bigint(8)        not null, primary key
+#  expired_date :datetime
+#  grand_total  :integer
+#  order_type   :integer
+#  status       :integer
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  notary_id    :integer
+#  user_id      :integer
 #
 # Indexes
 #
@@ -59,6 +60,7 @@ class Order < ApplicationRecord
 	def self.parent_order(current_user, opts)
 		Order.create!(
 			order_type: opts[:order_type],
+			expired_date: Time.now + 24.hours,
 			notary_id: opts[:notary_id],
 			grand_total: opts[:notary_service_price],
 			user_id: current_user.id
@@ -70,4 +72,5 @@ class Order < ApplicationRecord
 		def assign_default_status
 			self.status = "pending" if self.status.blank?
 		end
+
 end
