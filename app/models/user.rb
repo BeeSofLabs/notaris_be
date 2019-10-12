@@ -55,6 +55,6 @@ class User < ApplicationRecord
 	end
 
 	def self.notaris
-		user = User.where(roles: "notaris")
+		user = User.with_role("notaris")
 	end
 end
