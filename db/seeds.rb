@@ -13,7 +13,7 @@ Role.create(
 		{name: "debitur"},
 		{name: "kreditur"},
 		{name: "bpn"},
-		{name: "collateral owner"},
+		{name: "collateral_owner"},
 		{name: "admin"}
 	]
 )
