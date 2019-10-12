@@ -15,6 +15,7 @@ class UserSeed
 						phone: Faker::PhoneNumber.phone_number,
 					)
 					user.add_role(role) if user
+					user.has_role?(:notaris) ? user.notary_services.create!(notary_services) : nil 
 					puts "user #{user.email} with role #{role} created.." if user
 				end
 				puts "end of seed #{role}========================================================================="
@@ -53,6 +54,27 @@ class UserSeed
 			user.add_role(:bpn) if user
 			puts "user #{user.email} with role bpn created.." if user
 			puts "end of seed bpn========================================================================="
+		end
+
+		def notary_services
+			[
+				{
+					price: rand(100_000..200_000),
+					service_type: "fidusia"
+				},
+				{
+					price: rand(200_000..300_000),
+					service_type: "skmht"
+				},
+				{
+					price: rand(300_000..400_000),
+					service_type: "apht"
+				},
+				{
+					price: rand(400_000..500_000),
+					service_type: "skmht and apht"
+				}
+			]
 		end
 end
 # run
