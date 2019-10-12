@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-	skip_before_action :authorize_request, only: :create
+	skip_before_action :authorize_request, only: [:create, :roles, :notaris]
   	def create
 		user = User.create!(user_params)
 		auth_token = AuthenticateUser.new(user.email, user.password).call
@@ -32,6 +32,14 @@ class UsersController < ApplicationController
 		current_user.update(edit_params)
 		json_response(current_user)
 	end
+
+  def roles
+    json_response(User.roles)
+  end
+
+  def notaris
+    json_response(User.notaris)
+  end
 
   
   private

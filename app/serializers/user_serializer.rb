@@ -20,5 +20,20 @@
 #
 
 class UserSerializer < ActiveModel::Serializer
-  attributes :id
+	attributes	:id,
+				:approved,
+				:dob,
+				:email,
+				:gender,
+				:identity_image,
+				:identity_number,
+				:name,
+				:organizational_status,
+				:phone,
+				:privy_token
+	has_many 	:notary_services, if: :notaris?
+
+	def notaris?
+		object.has_role?(:notaris)
+	end
 end

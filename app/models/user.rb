@@ -45,4 +45,16 @@ class User < ApplicationRecord
 	def privy_approved
 		update!(approved: true)
 	end
+
+	def self.roles
+		%w(notaris
+		debitur
+		kreditur
+		collateral_owner
+		)
+	end
+
+	def self.notaris
+		user = User.with_role("notaris")
+	end
 end
