@@ -62,4 +62,33 @@ class Privy
 		)
 	end
 
+	def upload
+		body = {
+			"documentTitle": "documentTitle",
+			"docType": "Parallel",
+			"document": "file",
+			"recipients": [
+							{
+							"privyId": "TES002",
+							"type": "Signer",
+							"enterpriseToken": "41bc84b42c8543daf448d893c255be1dbdcc722e"
+							},
+							{
+							"privyId": "TES001",
+							"type": "Reviewer",
+							"enterpriseToken": ""
+							}
+						],
+			"owner": {
+						"privyId": "TE4455",
+						"enterpriseToken": "41bc84b42c8543daf448d893c255be1dbdcc722e"
+						} 
+		}
+		data = HTTParty.post(
+			"#{ENV["PRIVY_UPLOAD_URL"]}",
+			body: body,
+			headers: headers
+			)
+	end
+
 end
