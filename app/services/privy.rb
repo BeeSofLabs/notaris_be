@@ -84,6 +84,7 @@ class Privy
 						"enterpriseToken": "41bc84b42c8543daf448d893c255be1dbdcc722e"
 						} 
 		}
+		# byebug
 		data = HTTParty.post(
 			"#{ENV["PRIVY_UPLOAD_URL"]}",
 			body: body,
