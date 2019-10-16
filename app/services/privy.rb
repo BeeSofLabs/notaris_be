@@ -92,8 +92,8 @@ class Privy
 	end
 
 	def check
+		document_id = "3c20edappl0015b7d6999760568168b7389bb108fa3ac365083ba496be92d"
 		data = HTTParty.get(
-			document_id = "3c20edappl0015b7d6999760568168b7389bb108fa3ac365083ba496be92d"
 			"#{ENV['PRIVY_CHECK_URL']}#{document_id}",
 			headers: headers
 			)
