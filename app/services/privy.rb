@@ -1,3 +1,5 @@
+require 'rest-client'
+
 class Privy
 	attr_reader :email, 
 				:phone, 
@@ -24,30 +26,33 @@ class Privy
 
 	def headers
 		headers = {
-			"Authorization": "Basic " + Base64.strict_encode64("#{ENV["PRIVY_USERNAME"]}:#{ENV["PRIVY_PASSWORD"]}"),
-			"Merchant-Key": ENV["MERCHANT_KEY"],
-			"Content-Type": "multipart/form-data"
+			:authorization => "Basic " + Base64.strict_encode64("#{ENV["PRIVY_USERNAME"]}:#{ENV["PRIVY_PASSWORD"]}"),
+			:merchant_key => "#{ENV["MERCHANT_KEY"]}",
+			:content_type => 'application/x-www-form-urlencoded'
 		}
 	end
 
 	def registration
 		# post data to Privy here!
-		body = {
-			email: email,
+		request = RestClient::Request.new(
+		  :method => :post,
+		  :url => "#{ENV["PRIVY_REGISTRATION_URL"]}",
+		  :user => "#{ENV['PRIVY_USERNAME']}",
+		  :password => "#{ENV['PRIVY_PASSWORD']}",
+		  :payload => {
+		  	email: email,
 			phone: phone,
-			selfie: selfie_image,
-			ktp: identity_image,
+			selfie: File.new("/home/jhon/Desktop/img/github-qrcode.png", 'rb'),
+			ktp: File.new("/home/jhon/Desktop/img/github-qrcode.png", 'rb'),
 			identity: {
 				nik: identity,
 				nama: name,
 				tanggalLahir: dob.present? ? dob.strftime("%Y-%m-%d") : dob
 			}
-		}
-		data = HTTParty.post(
-			"#{ENV["PRIVY_REGISTRATION_URL"]}",
-			body: body.as_json,
-			headers: headers
+		},
+		:headers => headers
 		)
+		response = request.execute
 	end
 
 	def registration_status
