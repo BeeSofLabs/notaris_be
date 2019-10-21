@@ -31,6 +31,7 @@ gem 'dotenv-rails'
 gem "rolify"
 gem 'rails_admin', '~> 2.0'
 gem 'httparty'
+gem 'faraday', '~> 0.9.2'
 gem 'carrierwave', '~> 2.0'
 gem 'mini_magick'
 gem 'rest-client'
