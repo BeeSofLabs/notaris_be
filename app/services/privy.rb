@@ -34,25 +34,31 @@ class Privy
 
 	def registration
 		# post data to Privy here!
-		request = RestClient::Request.new(
-		  :method => :post,
-		  :url => "#{ENV["PRIVY_REGISTRATION_URL"]}",
-		  :user => "#{ENV['PRIVY_USERNAME']}",
-		  :password => "#{ENV['PRIVY_PASSWORD']}",
-		  :payload => {
+		conn =
+				Faraday.new do |f|
+				  f.request :multipart
+				  f.request :url_encoded
+				  f.adapter :net_http
+				end
+		selfie 	= Faraday::UploadIO.new("/home/jhon/Desktop/img/avatar_young.jpg", 'image/jpeg')
+		ktp 	= Faraday::UploadIO.new("/home/jhon/Desktop/img/avatar_young.jpg", 'image/jpeg')
+		tanggal_lahir = dob.present? ? dob.strftime("%Y-%m-%d") : dob
+
+		body = {
 		  	email: email,
 			phone: phone,
-			selfie: File.new("/home/jhon/Desktop/img/github-qrcode.png", 'rb'),
-			ktp: File.new("/home/jhon/Desktop/img/github-qrcode.png", 'rb'),
+			selfie: selfie,
+			ktp: ktp,
 			identity: {
-				nik: identity,
-				nama: name,
-				tanggalLahir: dob.present? ? dob.strftime("%Y-%m-%d") : dob
+				"nik": "#{identity}",
+				"nama": "#{name}",
+				"tanggalLahir": "#{tanggal_lahir}"
 			}
-		},
-		:headers => headers
-		)
-		response = request.execute
+		}.as_json
+
+		data = conn.post("#{ENV["PRIVY_REGISTRATION_URL"]}", body, headers)
+		# byebug
+
 	end
 
 	def registration_status
