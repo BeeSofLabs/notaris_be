@@ -49,11 +49,11 @@ class Privy
 			phone: phone,
 			selfie: selfie,
 			ktp: ktp,
-			identity: {
-				"nik": "#{identity}",
-				"nama": "#{name}",
-				"tanggalLahir": "#{tanggal_lahir}"
-			}
+			identity: "{
+							'nik': '#{identity}',
+							'nama': '#{name}',
+							'tanggalLahir': '#{tanggal_lahir}'
+						}"
 		}.as_json
 
 		data = conn.post("#{ENV["PRIVY_REGISTRATION_URL"]}", body, headers)
