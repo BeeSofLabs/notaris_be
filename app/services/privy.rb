@@ -99,10 +99,11 @@ class Privy
 
 	def check
 		document_id = "3c20edappl0015b7d6999760568168b7389bb108fa3ac365083ba496be92d"
-		data = HTTParty.get(
+		data = Faraday.new(
 			"#{ENV['PRIVY_CHECK_URL']}#{document_id}",
 			headers: headers
-			)
+			).get
+		# byebug
 	end
 
 end
