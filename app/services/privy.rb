@@ -40,8 +40,8 @@ class Privy
 				  f.request :url_encoded
 				  f.adapter :net_http
 				end
-		selfie 	= Faraday::UploadIO.new("/home/jhon/Desktop/img/avatar_young.jpg", 'image/jpeg')
-		ktp 	= Faraday::UploadIO.new("/home/jhon/Desktop/img/avatar_young.jpg", 'image/jpeg')
+		selfie 	= selfie_image.nil? ? nil : Faraday::UploadIO.new("#{selfie_image.url}", 'image/jpeg')
+		ktp 	= identity_image.nil? ? nil : Faraday::UploadIO.new("#{identity_image.url}", 'image/jpeg')
 		tanggal_lahir = dob.present? ? dob.strftime("%Y-%m-%d") : dob
 
 		body = {
