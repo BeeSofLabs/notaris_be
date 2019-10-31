@@ -3,9 +3,10 @@ class UsersController < ApplicationController
   	def create
 		user = User.create!(user_params)
 		auth_token = AuthenticateUser.new(user.email, user.password).call
-    res = Privy.new(user).registration
-    user.insert_privy_token(res["data"]["userToken"]) if res["code"] == 201 && res["data"]["userToken"].present?
-    response = { message: Message.account_created, auth_token: auth_token, privy: res}
+    # res = Privy.new(user).registration
+    # user.insert_privy_token(res["data"]["userToken"]) if res["code"] == 201 && res["data"]["userToken"].present?
+    # response = { message: Message.account_created, auth_token: auth_token, privy: res}
+    response = { message: Message.account_created, auth_token: auth_token, privy: {}}
 		json_response(response, :created)
 	end
 

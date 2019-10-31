@@ -1,3 +1,5 @@
+require 'rest-client'
+
 class Privy
 	attr_reader :email, 
 				:phone, 
@@ -24,30 +26,39 @@ class Privy
 
 	def headers
 		headers = {
-			"Authorization": "Basic " + Base64.strict_encode64("#{ENV["PRIVY_USERNAME"]}:#{ENV["PRIVY_PASSWORD"]}"),
-			"Merchant-Key": ENV["MERCHANT_KEY"],
-			"Content-Type": "multipart/form-data"
+			:authorization => "Basic " + Base64.strict_encode64("#{ENV["PRIVY_USERNAME"]}:#{ENV["PRIVY_PASSWORD"]}"),
+			:merchant_key => "#{ENV["MERCHANT_KEY"]}",
+			:content_type => 'application/x-www-form-urlencoded'
 		}
 	end
 
 	def registration
 		# post data to Privy here!
+		conn =
+				Faraday.new do |f|
+				  f.request :multipart
+				  f.request :url_encoded
+				  f.adapter :net_http
+				end
+		selfie 	= selfie_image.nil? ? nil : Faraday::UploadIO.new("#{selfie_image.url}", 'image/jpeg')
+		ktp 	= identity_image.nil? ? nil : Faraday::UploadIO.new("#{identity_image.url}", 'image/jpeg')
+		tanggal_lahir = dob.present? ? dob.strftime("%Y-%m-%d") : dob
+
 		body = {
-			email: email,
+		  	email: email,
 			phone: phone,
-			selfie: selfie_image,
-			ktp: identity_image,
-			identity: {
-				nik: identity,
-				nama: name,
-				tanggalLahir: dob.present? ? dob.strftime("%Y-%m-%d") : dob
-			}
-		}
-		data = HTTParty.post(
-			"#{ENV["PRIVY_REGISTRATION_URL"]}",
-			body: body.as_json,
-			headers: headers
-		)
+			selfie: selfie,
+			ktp: ktp,
+			identity: "{
+							'nik': '#{identity}',
+							'nama': '#{name}',
+							'tanggalLahir': '#{tanggal_lahir}'
+						}"
+		}.as_json
+
+		data = conn.post("#{ENV["PRIVY_REGISTRATION_URL"]}", body, headers)
+		# byebug
+
 	end
 
 	def registration_status
@@ -60,6 +71,45 @@ class Privy
 			body: body,
 			headers: headers
 		)
+	end
+
+	def upload
+		body = {
+			"documentTitle": "documentTitle",
+			"docType": "Parallel",
+			"document": "file",
+			"recipients": [
+							{
+							"privyId": "TES002",
+							"type": "Signer",
+							"enterpriseToken": "41bc84b42c8543daf448d893c255be1dbdcc722e"
+							},
+							{
+							"privyId": "TES001",
+							"type": "Reviewer",
+							"enterpriseToken": ""
+							}
+						],
+			"owner": {
+						"privyId": "TE4455",
+						"enterpriseToken": "41bc84b42c8543daf448d893c255be1dbdcc722e"
+						} 
+		}
+		# byebug
+		data = HTTParty.post(
+			"#{ENV["PRIVY_UPLOAD_URL"]}",
+			body: body,
+			headers: headers
+			)
+	end
+
+	def check
+		document_id = "3c20edappl0015b7d6999760568168b7389bb108fa3ac365083ba496be92d"
+		data = Faraday.new(
+			"#{ENV['PRIVY_CHECK_URL']}#{document_id}",
+			headers: headers
+			).get
+		# byebug
 	end
 
 end

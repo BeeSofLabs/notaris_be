@@ -31,11 +31,14 @@ gem 'dotenv-rails'
 gem "rolify"
 gem 'rails_admin', '~> 2.0'
 gem 'httparty'
+gem 'faraday', '~> 0.9.2'
 gem 'carrierwave', '~> 2.0'
+gem 'carrierwave-base64'
 gem 'mini_magick'
 gem 'rest-client'
 gem 'active_model_serializers', '~> 0.10.0'
 gem 'faker', :git => 'https://github.com/faker-ruby/faker.git', :branch => 'master'
+gem 'rack-cors'
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 
