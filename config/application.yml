@@ -2,7 +2,7 @@
 privy_api_registration_url: "https://api-sandbox.privy.id/v3/merchant/registration"
 privy_api_registration_status_url: "https://api-sandbox.privy.id/v3/merchant/registration/status"
 privy_api_upload_doc_url: "https://api-sandbox.privy.id/v3/merchant/document/upload"
-privy_api_check_doc_status_url: "https://api-sandbox.privy.id/v3/merchant/document/status/{doc_id}"
+privy_api_check_doc_status_url: "https://api-sandbox.privy.id/v3/merchant/document/status/{doc_token}"
 
 # Cek Mutasi
 cekmutasi_api_key: "71dfde726d0c5f7fa7b0c5a74c60fa41"
@@ -15,4 +15,3 @@ cekmutasi_api_ovo_bank_detail_url: "/ovo/transfer/detail"
 
 cekmutasi_api_ovo_inquiry_url: "/ovo/transfer-ovo/inquiry"
 cekmutasi_api_ovo_send_url: "/ovo/transfer-ovo/send"
-
