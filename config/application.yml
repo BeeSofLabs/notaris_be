@@ -8,6 +8,7 @@ privy_api_check_doc_status_url: "https://api-sandbox.privy.id/v3/merchant/docume
 cekmutasi_api_key: "71dfde726d0c5f7fa7b0c5a74c60fa41"
 cekmutasi_api_signature: "84d2e7d0d34f5f46f8e3e7156ac342821b69817b"
 cekmutasi_api_baseurl: "https://api.cekmutasi.co.id/v1"
+
 cekmutasi_api_ovo_bank_list_url: "/ovo/transfer/bank-list" 
 cekmutasi_api_ovo_bank_inquiry_url: "/ovo/transfer/inquiry" 
 cekmutasi_api_ovo_bank_send_url: "/ovo/transfer/send" 
