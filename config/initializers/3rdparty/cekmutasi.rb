@@ -1,5 +1,6 @@
 module CekMutasiModule
     # Bank
+    # CekMutasiModule::bank_list("08123456789")
     def self.bank_list(source_no)
         url = ENV["cekmutasi_api_baseurl"]+ ENV["cekmutasi_api_ovo_bank_list_url"]
         request = Typhoeus::Request.new(
