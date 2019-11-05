@@ -2,14 +2,20 @@ Rails.application.routes.draw do
   
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-  get "sayhello", to: "application#hello"
-	post 'auth/login', to: 'authentication#authenticate'
-	post 'signup', to: 'users#create'
-	post 'privy/status', to: "users#privy_status"
-	get 'users/roles', to: "users#roles"
-	get 'users/notaris', to: "users#notaris"
-	namespace :v1 do
-	    post 'orders/create'
-	end
+	
+	
+	namespace :api do
+		namespace :v1 do
+				post 'auth/login', to: 'authentication#authenticate'
+				post 'signup', to: 'users#create'
+				post 'privy/status', to: "users#privy_status"
+				post 'orders/create'
+				get 'users/roles', to: "users#roles"
+				get 'users/notaris', to: "users#notaris"
+		end
 
+		namespace :cms do
+			get "sayhello", to: "application#hello"
+		end
+	end
 end
