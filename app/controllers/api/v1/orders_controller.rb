@@ -1,4 +1,4 @@
-class V1::OrdersController < ApplicationController
+class Api::V1::OrdersController < ApplicationController
   before_action :find_notary, only: [:create]
   before_action :find_notary_service, only: [:create]
 

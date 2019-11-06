@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 	
 	
+	root to: "application#hello"
 	namespace :api do
 		namespace :v1 do
 				post 'auth/login', to: 'authentication#authenticate'
@@ -15,7 +16,6 @@ Rails.application.routes.draw do
 		end
 
 		namespace :cms do
-			get "sayhello", to: "application#hello"
 		end
 	end
 end
