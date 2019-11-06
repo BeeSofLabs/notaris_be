@@ -3,10 +3,22 @@ class Api::V1::UsersController < ApplicationController
   	def create
 		user = User.create!(user_params)
 		auth_token = AuthenticateUser.new(user.email, user.password).call
-    # res = Privy.new(user).registration
-    # user.insert_privy_token(res["data"]["userToken"]) if res["code"] == 201 && res["data"]["userToken"].present?
-    # response = { message: Message.account_created, auth_token: auth_token, privy: res}
-    response = { message: Message.account_created, auth_token: auth_token, privy: {}}
+    
+    res = PrivyModule::registration(
+      user.email, 
+      user.phone, 
+      user.identity_number, 
+      user.name, 
+      File.new(user.image_content(user.identity_image)), 
+      File.new(user.image_content(user.selfie_image))
+    )
+    
+    if privy_success_registration?(res)
+      privy_token = res["data"]["userToken"]
+      user.insert_privy_token(privy_token)
+    end 
+
+    response = { message: Message.account_created, auth_token: auth_token, privy: res}  
 		json_response(response, :created)
 	end
 
@@ -73,6 +85,10 @@ class Api::V1::UsersController < ApplicationController
 
   def privy_approved?(res)
     res["code"] == 201 && res["data"]["status"] ==  "verified"
+  end
+
+  def privy_success_registration?(res)
+    res["code"] == 201 && res["data"]["userToken"].present?
   end
 
 end
