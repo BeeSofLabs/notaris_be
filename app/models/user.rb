@@ -32,6 +32,7 @@ class User < ApplicationRecord
 
 	enum organizational_status: ["perorangan", "perusahaan"]
 	enum gender: ["laki-laki", "perempuan"]
+	enum user_tipe: ["notaris", "debitur", "kreditur","collateral_owner", "bpn"] 
 
 	mount_base64_uploader :identity_image, ImageUploader
 	mount_base64_uploader :selfie_image, ImageUploader
@@ -45,6 +46,10 @@ class User < ApplicationRecord
 
 	def privy_approved
 		update!(approved: true)
+	end
+
+	def image_content(image)
+		Rails.env.production? ? "#{image.url}" : "#{image.path}" 
 	end
 
 	def self.roles
