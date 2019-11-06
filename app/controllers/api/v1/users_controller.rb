@@ -12,7 +12,7 @@ class Api::V1::UsersController < ApplicationController
       File.new(user.image_content(user.identity_image)), 
       File.new(user.image_content(user.selfie_image))
     )
-    
+
     if privy_success_registration?(res)
       privy_token = res["data"]["userToken"]
       user.insert_privy_token(privy_token)
@@ -70,7 +70,8 @@ class Api::V1::UsersController < ApplicationController
       :phone,
       :selfie_image,
   		:password, 
-  		:password_confirmation
+  		:password_confirmation,
+      :user_tipe
 	)
   end
 
