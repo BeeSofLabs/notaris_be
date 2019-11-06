@@ -15,6 +15,7 @@
 #  phone                 :string
 #  privy_token           :string
 #  selfie_image          :string
+#  user_tipe             :integer
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
 #
