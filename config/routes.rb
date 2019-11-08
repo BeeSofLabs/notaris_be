@@ -13,6 +13,7 @@ Rails.application.routes.draw do
 				post 'orders/create'
 				get 'users/roles', to: "users#roles"
 				get 'users/notaris', to: "users#notaris"
+				get 'users/show', to: 'users#show'
 		end
 
 		namespace :cms do
