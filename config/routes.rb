@@ -14,6 +14,7 @@ Rails.application.routes.draw do
 				get 'users/roles', to: "users#roles"
 				get 'users/notaris', to: "users#notaris"
 				get 'users/show', to: 'users#show'
+				put 'users/edit', to: 'users#edit'
 		end
 
 		namespace :cms do

@@ -79,10 +79,13 @@ class Api::V1::UsersController < ApplicationController
 
   def edit_params
   	params.permit(
-  		:name, 
-  		:password, 
-  		:password_confirmation, 
-  		:address
+  		:name,
+      :dob,
+      :identity_image,
+      :identity_number,
+      :organizational_status,
+      :phone,
+      :selfie_image
 	)
   end
 
