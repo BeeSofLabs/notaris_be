@@ -12,9 +12,9 @@ class Api::V1::UsersController < ApplicationController
       File.new(user.image_content(user.identity_image)), 
       File.new(user.image_content(user.selfie_image))
     )
-
+    
     if privy_success_registration?(res)
-      privy_token = res["data"]["userToken"]
+      privy_token = res[:data][:userToken]
       user.insert_privy_token(privy_token)
     end 
 
@@ -85,11 +85,11 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def privy_approved?(res)
-    res["code"] == 201 && res["data"]["status"] ==  "verified"
+    res[:code] == 201 && res[:data][:status] ==  "verified"
   end
 
   def privy_success_registration?(res)
-    res["code"] == 201 && res["data"]["userToken"].present?
+    res[:code] == 201 && res[:data][:userToken].present?
   end
 
 end
