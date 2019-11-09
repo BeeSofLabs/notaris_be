@@ -39,6 +39,9 @@ gem 'rest-client'
 gem 'active_model_serializers', '~> 0.10.0'
 gem 'faker', :git => 'https://github.com/faker-ruby/faker.git', :branch => 'master'
 gem 'rack-cors'
+gem 'cloudinary'
+gem 'mailgun_rails', '~> 0.9.0'
+gem 'indonesia', '~> 0.5.0'
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 
@@ -60,6 +63,7 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem "letter_opener"
 end
 
 group :development do

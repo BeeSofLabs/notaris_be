@@ -31,5 +31,9 @@ class Message
 		def expired_token
 			"Sorry, your token has expired. Please login to continue."
 		end
+
+		def success
+			"Success."
+		end
 	end
 end

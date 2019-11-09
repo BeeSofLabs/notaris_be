@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_11_154929) do
+ActiveRecord::Schema.define(version: 2019_11_09_085011) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -74,6 +74,33 @@ ActiveRecord::Schema.define(version: 2019_10_11_154929) do
     t.datetime "updated_at", null: false
     t.integer "order_id"
     t.index ["imageable_type", "imageable_id"], name: "index_fidusia_orders_on_imageable_type_and_imageable_id"
+  end
+
+  create_table "indonesia_cities", force: :cascade do |t|
+    t.string "city_name"
+    t.integer "indonesia_province_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "indonesia_districts", force: :cascade do |t|
+    t.string "district_name"
+    t.integer "indonesia_city_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "indonesia_provinces", force: :cascade do |t|
+    t.string "province_name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "indonesia_villages", force: :cascade do |t|
+    t.string "village_name"
+    t.integer "indonesia_district_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "notary_services", force: :cascade do |t|
@@ -148,6 +175,13 @@ ActiveRecord::Schema.define(version: 2019_10_11_154929) do
     t.string "identity_image"
     t.string "selfie_image"
     t.string "privy_token"
+    t.integer "user_tipe"
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.string "province"
+    t.string "city"
+    t.string "district"
+    t.string "village"
   end
 
   create_table "users_roles", force: :cascade do |t|
