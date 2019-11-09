@@ -48,6 +48,12 @@ class Api::V1::UsersController < ApplicationController
 		json_response(current_user)
 	end
 
+  def forgot
+    user = User.find_by!(email: forgot_params[:email])
+    user.generate_password_token!
+    json_response({message: Message.success})
+  end
+
   def roles
     json_response(User.roles)
   end
@@ -58,6 +64,12 @@ class Api::V1::UsersController < ApplicationController
 
   
   private
+
+  def forgot_params
+    params.permit(
+      :email
+    )
+  end
 
   def user_params
   	params.permit(

@@ -65,4 +65,18 @@ class User < ApplicationRecord
 	def self.notaris
 		user = User.with_role("notaris")
 	end
+
+	def generate_password_token!
+		self.reset_password_token	= generate_token
+		self.reset_password_sent_at	= Time.now
+		save!	
+	end
+
+	private 
+
+		def generate_token
+			SecureRandom.hex(10)
+		end
+
+
 end
