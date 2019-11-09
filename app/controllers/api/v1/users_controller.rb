@@ -51,6 +51,7 @@ class Api::V1::UsersController < ApplicationController
   def forgot
     user = User.find_by!(email: forgot_params[:email])
     user.generate_password_token!
+    UserMailer.forgot(user).deliver_now
     json_response({message: Message.success})
   end
 
