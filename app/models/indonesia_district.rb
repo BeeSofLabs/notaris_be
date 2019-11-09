@@ -10,4 +10,5 @@
 #
 
 class IndonesiaDistrict < ApplicationRecord
+	belongs_to :indonesia_city
 end

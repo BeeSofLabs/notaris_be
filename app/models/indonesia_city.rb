@@ -11,4 +11,5 @@
 
 class IndonesiaCity < ApplicationRecord
 	belongs_to :indonesia_province
+	has_many :indonesia_districts
 end
