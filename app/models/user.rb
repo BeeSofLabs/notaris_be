@@ -4,6 +4,8 @@
 #
 #  id                     :bigint(8)        not null, primary key
 #  approved               :boolean          default(FALSE)
+#  city                   :string
+#  district               :string
 #  dob                    :date
 #  email                  :string
 #  gender                 :integer
@@ -14,10 +16,12 @@
 #  password_digest        :string
 #  phone                  :string
 #  privy_token            :string
+#  province               :string
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
 #  selfie_image           :string
 #  user_tipe              :integer
+#  village                :string
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #
