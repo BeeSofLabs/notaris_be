@@ -9,4 +9,5 @@
 #
 
 class IndonesiaProvince < ApplicationRecord
+	has_many :indonesia_cities
 end

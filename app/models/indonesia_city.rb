@@ -10,4 +10,5 @@
 #
 
 class IndonesiaCity < ApplicationRecord
+	belongs_to :indonesia_province
 end
