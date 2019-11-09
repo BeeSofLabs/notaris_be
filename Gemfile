@@ -41,6 +41,7 @@ gem 'faker', :git => 'https://github.com/faker-ruby/faker.git', :branch => 'mast
 gem 'rack-cors'
 gem 'cloudinary'
 gem 'mailgun_rails', '~> 0.9.0'
+gem 'indonesia', '~> 0.5.0'
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 
