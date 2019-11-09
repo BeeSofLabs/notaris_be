@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_09_084150) do
+ActiveRecord::Schema.define(version: 2019_11_09_084405) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -74,6 +74,13 @@ ActiveRecord::Schema.define(version: 2019_11_09_084150) do
     t.datetime "updated_at", null: false
     t.integer "order_id"
     t.index ["imageable_type", "imageable_id"], name: "index_fidusia_orders_on_imageable_type_and_imageable_id"
+  end
+
+  create_table "indonesia_cities", force: :cascade do |t|
+    t.string "city_name"
+    t.integer "indonesia_province_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "indonesia_provinces", force: :cascade do |t|

@@ -1,0 +1,20 @@
+# == Schema Information
+#
+# Table name: indonesia_cities
+#
+#  id                    :bigint(8)        not null, primary key
+#  city_name             :string
+#  created_at            :datetime         not null
+#  updated_at            :datetime         not null
+#  indonesia_province_id :integer
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  city_name: MyString
+  indonesia_province_id: 1
+
+two:
+  city_name: MyString
+  indonesia_province_id: 1
