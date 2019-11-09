@@ -16,6 +16,7 @@ Rails.application.routes.draw do
 				get 'users/show', to: 'users#show'
 				put 'users/edit', to: 'users#edit'
 				post 'users/forgot', to: 'users#forgot'
+				post 'users/reset', to: 'users#reset'
 		end
 
 		namespace :cms do

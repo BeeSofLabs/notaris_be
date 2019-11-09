@@ -1,5 +1,5 @@
 class Api::V1::UsersController < ApplicationController
-	skip_before_action :authorize_request, only: [:create, :roles, :notaris]
+	skip_before_action :authorize_request, only: [:create, :roles, :notaris, :forgot, :reset]
   	def create
       ActiveRecord::Base.transaction do
         user = User.create!(user_params)
@@ -55,6 +55,19 @@ class Api::V1::UsersController < ApplicationController
     json_response({message: Message.success})
   end
 
+  def reset
+    user = User.find_by!(reset_password_token: reset_params[:reset_password_token])
+    if user && user.valid_reset_password_token?
+      if user.reset_password!(reset_params[:new_password])
+        json_response({message: Message.success})
+      else
+        json_response({message: user.erros.full_messages}, :unprocessable_entity)
+      end
+    else
+      json_response({message: "Invalid. try generating token again."}, :not_found)
+    end
+  end
+
   def roles
     json_response(User.roles)
   end
@@ -65,6 +78,13 @@ class Api::V1::UsersController < ApplicationController
 
   
   private
+
+  def reset_params
+    params.permit(
+      :reset_password_token,
+      :new_password
+    )
+  end
 
   def forgot_params
     params.permit(

@@ -72,6 +72,16 @@ class User < ApplicationRecord
 		save!	
 	end
 
+	def valid_reset_password_token?
+		self.reset_password_sent_at + 4.hours > Time.now
+	end
+
+	def reset_password!(new_password)
+		self.reset_password_token = nil
+		self.password = new_password
+		save!
+	end
+
 	private 
 
 		def generate_token
