@@ -55,7 +55,7 @@ class User < ApplicationRecord
 	end
 
 	def image_content(image)
-		Rails.env.production? ? "#{image.url}" : "#{image.path}" 
+		Rails.env.production? ? "#{image.path}" : "#{image.path}" 
 	end
 
 	def self.roles
