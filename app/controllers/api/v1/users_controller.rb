@@ -3,6 +3,7 @@ class Api::V1::UsersController < ApplicationController
   	def create
       ActiveRecord::Base.transaction do
         user = User.create!(user_params)  
+        user.set_user_role(user_params[:user_tipe])
         auth_token = AuthenticateUser.new(user.email, user.password).call
 
         res = PrivyModule::registration(

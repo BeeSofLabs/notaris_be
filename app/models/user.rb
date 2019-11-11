@@ -86,6 +86,23 @@ class User < ApplicationRecord
 		save!
 	end
 
+	def set_user_role(role)
+		case role
+		when "notaris"
+			self.add_role(:notaris)
+		when "debitur"
+			self.add_role(:debitur)
+		when "kreditur"
+			self.add_role(:kreditur)
+		when "collateral_owner"
+			self.add_role(:collateral_owner)
+		when "bpn"
+			self.add_role(:bpn)
+		else
+			self.add_role(:user)
+		end
+	end
+
 	private 
 
 		def generate_token
