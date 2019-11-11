@@ -11,6 +11,8 @@
 #  gender                 :integer
 #  identity_image         :string
 #  identity_number        :string
+#  latitudes              :string
+#  longitude              :string
 #  name                   :string
 #  organizational_status  :integer          default("perorangan")
 #  password_digest        :string
