@@ -111,7 +111,9 @@ class Api::V1::UsersController < ApplicationController
       :province,
       :city,
       :district,
-      :village
+      :village,
+      :latitudes,
+      :longitude
 	)
   end
 
