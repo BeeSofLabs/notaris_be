@@ -11,6 +11,8 @@
 #  gender                 :integer
 #  identity_image         :string
 #  identity_number        :string
+#  latitudes              :string
+#  longitude              :string
 #  name                   :string
 #  organizational_status  :integer          default("perorangan")
 #  password_digest        :string
@@ -55,7 +57,7 @@ class User < ApplicationRecord
 	end
 
 	def image_content(image)
-		Rails.env.production? ? "#{image.url}" : "#{image.path}" 
+		Rails.env.production? ? "#{image.path}" : "#{image.path}" 
 	end
 
 	def self.roles
@@ -84,6 +86,23 @@ class User < ApplicationRecord
 		self.reset_password_token = nil
 		self.password = new_password
 		save!
+	end
+
+	def set_user_role(role)
+		case role
+		when "notaris"
+			self.add_role(:notaris)
+		when "debitur"
+			self.add_role(:debitur)
+		when "kreditur"
+			self.add_role(:kreditur)
+		when "collateral_owner"
+			self.add_role(:collateral_owner)
+		when "bpn"
+			self.add_role(:bpn)
+		else
+			self.add_role(:user)
+		end
 	end
 
 	private 

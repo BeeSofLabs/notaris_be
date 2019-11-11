@@ -2,7 +2,8 @@ class Api::V1::UsersController < ApplicationController
 	skip_before_action :authorize_request, only: [:create, :roles, :notaris, :forgot, :reset]
   	def create
       ActiveRecord::Base.transaction do
-        user = User.create!(user_params)
+        user = User.create!(user_params)  
+        user.set_user_role(user_params[:user_tipe])
         auth_token = AuthenticateUser.new(user.email, user.password).call
 
         res = PrivyModule::registration(
@@ -106,7 +107,13 @@ class Api::V1::UsersController < ApplicationController
       :selfie_image,
   		:password, 
   		:password_confirmation,
-      :user_tipe
+      :user_tipe,
+      :province,
+      :city,
+      :district,
+      :village,
+      :latitudes,
+      :longitude
 	)
   end
 
