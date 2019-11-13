@@ -1,11 +1,15 @@
 class Api::V1::UsersController < ApplicationController
 	skip_before_action :authorize_request, only: [:create, :roles, :notaris, :forgot, :reset]
-  	def create
+    def create
+
+      
       ActiveRecord::Base.transaction do
         user = User.create!(user_params)  
+        
         user.set_user_role(user_params[:user_tipe])
         auth_token = AuthenticateUser.new(user.email, user.password).call
 
+        
         res = PrivyModule::registration(
           user.email, 
           user.phone, 
@@ -14,7 +18,6 @@ class Api::V1::UsersController < ApplicationController
           File.new(user.image_content(user.identity_image)), 
           File.new(user.image_content(user.selfie_image))
         )
-
         if privy_success_registration?(res)
           privy_token = res[:data][:userToken]
           user.insert_privy_token(privy_token)

@@ -11,8 +11,8 @@
 #  gender                 :integer
 #  identity_image         :string
 #  identity_number        :string
-#  latitudes              :string
-#  longitude              :string
+#  lat                    :float
+#  lng                    :float
 #  name                   :string
 #  organizational_status  :integer          default("perorangan")
 #  password_digest        :string
@@ -39,7 +39,10 @@ class UserSerializer < ActiveModel::Serializer
 				:name,
 				:organizational_status,
 				:phone,
-				:privy_token
+				:privy_token,
+				:lat,
+				:lng
+				
 	has_many 	:notary_services, if: :notaris?
 
 	def notaris?

@@ -10,16 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_11_152645) do
+ActiveRecord::Schema.define(version: 2019_11_13_013658) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "admins", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
 
   create_table "apht_orders", force: :cascade do |t|
     t.string "proof_of_ownership"
@@ -182,8 +176,8 @@ ActiveRecord::Schema.define(version: 2019_11_11_152645) do
     t.string "city"
     t.string "district"
     t.string "village"
-    t.string "longitude"
-    t.string "latitudes"
+    t.float "lng"
+    t.float "lat"
   end
 
   create_table "users_roles", force: :cascade do |t|
