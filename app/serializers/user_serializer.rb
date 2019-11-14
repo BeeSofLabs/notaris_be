@@ -14,11 +14,12 @@
 #  bank_name_ppat          :string
 #  city                    :string
 #  district                :string
-#  dob                     :date
+#  dob                     :string
 #  email                   :string
 #  fax                     :string
-#  gender                  :string(1)
-#  gender_companion        :string(1)
+#  fax_ppat                :string
+#  gender                  :string
+#  gender_companion        :string
 #  idcard_number_companion :string
 #  identity_image          :string
 #  identity_number         :string
@@ -38,7 +39,6 @@
 #  name_ppat               :string
 #  no_akta                 :string
 #  no_akta_ppat            :string
-#  no_fak_ppat             :string
 #  no_rekening_ppat        :string
 #  no_sk_notaris           :string
 #  no_sk_notaris_ppat      :string
@@ -47,21 +47,23 @@
 #  organizational_status   :integer          default("perorangan")
 #  password_digest         :string
 #  phone                   :string
+#  pob                     :string
 #  privy_token             :string
 #  province                :string
 #  reset_password_sent_at  :datetime
 #  reset_password_token    :string
 #  selfie_image            :string
 #  status_companion        :string
-#  tgl_akta                :date
-#  tgl_akta_ppat           :date
-#  tgl_sk_notaris          :date
-#  tgl_sk_ppat             :date
+#  tgl_akta                :string
+#  tgl_akta_ppat           :string
+#  tgl_sk_notaris          :string
+#  tgl_sk_ppat             :string
 #  user_tipe               :integer
 #  village                 :string
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #  indonesia_city_id       :integer
+#  indonesia_village_id    :integer
 #
 
 class UserSerializer < ActiveModel::Serializer
@@ -75,7 +77,9 @@ class UserSerializer < ActiveModel::Serializer
 				:name,
 				:organizational_status,
 				:phone,
+				:identity_number,
 				:privy_token,
+				:user_tipe,
 				:lat,
 				:lng
 				

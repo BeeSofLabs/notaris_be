@@ -1,32 +1,33 @@
 class Api::V1::UsersController < ApplicationController
 	skip_before_action :authorize_request, only: [:create, :roles, :notaris, :forgot, :reset]
-    def create
 
+  def create
+    ActiveRecord::Base.transaction do
+      user = User.create!(user_params)  
       
-      ActiveRecord::Base.transaction do
-        user = User.create!(user_params)  
-        
-        user.set_user_role(user_params[:user_tipe])
-        auth_token = AuthenticateUser.new(user.email, user.password).call
+      user.set_user_role(user_params[:user_tipe])
+      auth_token = AuthenticateUser.new(user.email, user.password).call
 
-        
-        res = PrivyModule::registration(
-          user.email, 
-          user.phone, 
-          user.identity_number, 
-          user.name, 
-          File.new(user.image_content(user.identity_image)), 
-          File.new(user.image_content(user.selfie_image))
-        )
-        if privy_success_registration?(res)
-          privy_token = res[:data][:userToken]
-          user.insert_privy_token(privy_token)
-        end 
+      identity_image = File.new(user.image_content(user.identity_image))
+      selfie_image = File.new(user.image_content(user.selfie_image))
+      
+      # res = PrivyModule::registration(
+      #   user.email, 
+      #   user.phone, 
+      #   user.identity_number, 
+      #   user.name, 
+      #   File.new(user.image_content(user.identity_image)), 
+      #   File.new(user.image_content(user.selfie_image))
+      # )
+      # if privy_success_registration?(res)
+      #   privy_token = res[:data][:userToken]
+      #   user.insert_privy_token(privy_token)
+      # end 
 
-        response = { message: Message.account_created, auth_token: auth_token, privy: res}  
-        json_response(response, :created)
-      end
+      response = { message: Message.account_created, auth_token: auth_token, privy: nil}  
+      json_response(response, :created)
     end
+  end
 
   def privy_status
     unless current_user.approved == true
@@ -108,11 +109,16 @@ class Api::V1::UsersController < ApplicationController
       :approved,
       :dob,
       :gender,
-      :identity_image,
+      :address,
       :identity_number,
+      :identity_image,
+      :selfie_image,
+      :office_address,
+      :komparisi,
+      :occupation,
+      :user_tipe,
       :organizational_status,
       :phone,
-      :selfie_image,
   		:password, 
   		:password_confirmation,
       :user_tipe,
@@ -120,8 +126,47 @@ class Api::V1::UsersController < ApplicationController
       :city,
       :district,
       :village,
-      :latitudes,
-      :longitude
+      :lat,
+      :lng,
+      :name_organization,
+
+      :no_sk_notaris,
+      :tgl_sk_notaris,
+      :no_akta,
+      :tgl_akta,
+      :fax,
+      :bank_account_notaris,
+      :bank_name,
+      :indonesia_city_id,
+      :indonesia_village_id,
+    
+      :name_companion,
+      :idcard_number_companion,
+      :gender_companion,
+      :address_companion,
+      :status_companion,
+      :komparisi_companion,
+      :lat_companion,
+      :lng_companion,
+
+      :name_ppat,
+      :no_sk_notaris_ppat,
+      :tgl_sk_ppat,
+      :komparisi_ppat,
+      :no_akta_ppat,
+      :tgl_akta_ppat,
+      :address_ppat,
+      :fax_ppat,
+      :no_rekening_ppat,
+      :bank_name_ppat,
+      :lat_ppat,
+      :lng_ppat,
+
+      :pob, 
+      :mother_bpn,
+      :address_in_idcard_bpn,
+      :address_bpn
+    
 	)
   end
 

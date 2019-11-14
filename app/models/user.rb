@@ -14,11 +14,12 @@
 #  bank_name_ppat          :string
 #  city                    :string
 #  district                :string
-#  dob                     :date
+#  dob                     :string
 #  email                   :string
 #  fax                     :string
-#  gender                  :string(1)
-#  gender_companion        :string(1)
+#  fax_ppat                :string
+#  gender                  :string
+#  gender_companion        :string
 #  idcard_number_companion :string
 #  identity_image          :string
 #  identity_number         :string
@@ -38,7 +39,6 @@
 #  name_ppat               :string
 #  no_akta                 :string
 #  no_akta_ppat            :string
-#  no_fak_ppat             :string
 #  no_rekening_ppat        :string
 #  no_sk_notaris           :string
 #  no_sk_notaris_ppat      :string
@@ -47,21 +47,23 @@
 #  organizational_status   :integer          default("perorangan")
 #  password_digest         :string
 #  phone                   :string
+#  pob                     :string
 #  privy_token             :string
 #  province                :string
 #  reset_password_sent_at  :datetime
 #  reset_password_token    :string
 #  selfie_image            :string
 #  status_companion        :string
-#  tgl_akta                :date
-#  tgl_akta_ppat           :date
-#  tgl_sk_notaris          :date
-#  tgl_sk_ppat             :date
+#  tgl_akta                :string
+#  tgl_akta_ppat           :string
+#  tgl_sk_notaris          :string
+#  tgl_sk_ppat             :string
 #  user_tipe               :integer
 #  village                 :string
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #  indonesia_city_id       :integer
+#  indonesia_village_id    :integer
 #
 
 class User < ApplicationRecord
@@ -74,9 +76,8 @@ class User < ApplicationRecord
 	validates_uniqueness_of :email
 	validates_uniqueness_of :phone
 
-	enum organizational_status: ["perorangan", "perusahaan"]
-	enum gender: ["laki-laki", "perempuan"]
-	enum user_tipe: ["notaris", "debitur", "kreditur","collateral_owner", "bpn"] 
+	enum organizational_status: ["perorangan", "badan_usaha"]
+	enum user_tipe: [ "debitur", "kreditur","collateral_owner", "notaris", "bpn"] 
 
 	mount_base64_uploader :identity_image, ImageUploader
 	mount_base64_uploader :selfie_image, ImageUploader
@@ -84,6 +85,7 @@ class User < ApplicationRecord
 	has_many :orders
 	has_many :notary_services
 	has_one :indonesia_city
+	has_one :indonesia_village
 
 	def insert_privy_token(privy_token)
 		update!(privy_token: privy_token)

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_14_034008) do
+ActiveRecord::Schema.define(version: 2019_11_14_163552) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -165,8 +165,8 @@ ActiveRecord::Schema.define(version: 2019_11_14_034008) do
     t.integer "organizational_status", default: 0
     t.string "phone"
     t.string "identity_number"
-    t.string "gender", limit: 1
-    t.date "dob"
+    t.string "gender"
+    t.string "dob"
     t.string "identity_image"
     t.string "selfie_image"
     t.string "privy_token"
@@ -185,16 +185,16 @@ ActiveRecord::Schema.define(version: 2019_11_14_034008) do
     t.string "occupation"
     t.string "name_organization"
     t.string "no_sk_notaris"
-    t.date "tgl_sk_notaris"
+    t.string "tgl_sk_notaris"
     t.string "no_akta"
-    t.date "tgl_akta"
+    t.string "tgl_akta"
     t.string "fax"
     t.string "bank_account_notaris"
     t.string "bank_name"
     t.integer "indonesia_city_id"
     t.string "name_companion"
     t.string "idcard_number_companion"
-    t.string "gender_companion", limit: 1
+    t.string "gender_companion"
     t.string "address_companion"
     t.string "status_companion"
     t.text "komparisi_companion"
@@ -202,12 +202,12 @@ ActiveRecord::Schema.define(version: 2019_11_14_034008) do
     t.float "lng_companion"
     t.string "name_ppat"
     t.string "no_sk_notaris_ppat"
-    t.date "tgl_sk_ppat"
+    t.string "tgl_sk_ppat"
     t.text "komparisi_ppat"
     t.string "no_akta_ppat"
-    t.date "tgl_akta_ppat"
+    t.string "tgl_akta_ppat"
     t.string "address_ppat"
-    t.string "no_fak_ppat"
+    t.string "fax_ppat"
     t.string "no_rekening_ppat"
     t.string "bank_name_ppat"
     t.float "lat_ppat"
@@ -215,6 +215,8 @@ ActiveRecord::Schema.define(version: 2019_11_14_034008) do
     t.string "mother_bpn"
     t.string "address_in_idcard_bpn"
     t.string "address_bpn"
+    t.integer "indonesia_village_id"
+    t.string "pob"
   end
 
   create_table "users_roles", force: :cascade do |t|
