@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_13_013658) do
+ActiveRecord::Schema.define(version: 2019_11_14_034008) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,7 +19,7 @@ ActiveRecord::Schema.define(version: 2019_11_13_013658) do
     t.string "proof_of_ownership"
     t.string "collateral_value"
     t.string "owner"
-    t.string "on_behalf_of"
+    t.string "name_representative"
     t.string "certificate_number"
     t.datetime "publication_date"
     t.string "province"
@@ -27,11 +27,11 @@ ActiveRecord::Schema.define(version: 2019_11_13_013658) do
     t.string "district"
     t.string "village"
     t.string "street"
-    t.string "surface_area"
+    t.string "land_area"
     t.string "letter_of_measurement"
     t.datetime "tanggal_gs_su"
-    t.string "land_area_identification_number"
-    t.string "building_land_tax"
+    t.string "no_land_identity"
+    t.string "letter_of_pbbtax"
     t.string "nop"
     t.string "binding_value"
     t.integer "order_id"
@@ -52,13 +52,13 @@ ActiveRecord::Schema.define(version: 2019_11_13_013658) do
   create_table "fidusia_orders", force: :cascade do |t|
     t.string "proof_of_ownership"
     t.string "owner"
-    t.string "on_behalf_of"
-    t.string "number_of_evidence"
+    t.string "name_representative"
+    t.string "no_evidence"
     t.datetime "publication_date"
     t.string "machine_number"
     t.string "chassis_number"
     t.string "brand"
-    t.string "tipe"
+    t.string "classification"
     t.string "seri"
     t.string "collateral_value"
     t.string "binding_value"
@@ -67,6 +67,7 @@ ActiveRecord::Schema.define(version: 2019_11_13_013658) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "order_id"
+    t.string "color"
     t.index ["imageable_type", "imageable_id"], name: "index_fidusia_orders_on_imageable_type_and_imageable_id"
   end
 
@@ -133,7 +134,7 @@ ActiveRecord::Schema.define(version: 2019_11_13_013658) do
     t.string "proof_of_ownership"
     t.string "collateral_value"
     t.string "owner"
-    t.string "on_behalf_of"
+    t.string "name_representative"
     t.string "certificate_number"
     t.datetime "publication_date"
     t.string "province"
@@ -141,11 +142,11 @@ ActiveRecord::Schema.define(version: 2019_11_13_013658) do
     t.string "district"
     t.string "village"
     t.string "street"
-    t.string "surface_area"
+    t.string "land_area"
     t.string "letter_of_measurement"
     t.datetime "tanggal_gs_su"
-    t.string "land_area_identification_number"
-    t.string "building_land_tax"
+    t.string "no_land_identity"
+    t.string "letter_of_pbbtax"
     t.string "nop"
     t.string "binding_value"
     t.integer "order_id"
@@ -164,7 +165,7 @@ ActiveRecord::Schema.define(version: 2019_11_13_013658) do
     t.integer "organizational_status", default: 0
     t.string "phone"
     t.string "identity_number"
-    t.integer "gender"
+    t.string "gender", limit: 1
     t.date "dob"
     t.string "identity_image"
     t.string "selfie_image"
@@ -178,6 +179,42 @@ ActiveRecord::Schema.define(version: 2019_11_13_013658) do
     t.string "village"
     t.float "lng"
     t.float "lat"
+    t.string "address"
+    t.string "office_address"
+    t.text "komparisi"
+    t.string "occupation"
+    t.string "name_organization"
+    t.string "no_sk_notaris"
+    t.date "tgl_sk_notaris"
+    t.string "no_akta"
+    t.date "tgl_akta"
+    t.string "fax"
+    t.string "bank_account_notaris"
+    t.string "bank_name"
+    t.integer "indonesia_city_id"
+    t.string "name_companion"
+    t.string "idcard_number_companion"
+    t.string "gender_companion", limit: 1
+    t.string "address_companion"
+    t.string "status_companion"
+    t.text "komparisi_companion"
+    t.float "lat_companion"
+    t.float "lng_companion"
+    t.string "name_ppat"
+    t.string "no_sk_notaris_ppat"
+    t.date "tgl_sk_ppat"
+    t.text "komparisi_ppat"
+    t.string "no_akta_ppat"
+    t.date "tgl_akta_ppat"
+    t.string "address_ppat"
+    t.string "no_fak_ppat"
+    t.string "no_rekening_ppat"
+    t.string "bank_name_ppat"
+    t.float "lat_ppat"
+    t.float "lng_ppat"
+    t.string "mother_bpn"
+    t.string "address_in_idcard_bpn"
+    t.string "address_bpn"
   end
 
   create_table "users_roles", force: :cascade do |t|

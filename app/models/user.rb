@@ -2,30 +2,66 @@
 #
 # Table name: users
 #
-#  id                     :bigint(8)        not null, primary key
-#  approved               :boolean          default(FALSE)
-#  city                   :string
-#  district               :string
-#  dob                    :date
-#  email                  :string
-#  gender                 :integer
-#  identity_image         :string
-#  identity_number        :string
-#  lat                    :float
-#  lng                    :float
-#  name                   :string
-#  organizational_status  :integer          default("perorangan")
-#  password_digest        :string
-#  phone                  :string
-#  privy_token            :string
-#  province               :string
-#  reset_password_sent_at :datetime
-#  reset_password_token   :string
-#  selfie_image           :string
-#  user_tipe              :integer
-#  village                :string
-#  created_at             :datetime         not null
-#  updated_at             :datetime         not null
+#  id                      :bigint(8)        not null, primary key
+#  address                 :string
+#  address_bpn             :string
+#  address_companion       :string
+#  address_in_idcard_bpn   :string
+#  address_ppat            :string
+#  approved                :boolean          default(FALSE)
+#  bank_account_notaris    :string
+#  bank_name               :string
+#  bank_name_ppat          :string
+#  city                    :string
+#  district                :string
+#  dob                     :date
+#  email                   :string
+#  fax                     :string
+#  gender                  :string(1)
+#  gender_companion        :string(1)
+#  idcard_number_companion :string
+#  identity_image          :string
+#  identity_number         :string
+#  komparisi               :text
+#  komparisi_companion     :text
+#  komparisi_ppat          :text
+#  lat                     :float
+#  lat_companion           :float
+#  lat_ppat                :float
+#  lng                     :float
+#  lng_companion           :float
+#  lng_ppat                :float
+#  mother_bpn              :string
+#  name                    :string
+#  name_companion          :string
+#  name_organization       :string
+#  name_ppat               :string
+#  no_akta                 :string
+#  no_akta_ppat            :string
+#  no_fak_ppat             :string
+#  no_rekening_ppat        :string
+#  no_sk_notaris           :string
+#  no_sk_notaris_ppat      :string
+#  occupation              :string
+#  office_address          :string
+#  organizational_status   :integer          default("perorangan")
+#  password_digest         :string
+#  phone                   :string
+#  privy_token             :string
+#  province                :string
+#  reset_password_sent_at  :datetime
+#  reset_password_token    :string
+#  selfie_image            :string
+#  status_companion        :string
+#  tgl_akta                :date
+#  tgl_akta_ppat           :date
+#  tgl_sk_notaris          :date
+#  tgl_sk_ppat             :date
+#  user_tipe               :integer
+#  village                 :string
+#  created_at              :datetime         not null
+#  updated_at              :datetime         not null
+#  indonesia_city_id       :integer
 #
 
 class User < ApplicationRecord
@@ -47,6 +83,7 @@ class User < ApplicationRecord
 
 	has_many :orders
 	has_many :notary_services
+	has_one :indonesia_city
 
 	def insert_privy_token(privy_token)
 		update!(privy_token: privy_token)

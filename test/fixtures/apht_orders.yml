@@ -2,28 +2,28 @@
 #
 # Table name: apht_orders
 #
-#  id                              :bigint(8)        not null, primary key
-#  binding_value                   :string
-#  building_land_tax               :string
-#  certificate_number              :string
-#  city                            :string
-#  collateral_value                :string
-#  district                        :string
-#  land_area_identification_number :string
-#  letter_of_measurement           :string
-#  nop                             :string
-#  on_behalf_of                    :string
-#  owner                           :string
-#  proof_of_ownership              :string
-#  province                        :string
-#  publication_date                :datetime
-#  street                          :string
-#  surface_area                    :string
-#  tanggal_gs_su                   :datetime
-#  village                         :string
-#  created_at                      :datetime         not null
-#  updated_at                      :datetime         not null
-#  order_id                        :integer
+#  id                    :bigint(8)        not null, primary key
+#  binding_value         :string
+#  certificate_number    :string
+#  city                  :string
+#  collateral_value      :string
+#  district              :string
+#  land_area             :string
+#  letter_of_measurement :string
+#  letter_of_pbbtax      :string
+#  name_representative   :string
+#  no_land_identity      :string
+#  nop                   :string
+#  owner                 :string
+#  proof_of_ownership    :string
+#  province              :string
+#  publication_date      :datetime
+#  street                :string
+#  tanggal_gs_su         :datetime
+#  village               :string
+#  created_at            :datetime         not null
+#  updated_at            :datetime         not null
+#  order_id              :integer
 #
 # Indexes
 #
