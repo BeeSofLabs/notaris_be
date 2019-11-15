@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_14_163552) do
+ActiveRecord::Schema.define(version: 2019_11_15_024452) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -116,6 +116,7 @@ ActiveRecord::Schema.define(version: 2019_11_14_163552) do
     t.integer "notary_id"
     t.integer "user_id"
     t.datetime "expired_date"
+    t.datetime "valid_expired_datetime"
     t.index ["notary_id"], name: "index_orders_on_notary_id"
     t.index ["user_id"], name: "index_orders_on_user_id"
   end
@@ -217,6 +218,7 @@ ActiveRecord::Schema.define(version: 2019_11_14_163552) do
     t.string "address_bpn"
     t.integer "indonesia_village_id"
     t.string "pob"
+    t.integer "valid_count_search_notaris", default: 0
   end
 
   create_table "users_roles", force: :cascade do |t|

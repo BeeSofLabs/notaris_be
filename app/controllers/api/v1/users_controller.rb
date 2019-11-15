@@ -50,7 +50,7 @@ class Api::V1::UsersController < ApplicationController
     end
     json_response(response, :ok)
   end
-
+ 
 	def show
 		json_response(current_user)
 	end
