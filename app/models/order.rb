@@ -26,7 +26,7 @@ class Order < ApplicationRecord
 	has_many :collaterals
 	belongs_to :notary, class_name: "User", foreign_key: :notary_id
 
-	enum :order_type => ["fidusia", "skmht", "apht", "skmht and apht"]
+	enum :order_type => ["fidusia", "skmht", "apht", "skmht_apht"]
 	enum :status => ["cancelled", "pending", "completed", "expired"]
 
 	after_create :assign_default_status
