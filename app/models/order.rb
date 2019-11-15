@@ -3,7 +3,7 @@
 # Table name: orders
 #
 #  id                     :bigint(8)        not null, primary key
-#  expired_date           :datetime
+#  delete                 :boolean          default(FALSE)
 #  grand_total            :integer
 #  order_type             :integer
 #  status                 :integer

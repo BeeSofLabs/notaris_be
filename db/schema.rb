@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_15_024452) do
+ActiveRecord::Schema.define(version: 2019_11_15_081002) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,7 +29,7 @@ ActiveRecord::Schema.define(version: 2019_11_15_024452) do
     t.string "street"
     t.string "land_area"
     t.string "letter_of_measurement"
-    t.datetime "tanggal_gs_su"
+    t.string "tgl_gs_su"
     t.string "no_land_identity"
     t.string "letter_of_pbbtax"
     t.string "nop"
@@ -98,6 +98,36 @@ ActiveRecord::Schema.define(version: 2019_11_15_024452) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "notaris_orders", force: :cascade do |t|
+    t.string "proof_of_ownership"
+    t.string "owner"
+    t.string "collateral_value"
+    t.string "name_representative"
+    t.string "certificate_number"
+    t.string "no_evidence_fidusia"
+    t.string "publication_date"
+    t.string "province"
+    t.string "city"
+    t.string "district"
+    t.string "village"
+    t.string "street"
+    t.string "land_area"
+    t.string "letter_of_measurement"
+    t.string "tgl_gs_su"
+    t.string "no_land_identity"
+    t.string "letter_of_pbbtax"
+    t.string "nop"
+    t.string "binding_value"
+    t.string "machine_number_fidusia"
+    t.string "chassis_number_fidusia"
+    t.string "brand_fidusia"
+    t.string "classification_fidusia"
+    t.string "seri_fidusia"
+    t.string "color_fidusia"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "notary_services", force: :cascade do |t|
     t.integer "service_type"
     t.decimal "price"
@@ -115,8 +145,8 @@ ActiveRecord::Schema.define(version: 2019_11_15_024452) do
     t.integer "order_type"
     t.integer "notary_id"
     t.integer "user_id"
-    t.datetime "expired_date"
     t.datetime "valid_expired_datetime"
+    t.boolean "delete", default: false
     t.index ["notary_id"], name: "index_orders_on_notary_id"
     t.index ["user_id"], name: "index_orders_on_user_id"
   end
@@ -145,7 +175,7 @@ ActiveRecord::Schema.define(version: 2019_11_15_024452) do
     t.string "street"
     t.string "land_area"
     t.string "letter_of_measurement"
-    t.datetime "tanggal_gs_su"
+    t.string "tgl_gs_su"
     t.string "no_land_identity"
     t.string "letter_of_pbbtax"
     t.string "nop"

@@ -19,7 +19,7 @@
 #  province              :string
 #  publication_date      :datetime
 #  street                :string
-#  tanggal_gs_su         :datetime
+#  tgl_gs_su             :string
 #  village               :string
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null

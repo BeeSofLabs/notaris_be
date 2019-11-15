@@ -3,7 +3,7 @@
 # Table name: orders
 #
 #  id                     :bigint(8)        not null, primary key
-#  expired_date           :datetime
+#  delete                 :boolean          default(FALSE)
 #  grand_total            :integer
 #  order_type             :integer
 #  status                 :integer
@@ -20,13 +20,18 @@
 #
 
 class OrderSerializer < ActiveModel::Serializer
-  attributes 	:id,
+  	attributes 	:id,
 				:grand_total,
 				:order_type,
 				:status,
 				:created_at,
 				:updated_at,
 				:notary_id,
-				:user_id
-  has_one :fidusia_order
+				:user_id,
+				:skmht_order,
+				:apth_order,
+				:fidusia_order
+
+
+  	has_many :collaterals
 end
