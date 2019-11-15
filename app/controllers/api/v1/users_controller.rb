@@ -64,7 +64,7 @@ class Api::V1::UsersController < ApplicationController
     puts "=============================="
     puts "FORGOT PASSWORD YOU SHOULD HERE GOD DAMN IT!"
     puts "forgot params is #{params}"
-    puts "email is: #{params[:email]}"
+    puts "email is: #{forgot_params[:email]}"
     puts "=============================="
     user = User.find_by!(email: params[:email])
     user.generate_password_token!

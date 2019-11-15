@@ -8,6 +8,6 @@ class UserMailer < ApplicationMailer
     @greeting = "Hi"
     @user = user
     @reset_password_token = user.reset_password_token
-    mail to: @user.email, :subject => "forgot password"
+    mail to: @user.email, :subject => "Forgot Password"
   end
 end
