@@ -11,20 +11,27 @@ class Api::V1::UsersController < ApplicationController
       # identity_image = File.new(user.image_content(user.identity_image))
       # selfie_image = File.new(user.image_content(user.selfie_image))
       
-      res = PrivyModule::registration(
-        user.email, 
-        user.phone, 
-        user.identity_number, 
-        user.name, 
-        File.new(user.image_content(user.identity_image)), 
-        File.new(user.image_content(user.selfie_image))
-      )
-      if privy_success_registration?(res)
-        privy_token = res[:data][:userToken]
-        user.insert_privy_token(privy_token)
-      end 
 
-      response = { message: Message.account_created, auth_token: auth_token, privy: nil}  
+      res = nil
+      if(user_params[:user_tipe] != 'bpn')
+        res = PrivyModule::registration(
+          user.email, 
+          user.phone, 
+          user.identity_number, 
+          user.name, 
+          File.new(user.image_content(user.identity_image)), 
+          File.new(user.image_content(user.selfie_image))
+        )
+        
+        if privy_success_registration?(res)
+          privy_token = res[:data][:userToken]
+          user.insert_privy_token(privy_token)
+        else
+          raise Exception
+        end 
+      end
+
+      response = { message: Message.account_created, auth_token: auth_token, privy: res}  
       json_response(response, :created)
     end
   end
