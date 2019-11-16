@@ -3,6 +3,7 @@
 # Table name: users
 #
 #  id                         :bigint(8)        not null, primary key
+#  active                     :boolean          default(TRUE)
 #  address                    :string
 #  address_bpn                :string
 #  address_companion          :string
@@ -82,7 +83,8 @@ class UserSerializer < ActiveModel::Serializer
 				:privy_token,
 				:user_tipe,
 				:lat,
-				:lng
+				:lng, 
+				:active
 				
 	has_many 	:notary_services, if: :notaris?
 

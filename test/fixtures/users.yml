@@ -3,6 +3,7 @@
 # Table name: users
 #
 #  id                         :bigint(8)        not null, primary key
+#  active                     :boolean          default(TRUE)
 #  address                    :string
 #  address_bpn                :string
 #  address_companion          :string

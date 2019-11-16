@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_15_081002) do
+ActiveRecord::Schema.define(version: 2019_11_16_062647) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -249,6 +249,7 @@ ActiveRecord::Schema.define(version: 2019_11_15_081002) do
     t.integer "indonesia_village_id"
     t.string "pob"
     t.integer "valid_count_search_notaris", default: 0
+    t.boolean "active", default: true
   end
 
   create_table "users_roles", force: :cascade do |t|
