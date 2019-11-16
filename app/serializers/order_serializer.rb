@@ -2,15 +2,16 @@
 #
 # Table name: orders
 #
-#  id           :bigint(8)        not null, primary key
-#  expired_date :datetime
-#  grand_total  :integer
-#  order_type   :integer
-#  status       :integer
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#  notary_id    :integer
-#  user_id      :integer
+#  id                     :bigint(8)        not null, primary key
+#  delete                 :boolean          default(FALSE)
+#  grand_total            :integer
+#  order_type             :integer
+#  status                 :integer
+#  valid_expired_datetime :datetime
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#  notary_id              :integer
+#  user_id                :integer
 #
 # Indexes
 #
@@ -19,13 +20,18 @@
 #
 
 class OrderSerializer < ActiveModel::Serializer
-  attributes 	:id,
+  	attributes 	:id,
 				:grand_total,
 				:order_type,
 				:status,
 				:created_at,
 				:updated_at,
 				:notary_id,
-				:user_id
-  has_one :fidusia_order
+				:user_id,
+				:skmht_order,
+				:apth_order,
+				:fidusia_order
+
+
+  	has_many :collaterals
 end

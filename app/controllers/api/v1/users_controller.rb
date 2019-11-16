@@ -1,11 +1,19 @@
 class Api::V1::UsersController < ApplicationController
 	skip_before_action :authorize_request, only: [:create, :roles, :notaris, :forgot, :reset]
-  	def create
-      ActiveRecord::Base.transaction do
-        user = User.create!(user_params)  
-        user.set_user_role(user_params[:user_tipe])
-        auth_token = AuthenticateUser.new(user.email, user.password).call
 
+  def create
+    ActiveRecord::Base.transaction do
+      user = User.create!(user_params)  
+      
+      user.set_user_role(user_params[:user_tipe])
+      auth_token = AuthenticateUser.new(user.email, user.password).call
+
+      # identity_image = File.new(user.image_content(user.identity_image))
+      # selfie_image = File.new(user.image_content(user.selfie_image))
+      
+
+      res = nil
+      if(user_params[:user_tipe] != 'bpn')
         res = PrivyModule::registration(
           user.email, 
           user.phone, 
@@ -14,16 +22,19 @@ class Api::V1::UsersController < ApplicationController
           File.new(user.image_content(user.identity_image)), 
           File.new(user.image_content(user.selfie_image))
         )
-
+        
         if privy_success_registration?(res)
           privy_token = res[:data][:userToken]
           user.insert_privy_token(privy_token)
+        else
+          raise Exception
         end 
-
-        response = { message: Message.account_created, auth_token: auth_token, privy: res}  
-        json_response(response, :created)
       end
+
+      response = { message: Message.account_created, auth_token: auth_token, privy: res}  
+      json_response(response, :created)
     end
+  end
 
   def privy_status
     unless current_user.approved == true
@@ -39,7 +50,7 @@ class Api::V1::UsersController < ApplicationController
     end
     json_response(response, :ok)
   end
-
+ 
 	def show
 		json_response(current_user)
 	end
@@ -52,10 +63,10 @@ class Api::V1::UsersController < ApplicationController
   def forgot
     puts "=============================="
     puts "FORGOT PASSWORD YOU SHOULD HERE GOD DAMN IT!"
-    puts "forgot params is #{params}"
-    puts "email is: #{params[:email]}"
+    puts "forgot params is #{forgot_paramsss}"
+    puts "email is: #{forgot_params[:email]}"
     puts "=============================="
-    user = User.find_by!(email: params[:email])
+    user = User.find_by!(email: forgot_params[:email])
     user.generate_password_token!
     UserMailer.forgot(user).deliver_now
     json_response({message: Message.success})
@@ -105,11 +116,16 @@ class Api::V1::UsersController < ApplicationController
       :approved,
       :dob,
       :gender,
-      :identity_image,
+      :address,
       :identity_number,
+      :identity_image,
+      :selfie_image,
+      :office_address,
+      :komparisi,
+      :occupation,
+      :user_tipe,
       :organizational_status,
       :phone,
-      :selfie_image,
   		:password, 
   		:password_confirmation,
       :user_tipe,
@@ -117,8 +133,47 @@ class Api::V1::UsersController < ApplicationController
       :city,
       :district,
       :village,
-      :latitudes,
-      :longitude
+      :lat,
+      :lng,
+      :name_organization,
+
+      :no_sk_notaris,
+      :tgl_sk_notaris,
+      :no_akta,
+      :tgl_akta,
+      :fax,
+      :bank_account_notaris,
+      :bank_name,
+      :indonesia_city_id,
+      :indonesia_village_id,
+    
+      :name_companion,
+      :idcard_number_companion,
+      :gender_companion,
+      :address_companion,
+      :status_companion,
+      :komparisi_companion,
+      :lat_companion,
+      :lng_companion,
+
+      :name_ppat,
+      :no_sk_notaris_ppat,
+      :tgl_sk_ppat,
+      :komparisi_ppat,
+      :no_akta_ppat,
+      :tgl_akta_ppat,
+      :address_ppat,
+      :fax_ppat,
+      :no_rekening_ppat,
+      :bank_name_ppat,
+      :lat_ppat,
+      :lng_ppat,
+
+      :pob, 
+      :mother_bpn,
+      :address_in_idcard_bpn,
+      :address_bpn
+    
 	)
   end
 

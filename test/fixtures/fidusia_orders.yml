@@ -2,24 +2,25 @@
 #
 # Table name: fidusia_orders
 #
-#  id                 :bigint(8)        not null, primary key
-#  binding_value      :string
-#  brand              :string
-#  chassis_number     :string
-#  collateral_value   :string
-#  imageable_type     :string
-#  machine_number     :string
-#  number_of_evidence :string
-#  on_behalf_of       :string
-#  owner              :string
-#  proof_of_ownership :string
-#  publication_date   :datetime
-#  seri               :string
-#  tipe               :string
-#  created_at         :datetime         not null
-#  updated_at         :datetime         not null
-#  imageable_id       :bigint(8)
-#  order_id           :integer
+#  id                  :bigint(8)        not null, primary key
+#  binding_value       :string
+#  brand               :string
+#  chassis_number      :string
+#  classification      :string
+#  collateral_value    :string
+#  color               :string
+#  imageable_type      :string
+#  machine_number      :string
+#  name_representative :string
+#  no_evidence         :string
+#  owner               :string
+#  proof_of_ownership  :string
+#  publication_date    :datetime
+#  seri                :string
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  imageable_id        :bigint(8)
+#  order_id            :integer
 #
 # Indexes
 #

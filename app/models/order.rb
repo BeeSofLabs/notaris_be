@@ -2,15 +2,16 @@
 #
 # Table name: orders
 #
-#  id           :bigint(8)        not null, primary key
-#  expired_date :datetime
-#  grand_total  :integer
-#  order_type   :integer
-#  status       :integer
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#  notary_id    :integer
-#  user_id      :integer
+#  id                     :bigint(8)        not null, primary key
+#  delete                 :boolean          default(FALSE)
+#  grand_total            :integer
+#  order_type             :integer
+#  status                 :integer
+#  valid_expired_datetime :datetime
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#  notary_id              :integer
+#  user_id                :integer
 #
 # Indexes
 #
@@ -25,7 +26,7 @@ class Order < ApplicationRecord
 	has_many :collaterals
 	belongs_to :notary, class_name: "User", foreign_key: :notary_id
 
-	enum :order_type => ["fidusia", "skmht", "apht", "skmht and apht"]
+	enum :order_type => ["fidusia", "skmht", "apht", "skmht_apht"]
 	enum :status => ["cancelled", "pending", "completed", "expired"]
 
 	after_create :assign_default_status
