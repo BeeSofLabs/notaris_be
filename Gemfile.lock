@@ -355,7 +355,6 @@ DEPENDENCIES
   rack-cors
   rails (~> 5.2.2, >= 5.2.2.1)
   rails_admin (~> 2.0)
-  rest-client
   rolify
   sass-rails (~> 5.0)
   selenium-webdriver
