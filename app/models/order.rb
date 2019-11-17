@@ -3,10 +3,17 @@
 # Table name: orders
 #
 #  id                     :bigint(8)        not null, primary key
+#  agunan_pokok           :integer
+#  angsuran_bunga         :integer
 #  delete                 :boolean          default(FALSE)
 #  grand_total            :integer
+#  jangka_waktu           :string
+#  no_perjanjian          :string
 #  order_type             :integer
+#  plafond                :integer
 #  status                 :integer
+#  tgl_akad               :string
+#  tgl_jatuh_tempo        :string
 #  valid_expired_datetime :datetime
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
@@ -20,10 +27,10 @@
 #
 
 class Order < ApplicationRecord
-	has_one :fidusia_order
-	has_one :skmht_order
-	has_one :apht_order
-	has_many :collaterals
+	has_many :fidusia_order
+	has_many :skmht_order
+	has_many :apht_order
+	# has_many :collaterals
 	belongs_to :notary, class_name: "User", foreign_key: :notary_id
 
 	enum :order_type => ["fidusia", "skmht", "apht", "skmht_apht"]

@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: skmht_orders
+# Table name: apht_collaterals
 #
 #  id                    :bigint(8)        not null, primary key
 #  binding_value         :string
@@ -11,6 +11,7 @@
 #  land_area             :string
 #  letter_of_measurement :string
 #  letter_of_pbbtax      :string
+#  movable_asset         :boolean          default(FALSE)
 #  name_representative   :string
 #  no_land_identity      :string
 #  nop                   :string
@@ -27,9 +28,9 @@
 #
 # Indexes
 #
-#  index_skmht_orders_on_order_id  (order_id)
+#  index_apht_collaterals_on_order_id  (order_id)
 #
 
-class SkmhtOrder < ApplicationRecord
+class AphtCollateral < ApplicationRecord
 	belongs_to :order
 end

@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: fidusia_orders
+# Table name: fidusia_collaterals
 #
 #  id                  :bigint(8)        not null, primary key
 #  binding_value       :string
@@ -11,6 +11,7 @@
 #  color               :string
 #  imageable_type      :string
 #  machine_number      :string
+#  movable_asset       :boolean          default(FALSE)
 #  name_representative :string
 #  no_evidence         :string
 #  owner               :string
@@ -24,9 +25,9 @@
 #
 # Indexes
 #
-#  index_fidusia_orders_on_imageable_type_and_imageable_id  (imageable_type,imageable_id)
+#  index_fidusia_collaterals_on_imageable_type_and_imageable_id  (imageable_type,imageable_id)
 #
 
-class FidusiaOrder < ApplicationRecord
+class FidusiaCollateral < ApplicationRecord
 	belongs_to :order
 end
