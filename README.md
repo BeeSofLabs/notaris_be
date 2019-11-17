@@ -10,6 +10,7 @@ ModelLogic changes:
 [17Nov]:
 - change table from fidusia_order, skmht_order, apht_order into fidusia_collateral, skmht_collateral, apht_collateral
 - add field column in orders table (no_perjanjian, plafond, tgl_akad, tgl_jatuh_tempo, tarif_bunga, jangka_waktu, agunan_pokok, angsuran_bunga)
+- Create new table "menu_home_preview" for handle list of menu that will show sequence item in dashboard
 
 
 - Use Notaris order to counting chart data item related with order request document to Notaris in CMS-Notaris panel
