@@ -101,17 +101,26 @@ class User < ApplicationRecord
 		Rails.env.production? ? "#{image.path}" : "#{image.path}" 
 	end
 
+	def self.search_by_pa_name(name=nil) 
+		User.collateral_owner.where("users.name like ?", name + '%')
+	end
+
+	def self.search_by_notaris_filter(name=nil) 
+		User.notaris.where("users.name like ? ", name + '%')
+	end
+
 	def self.roles
 		%w(notaris
 		debitur
 		kreditur
-		collateral_owner
+		collateral_owner,
+		bpn
 		)
 	end
 
-	def self.notaris
-		user = User.with_role("notaris")
-	end
+	# def self.notaris
+	# 	user = User.with_role("notaris")
+	# end
 
 	def generate_password_token!
 		self.reset_password_token	= generate_token

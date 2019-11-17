@@ -1,0 +1,2 @@
+class MenuHomePreview < ApplicationRecord
+end
