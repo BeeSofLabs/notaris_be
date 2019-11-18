@@ -79,15 +79,15 @@ class User < ApplicationRecord
 	validates_uniqueness_of :phone
 
 	enum organizational_status: ["perorangan", "badan_usaha"]
-	enum user_tipe: [ "debitur", "kreditur","collateral_owner", "notaris", "bpn"] 
+	enum user_tipe: [ "debitur", "kreditur","collateral_owner", "notaris", "bpn"]
 
 	mount_base64_uploader :identity_image, ImageUploader
 	mount_base64_uploader :selfie_image, ImageUploader
 
 	has_many :orders
 	has_many :notary_services
-	has_one :indonesia_city
-	has_one :indonesia_village
+	belongs_to :indonesia_city
+	belongs_to :indonesia_village
 
 	def insert_privy_token(privy_token)
 		update!(privy_token: privy_token)
@@ -98,7 +98,7 @@ class User < ApplicationRecord
 	end
 
 	def image_content(image)
-		Rails.env.production? ? "#{image.path}" : "#{image.path}" 
+		Rails.env.production? ? "#{image.path}" : "#{image.path}"
 	end
 
 	def self.search_by_pa_name(name=nil) 
@@ -125,7 +125,7 @@ class User < ApplicationRecord
 	def generate_password_token!
 		self.reset_password_token	= generate_token
 		self.reset_password_sent_at	= Time.now
-		save!	
+		save!
 	end
 
 	def valid_reset_password_token?
@@ -155,7 +155,15 @@ class User < ApplicationRecord
 		end
 	end
 
-	private 
+  def self.filter(params, users)
+    users = users.where("lower(users.name) like lower(?)", "%#{params[:name]}%") if params[:name].present?
+    users = users.joins(:indonesia_city).where("lower(indonesia_cities.city_name) like lower(?)", "%#{params[:area]}%") if params[:area].present?
+    users = users.joins(:notary_services).where(notary_services: { service_type: params[:doc_type] }) if params[:doc_type].present?
+    users = users.joins(:notary_services).where(notary_services: { price: params[:range_lower]..params[:range_higher] }) if params[:range_lower].present? && params[:range_higher].present?
+    users
+  end
+
+	private
 
 		def generate_token
 			SecureRandom.hex(10)
