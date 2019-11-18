@@ -3,35 +3,35 @@ class Api::V1::UsersController < ApplicationController
 
   def create
     ActiveRecord::Base.transaction do
-      user = User.create!(user_params)  
-      
+      user = User.create!(user_params)
+
       user.set_user_role(user_params[:user_tipe])
       auth_token = AuthenticateUser.new(user.email, user.password).call
 
       # identity_image = File.new(user.image_content(user.identity_image))
       # selfie_image = File.new(user.image_content(user.selfie_image))
-      
+
 
       res = nil
       if(user_params[:user_tipe] != 'bpn')
         res = PrivyModule::registration(
-          user.email, 
-          user.phone, 
-          user.identity_number, 
-          user.name, 
-          File.new(user.image_content(user.identity_image)), 
+          user.email,
+          user.phone,
+          user.identity_number,
+          user.name,
+          File.new(user.image_content(user.identity_image)),
           File.new(user.image_content(user.selfie_image))
         )
-        
+
         if privy_success_registration?(res)
           privy_token = res[:data][:userToken]
           user.insert_privy_token(privy_token)
         else
           raise Exception
-        end 
+        end
       end
 
-      response = { message: Message.account_created, auth_token: auth_token, privy: res}  
+      response = { message: Message.account_created, auth_token: auth_token, privy: res}
       json_response(response, :created)
     end
   end
@@ -50,7 +50,7 @@ class Api::V1::UsersController < ApplicationController
     end
     json_response(response, :ok)
   end
- 
+
 	def show
 		json_response(current_user)
 	end
@@ -90,10 +90,12 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def notaris
-    json_response(User.notaris)
+    users = User.notaris
+    users = User.filter(params, users)
+    json_response(users)
   end
 
-  
+
   private
 
   def reset_params
@@ -111,7 +113,7 @@ class Api::V1::UsersController < ApplicationController
 
   def user_params
   	params.permit(
-  		:name, 
+  		:name,
   		:email,
       :approved,
       :dob,
@@ -126,7 +128,7 @@ class Api::V1::UsersController < ApplicationController
       :user_tipe,
       :organizational_status,
       :phone,
-  		:password, 
+  		:password,
   		:password_confirmation,
       :user_tipe,
       :province,
@@ -146,7 +148,7 @@ class Api::V1::UsersController < ApplicationController
       :bank_name,
       :indonesia_city_id,
       :indonesia_village_id,
-    
+
       :name_companion,
       :idcard_number_companion,
       :gender_companion,
@@ -169,11 +171,11 @@ class Api::V1::UsersController < ApplicationController
       :lat_ppat,
       :lng_ppat,
 
-      :pob, 
+      :pob,
       :mother_bpn,
       :address_in_idcard_bpn,
       :address_bpn
-    
+
 	)
   end
 
