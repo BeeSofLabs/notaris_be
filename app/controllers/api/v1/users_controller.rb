@@ -27,7 +27,9 @@ class Api::V1::UsersController < ApplicationController
           privy_token = res[:data][:userToken]
           user.insert_privy_token(privy_token)
         else
-          raise Exception
+          # raise Exception
+          raise(ExceptionHandler::DuplicateRecord, { message: res })
+          # json_response({ message: res }, :unprocessable_entity)
         end
       end
 
