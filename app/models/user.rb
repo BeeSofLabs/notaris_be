@@ -86,8 +86,8 @@ class User < ApplicationRecord
 
 	has_many :orders
 	has_many :notary_services
-	belongs_to :indonesia_city
-	belongs_to :indonesia_village
+	belongs_to :indonesia_city, optional: true
+	belongs_to :indonesia_village, optional: true
 
 	def insert_privy_token(privy_token)
 		update!(privy_token: privy_token)
@@ -101,11 +101,11 @@ class User < ApplicationRecord
 		Rails.env.production? ? "#{image.path}" : "#{image.path}"
 	end
 
-	def self.search_by_pa_name(name=nil) 
+	def self.search_by_pa_name(name=nil)
 		User.collateral_owner.where("users.name like ?", name + '%')
 	end
 
-	def self.search_by_notaris_filter(name=nil) 
+	def self.search_by_notaris_filter(name=nil)
 		User.notaris.where("users.name like ? ", name + '%')
 	end
 
