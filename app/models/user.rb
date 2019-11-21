@@ -84,8 +84,12 @@ class User < ApplicationRecord
 	mount_base64_uploader :identity_image, ImageUploader
 	mount_base64_uploader :selfie_image, ImageUploader
 
-	has_many :orders
+  has_many :notary_orders, class_name: 'Order', foreign_key: 'notary_id', dependent: :nullify
+  has_many :debtor_orders, class_name: 'Order', foreign_key: 'debtor_id', dependent: :nullify
+  has_many :collateral_owner_orders, class_name: 'Order', foreign_key: 'collateral_owner_id', dependent: :nullify
+  has_many :creditor_orders, class_name: 'Order', foreign_key: 'user_id', dependent: :nullify
 	has_many :notary_services
+
 	belongs_to :indonesia_city, optional: true
 	belongs_to :indonesia_village, optional: true
 
