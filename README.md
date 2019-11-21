@@ -21,4 +21,5 @@ ModelLogic changes:
 - Add Field "Active" for toggle service available by Notariss
 
 [21-nov]
-- change "delete" field on order to "is_deleted"
+- change "delete" field on order to "is_deleted
+- add debtor_id and collateral_owner_id to order
