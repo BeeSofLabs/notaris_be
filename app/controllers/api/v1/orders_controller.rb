@@ -3,7 +3,7 @@ class Api::V1::OrdersController < ApplicationController
   before_action :find_notary_service, only: [:create]
 
 
-  def create
+  def create_order
       case params[:order_type].downcase
       when "fidusia"
         if "fidusia" == @notary_service.service_type
@@ -34,18 +34,32 @@ class Api::V1::OrdersController < ApplicationController
       end
   end
 
+  def create
+    if ["fidusia", "skmht", "apht"].include?(params[:order][:order_type])
+      if params[:order][:order_type].eql?(@notary_service.service_type)
+        order = Order.create(order_params)
+
+        order.present? ? json_response({message: "order created!", order: order}, :created) : json_response({message: order.errors, order: {}}, :unprocessable_entity)
+      else
+        json_response({message: "Invalid service", order: {}}, :unprocessable_entity)
+      end
+    else
+      json_response({message: "invalid order_type", order: {}}, :not_found)
+    end
+  end
+
   private
 
     def opts
       {
-        order_type: params[:order_type],
+        order_type: params[:order][:order_type],
         notary_id: @notary.id,
         notary_service_price: @notary_service.id
       }
     end
 
   	def find_notary
-  		@notary = User.find(params[:notary_id])
+  		@notary = User.find(params[:order][:notary_id])
   	end
 
   	def find_notary_service
@@ -54,9 +68,87 @@ class Api::V1::OrdersController < ApplicationController
 
 	def order_params
 		params.require(:order).permit(
+      :agunan_pokok,
+      :angsuran_bunga,
+      :grand_total,
+      :jangka_waktu,
+      :no_perjanjian,
+      :plafond,
+      :tgl_akad,
+      :tgl_jatuh_tempo,
+      :valid_expired_datetime,
 			:order_type,
 			:notary_id,
-			:notary_service_id
+      :user_id,
+      :collateral_owner_id,
+      :debtor_id,
+      fidusia_collaterals_attributes: [
+        :id,
+        :binding_value,
+        :brand,
+        :chassis_number,
+        :classification,
+        :collateral_value,
+        :color,
+        :imageable_type,
+        :machine_number,
+        :movable_asset,
+        :name_representative,
+        :no_evidence,
+        :owner,
+        :proof_of_ownership,
+        :publication_date,
+        :seri,
+        :order_id,
+        :brand,
+        :movable_asset
+      ],
+      apht_collaterals_attributes: [
+        :id,
+        :binding_value,
+        :certificate_number,
+        :city,
+        :collateral_value,
+        :district,
+        :land_area,
+        :letter_of_measurement,
+        :letter_of_pbbtax,
+        :movable_asset,
+        :name_representative,
+        :no_land_identity,
+        :nop,
+        :owner,
+        :proof_of_ownership,
+        :province,
+        :publication_date,
+        :street,
+        :tgl_gs_su,
+        :village,
+        :order_id
+      ],
+      skmht_collaterals_attributes: [
+        :id,
+        :binding_value,
+        :certificate_number,
+        :city,
+        :collateral_value,
+        :district,
+        :land_area,
+        :letter_of_measurement,
+        :letter_of_pbbtax,
+        :movable_asset,
+        :name_representative,
+        :no_land_identity,
+        :nop,
+        :owner,
+        :proof_of_ownership,
+        :province,
+        :publication_date,
+        :street,
+        :tgl_gs_su,
+        :village,
+        :order_id
+      ]
 		)
 	end
 

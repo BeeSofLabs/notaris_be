@@ -20,3 +20,5 @@ ModelLogic changes:
     2. in orders table has "valid_expired_datetime", will set experience date in 24 hour once created, if not valid anymore the order will auto soft delete by flag and can be opened later in backoffice
 - Add Field "Active" for toggle service available by Notariss
 
+[21-nov]
+- change "delete" field on order to "is_deleted"
