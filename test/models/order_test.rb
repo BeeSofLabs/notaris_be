@@ -5,11 +5,11 @@
 #  id                     :bigint(8)        not null, primary key
 #  agunan_pokok           :integer
 #  angsuran_bunga         :integer
-#  grand_total            :integer
+#  collateral_type        :string
+#  document_type          :string
 #  is_deleted             :boolean          default(FALSE)
 #  jangka_waktu           :string
 #  no_perjanjian          :string
-#  order_type             :integer
 #  plafond                :integer
 #  status                 :integer
 #  tgl_akad               :string
@@ -17,6 +17,7 @@
 #  valid_expired_datetime :datetime
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
+#  collateral_id          :integer
 #  collateral_owner_id    :bigint(8)
 #  debtor_id              :bigint(8)
 #  notary_id              :integer
