@@ -32,18 +32,21 @@
 #
 
 class Order < ApplicationRecord
-	has_many :fidusia_collaterals, dependent: :nullify
-	has_many :skmht_collaterals, dependent: :nullify
-	has_many :apht_collaterals, dependent: :nullify
+	# has_many :fidusia_collaterals, dependent: :nullify
+	# has_many :skmht_collaterals, dependent: :nullify
+	# has_many :apht_collaterals, dependent: :nullify
 	# has_many :collaterals
+
+	belongs_to :collateral, polymorphic: true
+
   	belongs_to :notary, class_name: "User", foreign_key: :notary_id, optional: true
   	belongs_to :creditor, class_name: "User", foreign_key: :user_id, optional: true
   	belongs_to :collateral_owner, class_name: "User", foreign_key: :collateral_owner_id, optional: true
 	belongs_to :debtor, class_name: "User", foreign_key: :debtor_id, optional: true
 
-	accepts_nested_attributes_for :fidusia_collaterals
-	accepts_nested_attributes_for :skmht_collaterals
-	accepts_nested_attributes_for :apht_collaterals
+	# accepts_nested_attributes_for :fidusia_collaterals
+	# accepts_nested_attributes_for :skmht_collaterals
+	# accepts_nested_attributes_for :apht_collaterals
 
 
 	enum :document_type => ["fidusia", "skmht", "apht", "skmht_apht"]
