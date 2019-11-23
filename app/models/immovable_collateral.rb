@@ -14,7 +14,6 @@
 # #  index_collaterals_on_order_id  (order_id)
 # #
 
-# class Collateral < ApplicationRecord
-# 	belongs_to :order
-# 	enum :collateral_type => ["bergerak", "tidak bergerak"]
-# end
+class ImmovableCollateral < ApplicationRecord
+	has_many :orders, as: :collateral
+end
