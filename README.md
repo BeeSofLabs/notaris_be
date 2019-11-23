@@ -23,3 +23,10 @@ ModelLogic changes:
 [21-nov]
 - change "delete" field on order to "is_deleted
 - add debtor_id and collateral_owner_id to order
+
+[24-nov]:
+- create collateral orders to for connecting order and movable_collaterals - immovable collaterals
+- drop collateral
+- revert create order migration change
+- add data type to remove redundant expoired in order migration
+- swap movable_collateral and immovable_collateral fields
