@@ -1,5 +1,5 @@
 class RemoveRedundantExpiredInOrder < ActiveRecord::Migration[5.2]
   def change
-    remove_column :orders, :expired_date
+    remove_column :orders, :expired_date, :datetime
   end
 end
