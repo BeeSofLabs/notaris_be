@@ -5,11 +5,12 @@
 #  id                     :bigint(8)        not null, primary key
 #  agunan_pokok           :integer
 #  angsuran_bunga         :integer
-#  collateral_type        :string
 #  document_type          :string
+#  grand_total            :integer
 #  is_deleted             :boolean          default(FALSE)
 #  jangka_waktu           :string
 #  no_perjanjian          :string
+#  order_type             :integer
 #  plafond                :integer
 #  status                 :integer
 #  tgl_akad               :string
@@ -17,7 +18,6 @@
 #  valid_expired_datetime :datetime
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
-#  collateral_id          :integer
 #  collateral_owner_id    :bigint(8)
 #  debtor_id              :bigint(8)
 #  notary_id              :integer
@@ -39,9 +39,9 @@ class Order < ApplicationRecord
 
 	belongs_to :collateral, polymorphic: true
 
-  	belongs_to :notary, class_name: "User", foreign_key: :notary_id, optional: true
-  	belongs_to :creditor, class_name: "User", foreign_key: :user_id, optional: true
-  	belongs_to :collateral_owner, class_name: "User", foreign_key: :collateral_owner_id, optional: true
+	belongs_to :notary, class_name: "User", foreign_key: :notary_id, optional: true
+	belongs_to :creditor, class_name: "User", foreign_key: :user_id, optional: true
+	belongs_to :collateral_owner, class_name: "User", foreign_key: :collateral_owner_id, optional: true
 	belongs_to :debtor, class_name: "User", foreign_key: :debtor_id, optional: true
 
 	# accepts_nested_attributes_for :fidusia_collaterals
