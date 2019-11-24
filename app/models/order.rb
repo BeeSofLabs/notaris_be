@@ -44,10 +44,10 @@ class Order < ApplicationRecord
 	belongs_to :collateral_owner, class_name: "User", foreign_key: :collateral_owner_id, optional: true
 	belongs_to :debtor, class_name: "User", foreign_key: :debtor_id, optional: true
 
-  has_many :collateral_orders, dependent: :nullify
-  # has_many :collaterals, through: :collateral_orders, source: :collateral
-  has_many :movable_collaterals, through: :collateral_orders, source: :collateral, source_type: 'MovableCollateral'
-  has_many :immovable_collaterals, through: :collateral_orders, source: :collateral, source_type: 'ImmovableCollateral'
+	has_many :collateral_orders, dependent: :nullify
+	# has_many :collaterals, through: :collateral_orders, source: :collateral
+	has_many :movable_collaterals, through: :collateral_orders, source: :collateral, source_type: 'MovableCollateral'
+	has_many :immovable_collaterals, through: :collateral_orders, source: :collateral, source_type: 'ImmovableCollateral'
 
 	# accepts_nested_attributes_for :fidusia_collaterals
 	# accepts_nested_attributes_for :skmht_collaterals
