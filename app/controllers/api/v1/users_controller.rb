@@ -14,6 +14,7 @@ class Api::V1::UsersController < ApplicationController
 
       res = nil
       if(user_params[:user_tipe] != 'bpn')
+        
         res = PrivyModule::registration(
           user.email,
           user.phone,
@@ -23,6 +24,7 @@ class Api::V1::UsersController < ApplicationController
           File.new(user.image_content(user.selfie_image))
         )
 
+      
         if privy_success_registration?(res)
           privy_token = res[:data][:userToken]
           user.insert_privy_token(privy_token)

@@ -19,7 +19,7 @@
 #  proof_of_ownership    :string
 #  province              :string
 #  publication_date      :string
-#  signed                :boolean          default(FALSE)
+#  signed                :string           default("false")
 #  street                :string
 #  village               :string
 #  created_at            :datetime         not null
@@ -27,5 +27,6 @@
 #
 
 class ImmovableCollateral < ApplicationRecord
-  has_many :collateral_orders, as: :collateral, dependent: :nullify
+  # has_many :collateral_orders, as: :collateral, dependent: :nullify
+  has_and_belongs_to_many :orders
 end

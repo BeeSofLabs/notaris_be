@@ -1,6 +1,10 @@
 class Api::V1::OrdersController < ApplicationController
   before_action :find_notary, only: [:create]
-  before_action :find_notary_service, only: [:create]
+  # before_action :find_notary_service, only: [:  create]
+
+  DOCTYPE_SKMHT = "skmht"
+  DOCTYPE_APHT = "apht"
+  DOCTYPE_FIDUSIA = "fidusia"
 
 
   # def create_order
@@ -35,16 +39,23 @@ class Api::V1::OrdersController < ApplicationController
   # end
 
   def create
-    if ["fidusia", "skmht", "apht"].include?(params[:order][:header][:document_type])
-      if params[:order][:header][:document_type].eql?(@notary_service.service_type)
-        order = Order.create_order(current_user, order_params, @notary_service)
+    if [DOCTYPE_SKMHT, DOCTYPE_APHT, DOCTYPE_FIDUSIA].include?(order_params[:document_type])
+      # if order_params[:document_type].eql?(@notary_service.service_type)
 
-        order.present? ? json_response({message: "order created!", order: order}, :created) : json_response({message: order.errors, order: {}}, :unprocessable_entity)
-      else
-        json_response({message: "Invalid service", order: {}}, :unprocessable_entity)
-      end
+        if order_params[:document_type] != DOCTYPE_FIDUSIA
+          order = Order.create_order_with_immovable_collateral(current_user, order_params, params[:immovable_collateral_ids])
+        else
+          order = Order.create_order_with_movable_collateral(current_user, order_params, params[:movable_collateral_ids])
+        end
+
+        #  checking order valid or not
+        if order.present? 
+          json_response({message: "order created!", order: order}, :created)
+        else
+          json_response({message: "Invalid service", order: {}}, :unprocessable_entity)
+        end
     else
-      json_response({message: "invalid document type", order: {}}, :not_found)
+        json_response({message: "invalid document type", order: {}}, :not_found)
     end
   end
 
@@ -59,73 +70,76 @@ class Api::V1::OrdersController < ApplicationController
     end
 
   	def find_notary
-  		@notary = User.find(params[:order][:header][:notary_id])
+  		@notary = User.find(order_params[:notary_id])
   	end
 
   	def find_notary_service
-  		@notary_service = @notary.notary_services.find(params[:notary_service_id])
+  		@notary_service = @notary.notary_services.find(order_params[:notary_service_id])
   	end
 
 	def order_params
-		params.require(:order).permit(
-      header: [
-        :agunan_pokok,
-        :angsuran_bunga,
-        :grand_total,
-        :jangka_waktu,
-        :no_perjanjian,
-        :plafond,
-        :tgl_akad,
-        :tgl_jatuh_tempo,
-        :valid_expired_datetime,
-  			:document_type,
-  			:notary_id,
-        :user_id,
-        :collateral_owner_id,
-        :debtor_id
-      ],
-      movable_collaterals: [
-        :id,
-        :binding_value,
-        :brand,
-        :chassis_number,
-        :classification,
-        :collateral_value,
-        :color,
-        :imageable_type,
-        :machine_number,
-        :movable_asset,
-        :name_representative,
-        :no_evidence,
-        :owner,
-        :proof_of_ownership,
-        :publication_date,
-        :seri,
-        :brand,
-        :movable_asset
-      ],
-      immovable_collaterals: [
-        :id,
-        :binding_value,
-        :certificate_number,
-        :city,
-        :collateral_value,
-        :district,
-        :gs_su_date,
-        :land_area,
-        :letter_of_measurement,
-        :letter_of_pbbtax,
-        :name_representative,
-        :no_land_identity,
-        :nop,
-        :owner,
-        :proof_of_ownership,
-        :province,
-        :publication_date,
-        :signed,
-        :street,
-        :village
-      ]
+		params.permit(
+      :agunan_pokok,
+      :angsuran_bunga,
+      :total_price,
+      :jangka_waktu,
+      :no_perjanjian,
+      :plafond,
+      :tgl_akad,
+      :tgl_jatuh_tempo,
+      :valid_expired_datetime,
+      :document_type,
+      :no_request_order,
+      :notary_id,
+      :user_id,
+      :collateral_owner_id,
+      :debtor_id,
+      :creditor_id,
+      :movable_collateral_ids,
+      :immovable_collateral_ids
+      
+      # movable_collaterals: [
+      #   :id,
+      #   :binding_value,
+      #   :brand,
+      #   :chassis_number,
+      #   :classification,
+      #   :collateral_value,
+      #   :color,
+      #   :imageable_type,
+      #   :machine_number,
+      #   :movable_asset,
+      #   :name_representative,
+      #   :no_evidence,
+      #   :owner,
+      #   :proof_of_ownership,
+      #   :publication_date,
+      #   :seri,
+      #   :brand,
+      #   :movable_asset
+      # ],
+      # immovable_collaterals: [
+      #   :id,
+      #   :binding_value,
+      #   :certificate_number,
+      #   :city,
+      #   :collateral_value,
+      #   :district,
+      #   :gs_su_date,
+      #   :land_area,
+      #   :letter_of_measurement,
+      #   :letter_of_pbbtax,
+      #   :name_representative,
+      #   :no_land_identity,
+      #   :nop,
+      #   :owner,
+      #   :proof_of_ownership,
+      #   :province,
+      #   :publication_date,
+      #   :signed,
+      #   :street,
+      #   :village
+      # ]
 		)
 	end
 

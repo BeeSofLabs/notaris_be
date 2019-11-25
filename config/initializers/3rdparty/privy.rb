@@ -2,10 +2,11 @@ module PrivyModule
     # PrivyModule::registration("tester@mail.com", "0217262066", "1234567898", "Udin Jawa", File.new("public/dummy_ktp.jpeg"), File.new("public/dummy_selfie.jpeg"))
     # response -> {:code=>201, :data=>{:email=>"tester@mail.com", :phone=>"+62217262066", :userToken=>"1c4523310e4580359f69a7fae363ef95b8ff3f1aa5fcc6681442e5db5950c56b", :status=>"waiting"}, :message=>"Waiting for Verification"}
     def self.registration(email_user, phone_user, nik, name, file_ktp_image, file_selfie_image)
-        url = "#{ENV["PRIVY_API_URL"]}/#{ENV["privy_api_registration_path"]}"
+        # url = "#{ENV["PRIVY_API_URL"]}/#{ENV["privy_api_registration_path"]}"
+        url = "#{ENV["PRIVY_API_URL"]}/registration"
         request = Typhoeus::Request.new(
             url,
-            method: :post,
+            method: :post,  
             userpwd: ENV["PRIVY_PASSWORD"],
             headers: { 'Merchant-Key' => ENV["PRIVY_MERCHANT_KEY"], 'ContentType' => "application/json" },
             body: {
