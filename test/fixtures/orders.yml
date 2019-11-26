@@ -8,6 +8,7 @@
 #  document_type          :string
 #  is_deleted             :boolean          default(FALSE)
 #  jangka_waktu           :string
+#  no_order               :string
 #  no_perjanjian          :string
 #  no_request_order       :integer
 #  plafond                :integer
