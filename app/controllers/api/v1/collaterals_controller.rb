@@ -37,7 +37,37 @@ class Api::V1::CollateralsController < ApplicationController
         json_response({message: "Invalid service"}, :unprocessable_entity)
     end
 
+    def destroy
+        
+        if params[:collateral_type] == 'movable'
+            if params.present? && valid_collateral_owner(params)
+                if MovableCollateral.delete(params[:id])
+                    return json_response({message: "collateral deleted!"}, :deleted)
+                end
+            end
+        elsif params[:collateral_type] == 'immovable'
+            if params.present?
+                if ImovableCollateral.delete(params[:id])
+                    return json_response({message: "collateral deleted!"}, :deleted)
+                end
+            end
+        end
+
+        json_response({message: "Invalid service"}, :unprocessable_entity)
+    end
+
     private
+
+    def valid_collateral_owner(params)
+        case params[:collateral_type]
+        when "movable"
+            result = MovableCollateral.where(id: params[:id], user_id: current_user.id)
+        when "immovable"
+            result = ImmovableCollateral.where(id: params[:id], user_id: current_user.id)
+        end
+
+        result.present?
+    end
 
     def movable_collateral_params
         params.permit(

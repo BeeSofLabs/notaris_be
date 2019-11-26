@@ -28,7 +28,7 @@
 #
 
 class MovableCollateral < ApplicationRecord
-  has_many :collateral_orders, as: :collateral, dependent: :nullify
+  has_many :collateral_orders, as: :collateral, dependent: :delete_all
   belongs_to :user
 
   def self.save(params)
