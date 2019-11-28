@@ -23,10 +23,9 @@ Rails.application.routes.draw do
 				get 'districts/:city_id', 		to: 'indonesias#districts'
 				get 'villages/:district_id', 	to: 'indonesias#villages'
 				resource :collateral, only: [:show, :create, :destroy]
-			
-		end
 
-		namespace :cms do
+				resource :document, only: [:show]
+			
 		end
 	end
 end
