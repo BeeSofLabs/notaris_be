@@ -9,24 +9,31 @@
 #  classification      :string
 #  collateral_value    :float            default(0.0)
 #  color               :string
-#  imageable_type      :string
 #  machine_number      :string
 #  name_representative :string
+#  no_collateral       :string
 #  no_evidence         :string
 #  owner               :string
 #  proof_of_ownership  :string
 #  publication_date    :string
 #  serial_number       :string
-#  signed              :boolean          default(FALSE)
+#  signed              :string           default("false")
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
-#  imageable_id        :bigint(8)
+#  user_id             :bigint(8)
 #
 # Indexes
 #
-#  index_movable_collaterals_on_imageable_type_and_imageable_id  (imageable_type,imageable_id)
+#  index_movable_collaterals_on_user_id  (user_id)
 #
 
 class MovableCollateral < ApplicationRecord
-  has_many :collateral_orders, as: :collateral, dependent: :nullify
+  has_many :collateral_orders, as: :collateral, dependent: :delete_all
+  belongs_to :user
+
+  def self.save(params)
+    ActiveRecord::Base.transaction do
+        collateral =  self.create(params)
+    end 
+  end
 end

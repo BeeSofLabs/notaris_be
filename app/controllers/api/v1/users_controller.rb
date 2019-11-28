@@ -1,5 +1,5 @@
 class Api::V1::UsersController < ApplicationController
-	skip_before_action :authorize_request, only: [:create, :roles, :notaris, :forgot, :reset]
+	skip_before_action :authorize_request, only: [:create, :roles, :notaris, :forgot, :reset, :notaris_detail]
 
   def create
     ActiveRecord::Base.transaction do
@@ -14,6 +14,7 @@ class Api::V1::UsersController < ApplicationController
 
       res = nil
       if(user_params[:user_tipe] != 'bpn')
+
         res = PrivyModule::registration(
           user.email,
           user.phone,
@@ -22,6 +23,7 @@ class Api::V1::UsersController < ApplicationController
           File.new(user.image_content(user.identity_image)),
           File.new(user.image_content(user.selfie_image))
         )
+
 
         if privy_success_registration?(res)
           privy_token = res[:data][:userToken]
@@ -92,9 +94,15 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def notaris
-    users = User.notaris
+    # users = User.notaris
+    users = User.joins(:roles).where("roles.name = ?", "notaris")
     users = User.filter(params, users)
     json_response(users)
+  end
+
+  def notaris_detail
+    notaris = User.joins(:roles).where("roles.name = ? and users.id = ?", "notaris", params[:id])
+    json_response(notaris)
   end
 
 
