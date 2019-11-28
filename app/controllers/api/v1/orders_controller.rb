@@ -1,5 +1,5 @@
 class Api::V1::OrdersController < ApplicationController
-  before_action :find_notary, only: [:create]
+  # before_action :find_notary, only: [:create]
 
   DOCTYPE_SKMHT = "skmht"
   DOCTYPE_APHT = "apht"
@@ -15,7 +15,7 @@ class Api::V1::OrdersController < ApplicationController
         end
 
         #  checking order valid or not
-        if order.present? 
+        if order.present?
           json_response({message: "order created!", order: order}, :created)
         else
           json_response({message: "Invalid service", order: {}}, :unprocessable_entity)
@@ -26,7 +26,7 @@ class Api::V1::OrdersController < ApplicationController
   end
 
   private
-  
+
 	def order_params
 		params.permit(
       :agunan_pokok,
