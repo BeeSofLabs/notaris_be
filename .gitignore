@@ -24,6 +24,7 @@ config/*
 /node_modules
 /yarn-error.log
 
+/public/pdfs
 /public/assets
 .byebug_history
 
