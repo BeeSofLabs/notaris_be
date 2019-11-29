@@ -49,7 +49,7 @@ class Api::V1::DocumentsController < ApplicationController
             end
             return json_response( 
                 {   message: "Document generated in pdf format!", 
-                    path: "#{pdf_path}", 
+                    path: "#{pdf_path}",    
                     privy: privy }, :ok)
         rescue Exception
         end

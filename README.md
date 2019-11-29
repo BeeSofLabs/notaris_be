@@ -4,6 +4,7 @@ ChangeLog [29Nov]:
 * Add api for get html template document (skmht, apht, covernote, fidusia)
 * Add api upload content html for order document
 * Add api generate pdf from document content and return response fullpath pdf file
+* Get link iframe privy for go sign agreement in privyID
 
 
 ChangeLog [27Nov]:
