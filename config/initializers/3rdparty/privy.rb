@@ -59,7 +59,7 @@ module PrivyModule
                                     {
                                         privyId: signerPrivyID,
                                         type: "Signer",
-                                        enterpriseToken: ENV["PRIVY_ENTERPRISE_TOKEN"]
+                                        enterpriseToken: ""#ENV["PRIVY_ENTERPRISE_TOKEN"]
                                     }
 
                                 ].to_json,

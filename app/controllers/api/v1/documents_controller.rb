@@ -27,15 +27,30 @@ class Api::V1::DocumentsController < ApplicationController
 
     def generate_pdf
         begin
-            order = Order.find params[:order_id]
-            if order.present? && order.html_content.present?
-                filename = "#{order.document_type}#{order.id}-#{Time.now.strftime('%Y%m%d')}"
-                save_path = Rails.root.join('public/pdfs', "#{filename}")
-                pdf_path = Html2Pdf.generate(order.html_content, save_path)
+            privy = nil
+            
+            pdf_path = Order.build(params[:order_id]).to_s
+            if params[:with_privy]
+                order = Order.find params[:order_id]
+                
+                privy = PrivyModule::upload_document(
+                    order.document_type.camelcase, 
+                    order.creditor.privy_id, 
+                    "TE4455", 
+                    File.new(pdf_path))
+                
 
-                return json_response(  {message: "Document generated in pdf format!", path: "#{save_path}.pdf"}, :ok)
-        
+                if privy[:data].present?
+                    order.update(
+                        doc_token_privy: privy[:data][:docToken],
+                        url_document_privy: privy[:data][:urlDocument])
+                end
+                
             end
+            return json_response( 
+                {   message: "Document generated in pdf format!", 
+                    path: "#{pdf_path}", 
+                    privy: privy }, :ok)
         rescue Exception
         end
 

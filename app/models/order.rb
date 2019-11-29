@@ -5,6 +5,7 @@
 #  id                     :bigint(8)        not null, primary key
 #  agunan_pokok           :integer
 #  angsuran_bunga         :integer
+#  doc_token_privy        :string
 #  document_type          :string
 #  has_creditor_signed    :boolean          default(FALSE)
 #  has_debtor_signed      :boolean          default(FALSE)
@@ -20,6 +21,7 @@
 #  tgl_akad               :string
 #  tgl_jatuh_tempo        :string
 #  total_price            :integer
+#  url_document_privy     :string
 #  valid_expired_datetime :datetime
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
@@ -88,6 +90,22 @@ class Order < ApplicationRecord
 			order
 		end
 	end
+
+
+	def self.build(order_id)
+
+        order = Order.find order_id
+        
+        if order.present? && order.html_content.present?
+            filename = "#{order.document_type}-#{order.id}"
+            save_path = Rails.root.join('public/pdfs', "#{filename}.pdf")
+            Html2Pdf.generate(order.html_content, save_path)
+
+            return save_path
+        end
+
+        nil
+    end
 
 	private
 		def assign_default_value
