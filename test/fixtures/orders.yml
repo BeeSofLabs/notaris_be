@@ -5,7 +5,12 @@
 #  id                     :bigint(8)        not null, primary key
 #  agunan_pokok           :integer
 #  angsuran_bunga         :integer
+#  doc_token_privy        :string
 #  document_type          :string
+#  has_creditor_signed    :boolean          default(FALSE)
+#  has_debtor_signed      :boolean          default(FALSE)
+#  has_pa_signed          :boolean          default(FALSE)
+#  html_content           :string           default("")
 #  is_deleted             :boolean          default(FALSE)
 #  jangka_waktu           :string
 #  no_order               :string
@@ -16,6 +21,7 @@
 #  tgl_akad               :string
 #  tgl_jatuh_tempo        :string
 #  total_price            :integer
+#  url_document_privy     :string
 #  valid_expired_datetime :datetime
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null

@@ -1,6 +1,17 @@
 class Api::V1::UsersController < ApplicationController
 	skip_before_action :authorize_request, only: [:create, :roles, :notaris, :forgot, :reset, :notaris_detail]
 
+  def search_collateral_owner
+    ActiveRecord::Base.transaction do
+        result = User.collateral_owner.where("name LIKE ?", "%#{params[:owner]}%")
+        response = { message: "Search collateral owner updated", collateral_owners: result}
+        return json_response(response, :listed)    
+    end
+
+    json_response({message: "invalid action", collateral_owners: {}}, :invalid)
+    
+  end
+
   def create
     ActiveRecord::Base.transaction do
       user = User.create!(user_params)
@@ -27,7 +38,8 @@ class Api::V1::UsersController < ApplicationController
 
         if privy_success_registration?(res)
           privy_token = res[:data][:userToken]
-          user.insert_privy_token(privy_token)
+          privy_status = res[:data][:status]
+          user.insert_privy_token(privy_token, privy_status)
         else
           # raise Exception
           raise(ExceptionHandler::DuplicateRecord, { message: res })
@@ -45,9 +57,10 @@ class Api::V1::UsersController < ApplicationController
       unless current_user.privy_token.present?
         response = {msg: "privy token not found", privy: {}}
       else
-        res = Privy.new(current_user).registration_status
-        current_user.privy_approved if privy_approved?(res)
-        response = {msg: res["data"]["status"], privy: res}
+        # res = Privy.new(current_user).registration_status
+        res = PrivyModule.status_of_registration(current_user.privy_token)
+        current_user.privy_approved(res[:data][:status], res[:data][:privyId]) if privy_approved?(res)
+        response = {msg: current_user.privy_status, privy: res}
       end
     else
       response = {msg: "approved", privy: {}}
