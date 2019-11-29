@@ -26,6 +26,8 @@ Rails.application.routes.draw do
 				
 				resource :collateral, only: [:show, :create, :destroy]
 				resource :document, only: [:show]
+				post 'document/upload', 	to: 'documents#upload'
+				post 'document/generate', to: 'documents#generate_pdf'
 		end
 	end
 end

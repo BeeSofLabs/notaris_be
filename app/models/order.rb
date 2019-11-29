@@ -6,6 +6,10 @@
 #  agunan_pokok           :integer
 #  angsuran_bunga         :integer
 #  document_type          :string
+#  has_creditor_signed    :boolean          default(FALSE)
+#  has_debtor_signed      :boolean          default(FALSE)
+#  has_pa_signed          :boolean          default(FALSE)
+#  html_content           :string           default("")
 #  is_deleted             :boolean          default(FALSE)
 #  jangka_waktu           :string
 #  no_order               :string
@@ -48,7 +52,7 @@ class Order < ApplicationRecord
 
 	enum :document_type => { "fidusia": "fidusia", "skmht": "skmht", "apht": "apht", "skmht_apht": "skmht_apht" }
 	# enum :status => ["cancelled", "pending", "completed", "expired"	]
-	enum :status => ["draft", "cancel", "sign", "waiting_payment", "payment_done", "claim", "completed", "expired"]
+	enum :status => {"draft":0, "submission": 1, "sign":2, "waiting_payment":3, "payment_done":4, "claim":5, "completed":6, "expired":7,  "cancel":8, "deleted": 9}
 
 	before_create :assign_default_value
 
@@ -57,7 +61,9 @@ class Order < ApplicationRecord
 		ActiveRecord::Base.transaction do
 			order = self.create(params)
 			if order.try(:id).present?
-				order.update(tgl_jatuh_tempo: Time.now + 24.hours, 
+				order.update(
+					status: Order.statuses[params[:status]],
+					tgl_jatuh_tempo: Time.now + 24.hours, 
 					user_id: user.id, 
 					valid_expired_datetime: DateTime.now + 1.days,
 					movable_collaterals: MovableCollateral.find(movable_collateral_ids))
@@ -71,7 +77,9 @@ class Order < ApplicationRecord
 			order = self.create(params)
 			if order.try(:id).present?
 				no_request_order = params[:no_request_order].present? ? params[:no_request_order] : Time.now.to_i
-				order.update(tgl_jatuh_tempo: Time.now + 24.hours, 
+				order.update(
+					status: Order.statuses[params[:status]],
+					tgl_jatuh_tempo: Time.now + 24.hours, 
 					user_id: user.id, 
 					no_request_order: no_request_order,	
 					valid_expired_datetime: DateTime.now + 1.days,
@@ -82,7 +90,6 @@ class Order < ApplicationRecord
 	end
 
 	private
-
 		def assign_default_value
 			self.status = "draft"
 		end

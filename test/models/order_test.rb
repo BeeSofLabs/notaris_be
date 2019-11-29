@@ -6,6 +6,10 @@
 #  agunan_pokok           :integer
 #  angsuran_bunga         :integer
 #  document_type          :string
+#  has_creditor_signed    :boolean          default(FALSE)
+#  has_debtor_signed      :boolean          default(FALSE)
+#  has_pa_signed          :boolean          default(FALSE)
+#  html_content           :string           default("")
 #  is_deleted             :boolean          default(FALSE)
 #  jangka_waktu           :string
 #  no_order               :string

@@ -1,0 +1,61 @@
+debitur PO: ary@clappingape.com  
+kreditur BU: ary2@clappingape.com
+pa : ary3@clappingape.com
+notaris : ary4@clappingape.com
+--- password01
+
+issue FE:
+Registrasi:
+- mau upload photo saat attach photo harus 2x baru bisa ke attach di bagian registration 
+- Alamat sesuai KTP  Pendamping tidak bisa diketik
+- input text "nama lengkap" di step 1 di hilangkan, jadinya pke yg "nama lengkap" di step 2
+- pick date utk tanggal lahir di set 20 tahun yg lalu 
+- icon web blom terpasang
+- title search notaris box belum dihilangkan
+- setelah login , nama lengkapnya ngk muncul di pojok kanan atas, sepertinya masih di hardcode
+- dropdown tipe dokument di search notaris , placeholdernya ngk hilang setelah di select dokument typenya
+- utk yg dropdown wilayah kerja itu muncul:
+    -> list dari province , ketika milih akan muncul
+    -> list dari city , ketika milih akan muncul,
+    -> list dari distrik , ketika milih akan muncul
+    -> list dari village
+    -> action search dilakukan tiap kali filter berubah termasuk yg di search box jg
+
+- login sebagai PA, blom nampil dashboard PAnya
+- validasi KTP field harusnya angka semua max 20
+- validasi Phone field harusnya angka semua max 15
+- di bagian notaris utk wilayah kerja sampai distrik
+- di bagian notaris di longitude pke placeholder "Masukkan luas tanah"
+- dropdown pilih bank ngk bs milih Mandiri
+- login sbg notaris blom masuk ke cms notaris
+
+- registrasi sebagai bpn masih ngk bisa
+
+
+notes backend:
+- tambahin rails admin
+- api validasi step 1
+
+
+
+Task Android Indosat [Ary]:
+- Create splash screen 
+- Create onboarding 
+- Create KYC onboarding
+- Create first time install page
+- Create login 
+- Create signupO
+- Create OTP Verification
+- Create reset pin 
+- Create Upgrade version KYC
+- Create capture idcard photo
+- Create capture selfie photo
+- Implementation KYC flow for Upgrade version
+- Implementation kode bayar with qrcode, barcode and generate token
+- Create Validation for onboarding
+- Create Validation for login
+- Create Validation for signup
+- Create Validation for OTP
+
+
+

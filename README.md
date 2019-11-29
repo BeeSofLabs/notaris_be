@@ -1,5 +1,10 @@
 # README
 
+ChangeLog [29Nov]:
+* Add api for get html template document (skmht, apht, covernote, fidusia)
+* Add api upload content html for order document
+* Add api generate pdf from document content and return response fullpath pdf file
+
 
 ChangeLog [27Nov]:
 * add new field "no_request_order" for identify multiple order in same request
