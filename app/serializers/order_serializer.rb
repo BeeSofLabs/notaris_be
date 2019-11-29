@@ -42,7 +42,7 @@
 
 class OrderSerializer < ActiveModel::Serializer
   	attributes 	:id,
-				:grand_total,
+				# :grand_total,
 				:document_type,
 				:status,
 				:created_at,
@@ -50,5 +50,6 @@ class OrderSerializer < ActiveModel::Serializer
 				:notary_id,
 				:user_id
 
-  	has_many :collaterals
+  	# has_many :collaterals
+    has_one :chat_room
 end

@@ -1,4 +1,16 @@
 # README
+ChangeLog [29Nov]:
+* Add api for create chat
+* Add api for destroy chat
+* Add api for get chat room
+* Add api for get list orders
+
+ModelLogic changes:
+* create ChatRoom
+* create Chat
+* order has one chat room
+* chat room has many chats
+* user has many chats
 
 ChangeLog [29Nov]:
 * Add api for get html template document (skmht, apht, covernote, fidusia)
