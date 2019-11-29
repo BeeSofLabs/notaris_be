@@ -10,6 +10,7 @@ Rails.application.routes.draw do
 				post 'auth/login', 				to: 'authentication#authenticate'
 				post 'signup', 					to: 'users#create'
 				post 'orders/create'
+        get 'orders', to: 'orders#index'
 				post 'users/status', 			to: "users#privy_status"
 				get 'users/collateral',			to: "users#search_collateral_owner"
 				get 'users/roles', 				to: "users#roles"
@@ -23,11 +24,12 @@ Rails.application.routes.draw do
 				get 'cities/:province_id', 		to: 'indonesias#cities'
 				get 'districts/:city_id', 		to: 'indonesias#districts'
 				get 'villages/:district_id', 	to: 'indonesias#villages'
-				
+
 				resource :collateral, only: [:show, :create, :destroy]
 				resource :document, only: [:show]
 				post 'document/upload', 	to: 'documents#upload'
 				post 'document/generate', to: 'documents#generate_pdf'
+        resource :chats, only: [:show, :create, :destroy]
 		end
 	end
 end
