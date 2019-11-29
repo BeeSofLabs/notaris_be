@@ -9,6 +9,7 @@
 #  address_companion          :string
 #  address_in_idcard_bpn      :string
 #  address_ppat               :string
+#  apht_price                 :decimal(, )      default(0.0)
 #  approved                   :boolean          default(FALSE)
 #  bank_account_notaris       :string
 #  bank_name                  :string
@@ -19,6 +20,7 @@
 #  email                      :string
 #  fax                        :string
 #  fax_ppat                   :string
+#  fidusia_price              :decimal(, )      default(0.0)
 #  gender                     :string
 #  gender_companion           :string
 #  idcard_number_companion    :string
@@ -49,11 +51,13 @@
 #  password_digest            :string
 #  phone                      :string
 #  pob                        :string
+#  privy_status               :string
 #  privy_token                :string
 #  province                   :string
 #  reset_password_sent_at     :datetime
 #  reset_password_token       :string
 #  selfie_image               :string
+#  skmht_price                :decimal(, )      default(0.0)
 #  status_companion           :string
 #  tgl_akta                   :string
 #  tgl_akta_ppat              :string
@@ -66,6 +70,7 @@
 #  updated_at                 :datetime         not null
 #  indonesia_city_id          :integer
 #  indonesia_village_id       :integer
+#  privy_id                   :string
 #
 
 class UserSerializer < ActiveModel::Serializer

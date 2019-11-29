@@ -44,7 +44,8 @@ class Api::V1::OrdersController < ApplicationController
       :user_id,
       :collateral_owner_id,
       :debtor_id,
-      :creditor_id
+      :creditor_id, 
+      :status
 		)
 	end
 

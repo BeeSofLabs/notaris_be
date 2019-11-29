@@ -9,8 +9,9 @@ Rails.application.routes.draw do
 		namespace :v1 do
 				post 'auth/login', 				to: 'authentication#authenticate'
 				post 'signup', 					to: 'users#create'
-				post 'privy/status', 			to: "users#privy_status"
 				post 'orders/create'
+				post 'users/status', 			to: "users#privy_status"
+				get 'users/collateral',			to: "users#search_collateral_owner"
 				get 'users/roles', 				to: "users#roles"
         get 'users/notaris',      to: "users#notaris"
 				get 'users/notaris_detail/:id', 			to: "users#notaris_detail"
@@ -22,11 +23,11 @@ Rails.application.routes.draw do
 				get 'cities/:province_id', 		to: 'indonesias#cities'
 				get 'districts/:city_id', 		to: 'indonesias#districts'
 				get 'villages/:district_id', 	to: 'indonesias#villages'
+				
 				resource :collateral, only: [:show, :create, :destroy]
-
-		end
-
-		namespace :cms do
+				resource :document, only: [:show]
+				post 'document/upload', 	to: 'documents#upload'
+				post 'document/generate', to: 'documents#generate_pdf'
 		end
 	end
 end
