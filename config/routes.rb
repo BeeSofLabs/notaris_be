@@ -28,6 +28,8 @@ Rails.application.routes.draw do
 				resource :document, only: [:show]
 				post 'document/upload', 	to: 'documents#upload'
 				post 'document/generate', to: 'documents#generate_pdf'
+				post 'document/approval', to: 'documents#approval_parties'
+				post 'document/sign', to: 'documents#sign'
 		end
 	end
 end

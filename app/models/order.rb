@@ -5,6 +5,7 @@
 #  id                     :bigint(8)        not null, primary key
 #  agunan_pokok           :integer
 #  angsuran_bunga         :integer
+#  doc_filename           :string
 #  doc_token_privy        :string
 #  document_type          :string
 #  has_creditor_signed    :boolean          default(FALSE)
@@ -54,7 +55,8 @@ class Order < ApplicationRecord
 
 	enum :document_type => { "fidusia": "fidusia", "skmht": "skmht", "apht": "apht", "skmht_apht": "skmht_apht" }
 	# enum :status => ["cancelled", "pending", "completed", "expired"	]
-	enum :status => {"draft":0, "submission": 1, "sign":2, "waiting_payment":3, "payment_done":4, "claim":5, "completed":6, "expired":7,  "cancel":8, "deleted": 9}
+	enum :status => {"draft":0, "submission": 1, "sign":2, "waiting_payment":3, "payment_done":4,
+			 "covernote": 5, "claim":6, "completed":7, "expired":8,  "cancel":9, "deleted": 10}
 
 	before_create :assign_default_value
 
@@ -92,15 +94,16 @@ class Order < ApplicationRecord
 	end
 
 
-	def self.build(order_id)
+	def self.build_file(order_id)
 
         order = Order.find order_id
         
         if order.present? && order.html_content.present?
             filename = "#{order.document_type}-#{order.id}"
-            save_path = Rails.root.join('public/pdfs', "#{filename}.pdf")
+            save_path = Rails.root.join(ENV['ROOT_DIRECTORY_DOC_PDF'], "#{filename}.pdf")
             Html2Pdf.generate(order.html_content, save_path)
 
+			order.update(doc_filename: filename)
             return save_path
         end
 
