@@ -55,8 +55,8 @@ class Order < ApplicationRecord
 
 	enum :document_type => { "fidusia": "fidusia", "skmht": "skmht", "apht": "apht", "skmht_apht": "skmht_apht" }
 	# enum :status => ["cancelled", "pending", "completed", "expired"	]
-	enum :status => {"draft":0, "submission": 1, "sign":2, "waiting_payment":3, "payment_done":4,
-			 "covernote": 5, "claim":6, "completed":7, "expired":8,  "cancel":9, "deleted": 10}
+	enum :status => {"draft":0, "submission": 1, "approval":2, "waiting_payment":3, "paid":4,
+			 "covernote": 5, "claim":6, "close_claim": 7, "completed":8, "expired":9,  "cancel":10, "deleted": 11}
 
 	before_create :assign_default_value
 
