@@ -80,7 +80,7 @@ class Api::V1::UsersController < ApplicationController
   def forgot
     puts "=============================="
     puts "FORGOT PASSWORD YOU SHOULD HERE GOD DAMN IT!"
-    puts "forgot params is #{forgot_paramsss}"
+    puts "forgot params is #{forgot_params}"
     puts "email is: #{forgot_params[:email]}"
     puts "=============================="
     user = User.find_by!(email: forgot_params[:email])

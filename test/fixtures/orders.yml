@@ -5,6 +5,7 @@
 #  id                     :bigint(8)        not null, primary key
 #  agunan_pokok           :integer
 #  angsuran_bunga         :integer
+#  doc_filename           :string
 #  doc_token_privy        :string
 #  document_type          :string
 #  has_creditor_signed    :boolean          default(FALSE)
