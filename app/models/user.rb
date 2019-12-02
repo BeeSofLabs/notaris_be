@@ -93,7 +93,9 @@ class User < ApplicationRecord
 	has_many :debtor_orders, class_name: 'Order', foreign_key: 'debtor_id', dependent: :nullify
 	has_many :collateral_owner_orders, class_name: 'Order', foreign_key: 'collateral_owner_id', dependent: :nullify
 	has_many :creditor_orders, class_name: 'Order', foreign_key: 'user_id', dependent: :nullify
-	has_many :notary_services
+  has_many :notary_services
+
+  has_many :chats, dependent: :nullify
 
 	has_many :movable_collaterals
 	has_many :immovable_collaterals

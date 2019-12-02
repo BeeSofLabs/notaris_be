@@ -5,6 +5,22 @@ class Api::V1::OrdersController < ApplicationController
   DOCTYPE_APHT = "apht"
   DOCTYPE_FIDUSIA = "fidusia"
 
+  def index
+    notary_orders = current_user.notary_orders
+    debtor_orders = current_user.debtor_orders
+    collateral_owner_orders = current_user.collateral_owner_orders
+    creditor_orders = current_user.creditor_orders
+    orders = notary_orders + debtor_orders + collateral_owner_orders + creditor_orders
+
+    json_response_with_serializer(orders, { adapter: :json, root: "order" })
+    # json_response({ orders: {
+    #   notary_orders: current_user.notary_orders,
+    #   debtor_orders: current_user.debtor_orders,
+    #   collateral_owner_orders: current_user.collateral_owner_orders,
+    #   creditor_orders: current_user.creditor_orders
+    # }}, :unprocessable_entity)
+  end
+
   def create
     if [DOCTYPE_SKMHT, DOCTYPE_APHT, DOCTYPE_FIDUSIA].include?(order_params[:document_type])
 
@@ -44,7 +60,7 @@ class Api::V1::OrdersController < ApplicationController
       :user_id,
       :collateral_owner_id,
       :debtor_id,
-      :creditor_id, 
+      :creditor_id,
       :status
 		)
 	end

@@ -42,13 +42,16 @@
 #
 
 class Order < ApplicationRecord
+  attr_accessor :chat_room_id
 
 	belongs_to :creator, class_name: "User", foreign_key: :user_id, optional: true
 	belongs_to :debtor, class_name: "User", foreign_key: :debtor_id, optional: true
 	belongs_to :creditor, class_name: "User", foreign_key: :creditor_id, optional: true
 	belongs_to :collateral_owner, class_name: "User", foreign_key: :collateral_owner_id, optional: true
 	belongs_to :notary, class_name: "User", foreign_key: :notary_id, optional: true
-	
+
+  has_one :chat_room, dependent: :nullify
+  has_many :chats, through: :chat_room
 
 	has_and_belongs_to_many :immovable_collaterals
 	has_and_belongs_to_many :movable_collaterals
@@ -59,6 +62,7 @@ class Order < ApplicationRecord
 			 "covernote": 5, "claim":6, "close_claim": 7, "completed":8, "expired":9,  "cancel":10, "deleted": 11}
 
 	before_create :assign_default_value
+  after_create :create_chat_room
 
 
 	def self.create_order_with_movable_collateral(user, params, movable_collateral_ids)
@@ -67,8 +71,8 @@ class Order < ApplicationRecord
 			if order.try(:id).present?
 				order.update(
 					status: Order.statuses[params[:status]],
-					tgl_jatuh_tempo: Time.now + 24.hours, 
-					user_id: user.id, 
+					tgl_jatuh_tempo: Time.now + 24.hours,
+					user_id: user.id,
 					valid_expired_datetime: DateTime.now + 1.days,
 					movable_collaterals: MovableCollateral.find(movable_collateral_ids))
 			end
@@ -83,9 +87,9 @@ class Order < ApplicationRecord
 				no_request_order = params[:no_request_order].present? ? params[:no_request_order] : Time.now.to_i
 				order.update(
 					status: Order.statuses[params[:status]],
-					tgl_jatuh_tempo: Time.now + 24.hours, 
-					user_id: user.id, 
-					no_request_order: no_request_order,	
+					tgl_jatuh_tempo: Time.now + 24.hours,
+					user_id: user.id,
+					no_request_order: no_request_order,
 					valid_expired_datetime: DateTime.now + 1.days,
 					immovable_collaterals: ImmovableCollateral.find(immovable_collateral_ids))
 			end
@@ -97,7 +101,7 @@ class Order < ApplicationRecord
 	def self.build_file(order_id)
 
         order = Order.find order_id
-        
+
         if order.present? && order.html_content.present?
             filename = "#{order.document_type}-#{order.id}"
             save_path = Rails.root.join(ENV['ROOT_DIRECTORY_DOC_PDF'], "#{filename}.pdf")
@@ -110,9 +114,17 @@ class Order < ApplicationRecord
         nil
     end
 
+  def chat_room_id
+    @chat_room_id = self.chat_room.try(:id)
+  end
+
 	private
 		def assign_default_value
 			self.status = "draft"
 		end
+
+    def create_chat_room
+      ChatRoom.create(open_date: Date.today, order_id: self.id)
+    end
 
 end
