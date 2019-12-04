@@ -9,6 +9,7 @@
 #  address_companion          :string
 #  address_in_idcard_bpn      :string
 #  address_ppat               :string
+#  apht_price                 :decimal(, )      default(0.0)
 #  approved                   :boolean          default(FALSE)
 #  bank_account_notaris       :string
 #  bank_name                  :string
@@ -19,6 +20,7 @@
 #  email                      :string
 #  fax                        :string
 #  fax_ppat                   :string
+#  fidusia_price              :decimal(, )      default(0.0)
 #  gender                     :string
 #  gender_companion           :string
 #  idcard_number_companion    :string
@@ -49,11 +51,13 @@
 #  password_digest            :string
 #  phone                      :string
 #  pob                        :string
+#  privy_status               :string
 #  privy_token                :string
 #  province                   :string
 #  reset_password_sent_at     :datetime
 #  reset_password_token       :string
 #  selfie_image               :string
+#  skmht_price                :decimal(, )      default(0.0)
 #  status_companion           :string
 #  tgl_akta                   :string
 #  tgl_akta_ppat              :string
@@ -66,6 +70,7 @@
 #  updated_at                 :datetime         not null
 #  indonesia_city_id          :integer
 #  indonesia_village_id       :integer
+#  privy_id                   :string
 #
 
 class User < ApplicationRecord
@@ -84,21 +89,26 @@ class User < ApplicationRecord
 	mount_base64_uploader :identity_image, ImageUploader
 	mount_base64_uploader :selfie_image, ImageUploader
 
-  has_many :notary_orders, class_name: 'Order', foreign_key: 'notary_id', dependent: :nullify
-  has_many :debtor_orders, class_name: 'Order', foreign_key: 'debtor_id', dependent: :nullify
-  has_many :collateral_owner_orders, class_name: 'Order', foreign_key: 'collateral_owner_id', dependent: :nullify
-  has_many :creditor_orders, class_name: 'Order', foreign_key: 'user_id', dependent: :nullify
-	has_many :notary_services
+	has_many :notary_orders, class_name: 'Order', foreign_key: 'notary_id', dependent: :nullify
+	has_many :debtor_orders, class_name: 'Order', foreign_key: 'debtor_id', dependent: :nullify
+	has_many :collateral_owner_orders, class_name: 'Order', foreign_key: 'collateral_owner_id', dependent: :nullify
+	has_many :creditor_orders, class_name: 'Order', foreign_key: 'user_id', dependent: :nullify
+  has_many :notary_services
+
+  has_many :chats, dependent: :nullify
+
+	has_many :movable_collaterals
+	has_many :immovable_collaterals
 
 	belongs_to :indonesia_city, optional: true
 	belongs_to :indonesia_village, optional: true
 
-	def insert_privy_token(privy_token)
-		update!(privy_token: privy_token)
+	def insert_privy_token(privy_token, privy_status)
+		update!(privy_token: privy_token, privy_status: privy_status)
 	end
 
-	def privy_approved
-		update!(approved: true)
+	def privy_approved(status, privy_id)
+		update!(approved: true, privy_status: status, privy_id: privy_id)
 	end
 
 	def image_content(image)
