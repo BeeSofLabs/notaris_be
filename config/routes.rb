@@ -10,7 +10,9 @@ Rails.application.routes.draw do
 				post 'auth/login', 						to: 'authentication#authenticate'
 				post 'signup', 								to: 'users#create'
 				post 'orders/create'
-        get 'orders', to: 'orders#index'
+				put 'orders/update'
+				get 'orders', 								to: 'orders#index'
+				get 'orders/show/:order_id', 						to: 'orders#show'
 				post 'users/status', 					to: "users#privy_status"
 				get 'users/collateral',				to: "users#search_collateral_owner"
 				get 'users/roles', 						to: "users#roles"
@@ -29,9 +31,8 @@ Rails.application.routes.draw do
 				resource :document, only: [:show]
 				post 'document/upload', 			to: 'documents#upload'
 				post 'document/generate', 		to: 'documents#generate_pdf'
-				post 'document/approval',	 		to: 'documents#approval_parties'
-				post 'document/sign', 				to: 'documents#sign'
-
+				post 'document/sign/list',	 	to: 'documents#list_parties'
+		
         resource :chats, only: [:show, :create, :destroy]
 
 		end

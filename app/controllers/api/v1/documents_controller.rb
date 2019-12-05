@@ -1,47 +1,12 @@
 class Api::V1::DocumentsController < ApplicationController
 
-    def sign
+    def list_parties
         order = Order.find params[:order_id]
         unless order
-            return json_response({message: "invalid document approval"}, :not_found)
+            return json_response({message: "invalid document"}, :not_found)
         else
-            
-            json_response(  {message: "Document approved", document: {
-                status: order.status,
-                token: order.doc_token_privy,
-                path: "#{ENV['ROOT_DIRECTORY_DOC_PDF']}#{order.doc_filename}.pdf",
-                link_approval: order.url_document_privy,
-                debtor: order.debtor,
-                creditor: order.creditor,
-                collateral_owner: order.collateral_owner,
-                debtor_has_signed: order.has_debtor_signed,
-                creditor_has_signed: order.has_creditor_signed,
-                collateral_owner_has_signed: order.has_pa_signed
-                
-            }})
-        end
-    end
 
-
-
-    def approval_parties
-        order = Order.find params[:order_id]
-        unless order
-            return json_response({message: "invalid document approval"}, :not_found)
-        else
-            json_response(  {message: "Document approval", document: {
-                status: order.status,
-                token: order.doc_token_privy,
-                path: "#{ENV['ROOT_DIRECTORY_DOC_PDF']}#{order.doc_filename}.pdf",
-                link_approval: order.url_document_privy,
-                debtor: order.debtor,
-                creditor: order.creditor,
-                collateral_owner: order.collateral_owner,
-                debtor_has_signed: order.has_debtor_signed,
-                creditor_has_signed: order.has_creditor_signed,
-                collateral_owner_has_signed: order.has_pa_signed
-                
-            }}, :ok)
+            json_response(  {message: "Document listed", document: OrderPartiesSerializer.new(order)}, :ok)
         end
     end
 

@@ -51,6 +51,8 @@ class OrderSerializer < ActiveModel::Serializer
 				:notary_id,
 				:user_id
 
-  	# has_many :collaterals
+	# has_many :collaterals
+	has_many :immovable_collaterals  
+	has_many :movable_collaterals  
     has_one :chat_room
 end
