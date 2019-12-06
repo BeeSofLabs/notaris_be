@@ -1,6 +1,6 @@
 class Api::V1::DocumentsController < ApplicationController
 
-    def list_parties
+    def parties
         order = Order.find params[:order_id]
         unless order
             return json_response({message: "invalid document"}, :not_found)
@@ -11,12 +11,18 @@ class Api::V1::DocumentsController < ApplicationController
     end
 
     def show
-        content = ::Document.content_template(params[:doctype])
-
-        unless content
+        template = ::Document.content_template(params[:doctype])
+        
+        unless template
             return json_response({message: "invalid document type"}, :not_found)
         else
-            json_response(  {tipe: params[:doctype], template: content}, :ok)
+            begin
+                order = Order.find params[:order_id]
+                content = order.html_content
+            rescue Exception
+                content = ""
+            end
+            json_response(  {tipe: params[:doctype], template: template, content: content}, :ok)
         end
 
     end

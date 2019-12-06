@@ -31,7 +31,7 @@ Rails.application.routes.draw do
 				resource :document, only: [:show]
 				post 'document/upload', 			to: 'documents#upload'
 				post 'document/generate', 		to: 'documents#generate_pdf'
-				post 'document/sign/list',	 	to: 'documents#list_parties'
+				post 'document/parties',	 	to: 'documents#parties'
 		
         resource :chats, only: [:show, :create, :destroy]
 
