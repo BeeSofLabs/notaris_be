@@ -32,8 +32,8 @@
 #  updated_at             :datetime         not null
 #
 
-class NotarisOrder < ApplicationRecord
+# class NotarisOrder < ApplicationRecord
 
-    def pullAllNotarisOrder
-    end
-end
+#     def pullAllNotarisOrder
+#     end
+# end

@@ -1,4 +1,9 @@
 # README
+ChangeLog [6Dec]:
+* Add api for update order
+* Add api for detail order
+* Fix api for document parties
+  
 ChangeLog [29Nov]:
 * Add api for create chat
 * Add api for destroy chat

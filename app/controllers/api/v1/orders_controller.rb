@@ -21,6 +21,15 @@ class Api::V1::OrdersController < ApplicationController
     # }}, :unprocessable_entity)
   end
 
+  def show
+    order = Order.find params[:order_id]
+    if order
+      json_response({message: "order found!", order: OrderSerializer.new(order)}, :show)
+    else
+      json_response({message: "Invalid order", order: {}}, :not_found)
+    end
+  end
+
   def create
     if [DOCTYPE_SKMHT, DOCTYPE_APHT, DOCTYPE_FIDUSIA].include?(order_params[:document_type])
 
@@ -41,7 +50,40 @@ class Api::V1::OrdersController < ApplicationController
     end
   end
 
+  def update
+    if update_order_params
+      order = Order.find params[:order_id]
+      if order.present?
+
+        order.update(update_order_params)
+        json_response({message: "order updated!", order: order}, :update)
+
+      else
+        json_response({message: "Invalid order", order: {}}, :not_found)
+      end
+    else
+      json_response({message: "Invalid order", order: {}}, :invalid)
+    end
+  end
+
   private
+
+  def update_order_params 
+    params.permit(
+      :status,
+      :no_perjanjian,
+      :plafond,
+      :tgl_akad,
+      :tgl_jatuh_tempo,
+      :jangka_waktu,
+      :agunan_pokok,
+      :angsuran_bunga,
+      :html_content,
+      :has_debtor_signed,
+      :has_creditor_signed,
+      :has_pa_signed
+    )
+  end
 
 	def order_params
 		params.permit(

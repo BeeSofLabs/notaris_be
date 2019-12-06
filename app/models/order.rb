@@ -50,8 +50,18 @@ class Order < ApplicationRecord
 	belongs_to :collateral_owner, class_name: "User", foreign_key: :collateral_owner_id, optional: true
 	belongs_to :notary, class_name: "User", foreign_key: :notary_id, optional: true
 
-  has_one :chat_room, dependent: :nullify
-  has_many :chats, through: :chat_room
+	has_many :collateral_orders, dependent: :nullify
+	# has_many :collaterals, through: :collateral_orders, source: :collateral
+	has_many :movable_collaterals, through: :collateral_orders, source: :collateral, source_type: 'MovableCollateral'
+	has_many :immovable_collaterals, through: :collateral_orders, source: :collateral, source_type: 'ImmovableCollateral'
+
+	# accepts_nested_attributes_for :fidusia_collaterals
+	# accepts_nested_attributes_for :skmht_collaterals
+	# accepts_nested_attributes_for :apht_collaterals
+
+	has_one :chat_room, dependent: :nullify
+	has_many :chats, through: :chat_room
+
 
 	has_and_belongs_to_many :immovable_collaterals
 	has_and_belongs_to_many :movable_collaterals
@@ -62,7 +72,7 @@ class Order < ApplicationRecord
 			 "covernote": 5, "claim":6, "close_claim": 7, "completed":8, "expired":9,  "cancel":10, "deleted": 11}
 
 	before_create :assign_default_value
-  after_create :create_chat_room
+  	after_create :create_chat_room
 
 
 	def self.create_order_with_movable_collateral(user, params, movable_collateral_ids)
