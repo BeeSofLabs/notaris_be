@@ -5,11 +5,11 @@ class Api::V1::UsersController < ApplicationController
     ActiveRecord::Base.transaction do
         result = User.collateral_owner.where("name LIKE ?", "%#{params[:owner]}%")
         response = { message: "Search collateral owner updated", collateral_owners: result}
-        return json_response(response, :listed)    
+        return json_response(response, :listed)
     end
 
     json_response({message: "invalid action", collateral_owners: {}}, :invalid)
-    
+
   end
 
   def create
@@ -73,7 +73,7 @@ class Api::V1::UsersController < ApplicationController
 	end
 
 	def edit
-		current_user.update(edit_params)
+		current_user.update_profile(edit_params)
 		json_response(current_user)
 	end
 
@@ -203,15 +203,38 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def edit_params
-  	params.permit(
-  		:name,
-      :dob,
-      :identity_image,
-      :identity_number,
-      :organizational_status,
-      :phone,
-      :selfie_image
-	)
+ #  	params.permit(
+ #  		:name,
+ #      :dob,
+ #      :identity_image,
+ #      :identity_number,
+ #      :organizational_status,
+ #      :phone,
+ #      :selfie_image
+	# )
+    params.permit(
+      users: [
+        :name,
+        :dob,
+        :identity_image,
+        :identity_number,
+        :organizational_status,
+        :phone,
+        :selfie_image,
+        :address,
+        :address_bpn,
+        :address_companion,
+        :address_in_idcard_bpn,
+        :address_ppat,
+        :indonesia_city_id,
+        :indonesia_village_id,
+        :active
+      ],
+      services: [
+        :id,
+        :price
+      ]
+    )
   end
 
   def privy_approved?(res)
