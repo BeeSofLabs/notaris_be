@@ -188,6 +188,21 @@ class User < ApplicationRecord
     end
   end
 
+  def get_orders(params)
+    if params[:search_type].eql?('list')
+      self.notary_orders + self.debtor_orders + self.collateral_owner_orders + self.creditor_orders
+    else
+      self.notary_orders.where(created_at: params[:start_time]..params[:end_time]) + self.debtor_orders.where(created_at: params[:start_time]..params[:end_time]) + self.collateral_owner_orders.where(created_at: params[:start_time]..params[:end_time]) + self.creditor_orders.where(created_at: params[:start_time]..params[:end_time])
+    end
+    # orders = notary_orders + debtor_orders + collateral_owner_orders + creditor_orders
+  end
+
+  def get_carts(params)
+    order_list = get_orders(params)
+    # order_list.group_by(&:document_type)
+    order_list.group_by(&:document_type).map {|k,v| Hash[k, v.length]}
+  end
+
 	private
 
 		def generate_token
