@@ -4,8 +4,19 @@ class Api::V1::UsersController < ApplicationController
   def search_collateral_owner
     ActiveRecord::Base.transaction do
         result = User.collateral_owner.where("name LIKE ?", "%#{params[:owner]}%")
-        response = { message: "Search collateral owner updated", collateral_owners: result}
-        return json_response(response, :listed)
+        response = { message: "Ok", collateral_owners: result}
+        
+        return json_response({message: "ok", 
+          collateral_owners: 
+            result.map do |user|
+              {
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                user_tipe: user.user_tipe
+              }
+            end
+          }, :ok)
     end
 
     json_response({message: "invalid action", collateral_owners: {}}, :invalid)
@@ -18,10 +29,6 @@ class Api::V1::UsersController < ApplicationController
 
       user.set_user_role(user_params[:user_tipe])
       auth_token = AuthenticateUser.new(user.email, user.password).call
-
-      # identity_image = File.new(user.image_content(user.identity_image))
-      # selfie_image = File.new(user.image_content(user.selfie_image))
-
 
       res = nil
       if(user_params[:user_tipe] != 'bpn')
