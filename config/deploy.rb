@@ -27,7 +27,7 @@ set :whenever_identifier, ->{ "#{fetch(:application)}_production" }
 # set :pty, true
 
 # Default value for :linked_files is []
-append :linked_files, "config/database.yml", "config/secrets.yml", ".env"
+append :linked_files, "config/database.yml", "config/secrets.yml", ".env", 'public/document/apht_template.html', 'public/document/covernote_template.html', 'public/document/fidusia_template.html', 'public/document/skmht_template.html'
 
 # Default value for linked_dirs is []
 append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system", 'public/uploads', 'public/assets', 'public/document'
