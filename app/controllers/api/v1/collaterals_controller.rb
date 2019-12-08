@@ -1,12 +1,17 @@
 class Api::V1::CollateralsController < ApplicationController
 
     def show
-        if current_user.immovable_collaterals.present?
-            
+        if(params[:user_id].present?)
+            user = User.find(params[:user_id])
+        else
+            user = current_user
+        end
+
+        if user.present?
             json_response({
-                message: "agunan listed!", 
-                immovable_collaterals: current_user.immovable_collaterals,
-                movable_collaterals: current_user.movable_collaterals}, :listed)
+                message: "Collateral listed!", 
+                immovable_collaterals: user.immovable_collaterals,
+                movable_collaterals: user.movable_collaterals}, :listed)
         else
             json_response({message: "Invalid service", collaterals: {}}, :s)
         end
