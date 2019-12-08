@@ -74,23 +74,8 @@
 #
 
 class UserSerializer < ActiveModel::Serializer
-	attributes	:id,
-				:approved,
-				:dob,
-				:email,
-				:gender,
-				:identity_image,
-				:identity_number,
-				:name,
-				:organizational_status,
-				:phone,
-				:identity_number,
-				:privy_token,
-				:user_tipe,
-				:lat,
-				:lng, 
-				:active
-				
+	attributes	:id, :approved, :dob, :email, :gender, :identity_image, :identity_number, :name, :organizational_status, :phone, :identity_number, :privy_token, :user_tipe, :lat, :lng, :active, :indonesia_village, :indonesia_district, :indonesia_city, :indonesia_province, :address, :address_bpn, :address_companion, :address_in_idcard_bpn, :address_ppat
+
 	has_many 	:notary_services, if: :notaris?
 
 	def notaris?

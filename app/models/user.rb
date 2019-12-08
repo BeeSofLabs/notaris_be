@@ -100,8 +100,10 @@ class User < ApplicationRecord
 	has_many :movable_collaterals
 	has_many :immovable_collaterals
 
-	belongs_to :indonesia_city, optional: true
-	belongs_to :indonesia_village, optional: true
+  belongs_to :indonesia_city, optional: true
+	has_one :indonesia_province, through: :indonesia_city
+  belongs_to :indonesia_village, optional: true
+	has_one :indonesia_district, through: :indonesia_village
 
 	def insert_privy_token(privy_token, privy_status)
 		update!(privy_token: privy_token, privy_status: privy_status)
@@ -175,6 +177,30 @@ class User < ApplicationRecord
     users = users.joins(:notary_services).where(notary_services: { service_type: params[:doc_type] }) if params[:doc_type].present?
     users = users.joins(:notary_services).where(notary_services: { price: params[:range_lower]..params[:range_higher] }) if params[:range_lower].present? && params[:range_higher].present?
     users
+  end
+
+  def update_profile(params)
+    self.update(params[:users])
+    # services_params = params[:services].map { |serv|  } if params[:services].present?
+    if params[:services].present?
+      services_params = Hash[params[:services].map { |serv| [serv[:id], { price: serv[:price] }] }]
+      self.notary_services.update(services_params.keys, services_params.values)
+    end
+  end
+
+  def get_orders(params)
+    if params[:search_type].eql?('list')
+      self.notary_orders + self.debtor_orders + self.collateral_owner_orders + self.creditor_orders
+    else
+      self.notary_orders.where(created_at: params[:start_time]..params[:end_time]) + self.debtor_orders.where(created_at: params[:start_time]..params[:end_time]) + self.collateral_owner_orders.where(created_at: params[:start_time]..params[:end_time]) + self.creditor_orders.where(created_at: params[:start_time]..params[:end_time])
+    end
+    # orders = notary_orders + debtor_orders + collateral_owner_orders + creditor_orders
+  end
+
+  def get_carts(params)
+    order_list = get_orders(params)
+    # order_list.group_by(&:document_type)
+    order_list.group_by(&:document_type).map {|k,v| Hash[k, v.length]}
   end
 
 	private
