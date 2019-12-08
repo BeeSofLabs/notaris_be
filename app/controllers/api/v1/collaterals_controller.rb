@@ -1,12 +1,14 @@
 class Api::V1::CollateralsController < ApplicationController
 
     def show
+        
         if(params[:user_id].present?)
             user = User.find(params[:user_id])
         else
             user = current_user
         end
 
+        
         if user.present?
             json_response({
                 message: "Collateral listed!", 
