@@ -14,7 +14,11 @@ Rails.application.routes.draw do
 				get 'orders', 								to: 'orders#index'
 				get 'orders/show/:order_id', 						to: 'orders#show'
 				post 'users/status', 					to: "users#privy_status"
+				
 				get 'users/collateral',				to: "users#search_collateral_owner"
+				get 'users/debitor',					to: "users#search_debitor"
+				get 'users/creditor',					to: "users#search_creditor"
+
 				get 'users/roles', 						to: "users#roles"
         get 'users/notaris',      		to: "users#notaris"
 				get 'users/notaris_detail/:id', 			to: "users#notaris_detail"

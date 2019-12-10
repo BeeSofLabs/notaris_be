@@ -10,14 +10,14 @@ class Api::V1::CollateralsController < ApplicationController
 
         
         if user.present?
-            json_response({
+            return json_response({
                 message: "Collateral listed!", 
                 immovable_collaterals: user.immovable_collaterals,
-                movable_collaterals: user.movable_collaterals}, :listed)
-        else
-            json_response({message: "Invalid service", collaterals: {}}, :s)
+                movable_collaterals: user.movable_collaterals})
+            
         end
 
+        json_response({message: "Invalid service", collaterals: {}}, :not_found)
     end
 
     def create
@@ -49,13 +49,13 @@ class Api::V1::CollateralsController < ApplicationController
         if params[:collateral_type] == 'movable'
             if params.present? && valid_collateral_owner(params)
                 if MovableCollateral.delete(params[:id])
-                    return json_response({message: "collateral deleted!"}, :deleted)
+                    return json_response({message: "collateral deleted!"})
                 end
             end
         elsif params[:collateral_type] == 'immovable'
             if params.present?
                 if ImovableCollateral.delete(params[:id])
-                    return json_response({message: "collateral deleted!"}, :deleted)
+                    return json_response({message: "collateral deleted!"})
                 end
             end
         end

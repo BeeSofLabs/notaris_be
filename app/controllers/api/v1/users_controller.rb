@@ -12,14 +12,53 @@ class Api::V1::UsersController < ApplicationController
               {
                 id: user.id,
                 name: user.name,
-                email: user.email,
-                user_tipe: user.user_tipe
+                email: user.email
               }
             end
           }, :ok)
     end
 
-    json_response({message: "invalid action", collateral_owners: {}}, :invalid)
+    json_response({message: "invalid action", collateral_owners: []}, :invalid)
+
+  end
+
+  def search_debitor
+    ActiveRecord::Base.transaction do
+        result = User.debitur.where("name LIKE ?", "%#{params[:owner]}%")
+        
+        return json_response({message: "ok", 
+        debitors: 
+            result.map do |user|
+              {
+                id: user.id,
+                name: user.name,
+                email: user.email
+              }
+            end
+          }, :ok)
+    end
+
+    json_response({message: "invalid action", debitors: []}, :invalid)
+
+  end
+
+  def search_creditor
+    ActiveRecord::Base.transaction do
+        result = User.kreditur.where("name LIKE ?", "%#{params[:owner]}%")
+        
+        return json_response({message: "ok", 
+        creditors: 
+            result.map do |user|
+              {
+                id: user.id,
+                name: user.name,
+                email: user.email
+              }
+            end
+          }, :ok)
+    end
+
+    json_response({message: "invalid action", creditors: []}, :invalid)
 
   end
 
