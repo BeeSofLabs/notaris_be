@@ -35,11 +35,14 @@ Rails.application.routes.draw do
 				resource :document, only: [:show]
 				post 'document/upload', 			to: 'documents#upload'
 				post 'document/generate', 		to: 'documents#generate_pdf'
-				post 'document/parties',	 	to: 'documents#parties'
+				post 'document/parties',	 		to: 'documents#parties'
+				post 'document/approval',	 		to: 'documents#approval'
 
         resource :chats, only: [:show, :create, :destroy]
         # resource :carts, only: [:index]
-        get 'carts', to: 'carts#index'
+				get 'carts', to: 'carts#index'
+				
+			
 
 		end
 	end

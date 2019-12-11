@@ -1,5 +1,17 @@
 class Api::V1::DocumentsController < ApplicationController
 
+    def approval
+        order = Order.find params[:order_id]
+        unless order
+            return json_response({message: "invalid document"}, :not_found)
+        else    
+            if(approval_params[:approval])
+                order.update(status: :approval)
+            end
+        end
+        json_response(  {message: "Order approval", status: order.status}, :ok)
+    end
+
     def parties
         order = Order.find params[:order_id]
         unless order
@@ -71,6 +83,15 @@ class Api::V1::DocumentsController < ApplicationController
         end
 
         json_response(  {message: "Invalid document not generated!"}, :failed)
+    end
+
+
+    private
+    def approval_params
+        params.permit(
+            :order_id,
+            :approval
+        )
     end
 
 end
