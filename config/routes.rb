@@ -41,6 +41,11 @@ Rails.application.routes.draw do
         resource :chats, only: [:show, :create, :destroy]
         # resource :carts, only: [:index]
 				get 'carts', to: 'carts#index'
+
+
+				get "payment/bank", 					to: "payment#bank"
+				post "payment/bank/transfer", to: "payment#bank_transfer"
+				post "payment/ovo/transfer", 	to: "payment#ovo_transfer"
 				
 			
 
