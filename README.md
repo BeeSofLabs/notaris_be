@@ -1,4 +1,9 @@
 # README
+
+ChangeLog [12Dec]:
+* Add api payment for bank transfer via ovo
+* Add api payment between ovo transfer accounts
+
 ChangeLog [6Dec]:
 * Add api for update order
 * Add api for detail order
