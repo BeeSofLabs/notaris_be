@@ -115,7 +115,8 @@ class Api::V1::CollateralsController < ApplicationController
             :no_land_identity,
             :letter_of_pbbtax,
             :nop,
-            :binding_value
+            :binding_value,
+            :collateral_value
         )
     end
 end
