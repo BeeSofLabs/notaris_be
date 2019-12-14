@@ -1,9 +1,14 @@
 # README
+
+ChangeLog [12Dec]:
+* Add api payment for bank transfer via ovo
+* Add api payment between ovo transfer accounts
+
 ChangeLog [6Dec]:
 * Add api for update order
 * Add api for detail order
 * Fix api for document parties
-  
+
 ChangeLog [29Nov]:
 * Add api for create chat
 * Add api for destroy chat
@@ -64,3 +69,16 @@ ModelLogic changes:
 - revert create order migration change
 - add data type to remove redundant expoired in order migration
 - swap movable_collateral and immovable_collateral fields
+
+
+## BRANCHING RULES
+* create new branch from master
+* PR the branch to staging and master
+* never merge staging to master
+
+## HOW TO DEPLOY
+Staging
+* cap staging deploy
+
+Production
+* cap staging production (for now deploy to production are disabled)
