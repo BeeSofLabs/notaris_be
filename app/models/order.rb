@@ -68,12 +68,18 @@ class Order < ApplicationRecord
 
 	enum :document_type => { "fidusia": "fidusia", "skmht": "skmht", "apht": "apht", "skmht_apht": "skmht_apht" }
 	# enum :status => ["cancelled", "pending", "completed", "expired"	]
-	enum :status => {"draft":0, "submission": 1, "approval":2, "waiting_payment":3, "paid":4,
-			 "covernote": 5, "claim":6, "close_claim": 7, "completed":8, "expired":9,  "cancel":10, "deleted": 11}
+	# enum :status => {"draft":0, "submission": 1, "approval":2, "waiting_payment":3, "paid":4,
+	# 		 "covernote": 5, "claim":6, "close_claim": 7, "completed":8, "expired":9,  "cancel":10, "deleted": 11}
+
+	enum :status => {"draft":0, "submission": 1, "revision": 2, "approval":3, "paid":4, "partial": 5,
+	"claim":6, "close_claim": 7, "expired":9,  "cancel":10, "deleted": 11,"done": 20, "completed": 21}
 
 	before_create :assign_default_value
-  	after_create :create_chat_room
+  	after_create :create_chat_room, :if => :allow_chat_room?
 
+	def allow_chat_room?
+		self.document_type != "skmht"
+	end
 
 	def self.create_order_with_movable_collateral(user, params, movable_collateral_ids)
 		ActiveRecord::Base.transaction do
