@@ -16,7 +16,7 @@
 #  jangka_waktu           :string
 #  no_order               :string
 #  no_perjanjian          :string
-#  no_request_order       :integer
+#  no_request_order       :string
 #  plafond                :integer
 #  status                 :integer
 #  tgl_akad               :string
@@ -67,12 +67,9 @@ class Order < ApplicationRecord
 	has_and_belongs_to_many :movable_collaterals
 
 	enum :document_type => { "fidusia": "fidusia", "skmht": "skmht", "apht": "apht", "skmht_apht": "skmht_apht" }
-	# enum :status => ["cancelled", "pending", "completed", "expired"	]
-	# enum :status => {"draft":0, "submission": 1, "approval":2, "waiting_payment":3, "paid":4,
-	# 		 "covernote": 5, "claim":6, "close_claim": 7, "completed":8, "expired":9,  "cancel":10, "deleted": 11}
-
+	
 	enum :status => {"draft":0, "submission": 1, "revision": 2, "approval":3, "paid":4, "partial": 5,
-	"claim":6, "close_claim": 7, "expired":9,  "cancel":10, "deleted": 11,"done": 20, "completed": 21}
+	"claim":6, "expired":9,  "cancel":10, "deleted": 11,"done": 20, "completed": 21}
 
 	before_create :assign_default_value
   	after_create :create_chat_room, :if => :allow_chat_room?
@@ -81,26 +78,33 @@ class Order < ApplicationRecord
 		self.document_type != "skmht"
 	end
 
-	def self.create_order_with_movable_collateral(user, params, movable_collateral_ids)
+	def self.create_order_with_movable_collateral(user, params, order_id, movable_collateral_ids)
 		ActiveRecord::Base.transaction do
-			order = self.create(params)
-			if order.try(:id).present?
+			
+			unless Order.exists?(order_id)
+				order = self.create(params) 
 				order.update(
 					status: Order.statuses[params[:status]],
 					tgl_jatuh_tempo: Time.now + 24.hours,
 					user_id: user.id,
 					valid_expired_datetime: DateTime.now + 1.days,
-					movable_collaterals: MovableCollateral.find(movable_collateral_ids))
+					movable_collaterals: MovableCollateral.find(movable_collateral_ids),
+					no_request_order: "RO-#{Time.now.to_i}")
+			else
+				order = Order.find(order_id)
+				order.update(params)
 			end
+			
 			order
 		end
 	end
 
-	def self.create_order_with_immovable_collateral(user, params, immovable_collateral_ids)
+	def self.create_order_with_immovable_collateral(user, params, order_id, immovable_collateral_ids)
 		ActiveRecord::Base.transaction do
-			order = self.create(params)
-			if order.try(:id).present?
-				no_request_order = params[:no_request_order].present? ? params[:no_request_order] : Time.now.to_i
+			
+			unless Order.exists?(order_id)
+				order = self.create(params) 
+				no_request_order = params[:no_request_order].present? ? params[:no_request_order] : "RO-#{Time.now.to_i}"
 				order.update(
 					status: Order.statuses[params[:status]],
 					tgl_jatuh_tempo: Time.now + 24.hours,
@@ -108,7 +112,11 @@ class Order < ApplicationRecord
 					no_request_order: no_request_order,
 					valid_expired_datetime: DateTime.now + 1.days,
 					immovable_collaterals: ImmovableCollateral.find(immovable_collateral_ids))
+			else
+				order = Order.find(order_id)
+				order.update(params)
 			end
+
 			order
 		end
 	end

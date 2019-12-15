@@ -54,7 +54,7 @@ class Api::V1::CollateralsController < ApplicationController
             end
         elsif params[:collateral_type] == 'immovable'
             if params.present?
-                if ImovableCollateral.delete(params[:id])
+                if ImmovableCollateral.delete(params[:id])
                     return json_response({message: "collateral deleted!"})
                 end
             end

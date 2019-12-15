@@ -16,7 +16,7 @@
 #  jangka_waktu           :string
 #  no_order               :string
 #  no_perjanjian          :string
-#  no_request_order       :integer
+#  no_request_order       :string
 #  plafond                :integer
 #  status                 :integer
 #  tgl_akad               :string
