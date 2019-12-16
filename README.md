@@ -1,4 +1,6 @@
 # README
+ChangeLog [15 Dec]:
+* Fix validation for create chat room only for except document type "skmht"
 
 ChangeLog [12Dec]:
 * Add api payment for bank transfer via ovo

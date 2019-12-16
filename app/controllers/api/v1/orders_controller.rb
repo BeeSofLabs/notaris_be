@@ -28,11 +28,12 @@ class Api::V1::OrdersController < ApplicationController
 
   def create
     if [DOCTYPE_SKMHT, DOCTYPE_APHT, DOCTYPE_FIDUSIA].include?(order_params[:document_type])
+        op = order_params[:status].present? ? order_params : order_params.merge({status: :draft})
 
         if order_params[:document_type] != DOCTYPE_FIDUSIA
-          order = Order.create_order_with_immovable_collateral(current_user, order_params, params[:immovable_collateral_ids])
+          order = Order.create_order_with_immovable_collateral(current_user, op, params[:order_id], params[:immovable_collateral_ids])
         else
-          order = Order.create_order_with_movable_collateral(current_user, order_params, params[:movable_collateral_ids])
+          order = Order.create_order_with_movable_collateral(current_user, op, params[:order_id], params[:movable_collateral_ids])
         end
 
         #  checking order valid or not
@@ -46,19 +47,55 @@ class Api::V1::OrdersController < ApplicationController
     end
   end
 
-  def update
-    if update_order_params
-      order = Order.find params[:order_id]
-      if order.present?
+  # def update
+  #   if update_order_params
+  #     order = Order.find params[:order_id]
+  #     if order.present?
 
-        order.update(update_order_params)
-        json_response({message: "order updated!", order: order}, :update)
+  #       order.update(update_order_params)
+  #       json_response({message: "order updated!", order: order}, :ok)
 
-      else
-        json_response({message: "Invalid order", order: {}}, :not_found)
-      end
+  #     else
+  #       json_response({message: "Invalid order", order: {}}, :not_found)
+  #     end
+  #   else
+  #     json_response({message: "Invalid order", order: {}}, :invalid)
+  #   end
+  # end
+
+  def done
+    order = Order.find params[:order_id]
+    if order.present?
+
+      order.update(status: :done)
+      json_response({message: "Document order done!", order: order}, :ok)
+
     else
-      json_response({message: "Invalid order", order: {}}, :invalid)
+      json_response({message: "Invalid order", order: {}}, :not_found)
+    end
+  end
+
+  def complete
+    order = Order.find params[:order_id]
+    if order.present?
+
+      order.update(status: :completed)
+      json_response({message: "order complete!", order: order}, :ok)
+
+    else
+      json_response({message: "Invalid order", order: {}}, :not_found)
+    end
+  end
+
+  def destroy
+    order = Order.find params[:order_id]
+    if order.present?
+
+      order.update(is_deleted: true, status: :deleted)
+      json_response({message: "order deleted!", order: order}, :ok)
+
+    else
+      json_response({message: "Invalid order", order: {}}, :not_found)
     end
   end
 

@@ -10,7 +10,10 @@ Rails.application.routes.draw do
 				post 'auth/login', 						to: 'authentication#authenticate'
 				post 'signup', 								to: 'users#create'
 				post 'orders/create'
-				put 'orders/update'
+				# put 'orders/update'
+				put 'orders/done'
+				put 'orders/complete'
+				delete 'orders/destroy'
 				get 'orders', 								to: 'orders#index'
 				get 'orders/show/:order_id', 						to: 'orders#show'
 				post 'users/status', 					to: "users#privy_status"

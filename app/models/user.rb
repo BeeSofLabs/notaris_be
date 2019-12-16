@@ -84,7 +84,7 @@ class User < ApplicationRecord
 	validates_uniqueness_of :phone
 
 	enum organizational_status: ["perorangan", "badan_usaha"]
-	enum user_tipe: [ "debitur", "kreditur","collateral_owner", "notaris", "bpn"]
+	enum user_tipe: [ "debtor", "creditor","collateral_owner", "notaris", "bpn"]
 
 	mount_base64_uploader :identity_image, ImageUploader
 	mount_base64_uploader :selfie_image, ImageUploader

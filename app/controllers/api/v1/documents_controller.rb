@@ -5,7 +5,13 @@ class Api::V1::DocumentsController < ApplicationController
         unless order
             return json_response({message: "invalid document"}, :not_found)
         else    
-            if(approval_params[:approval])
+            if approval_params[:approve]
+                order.update(has_debtor_signed: approval_params[:approve]) if current_user.debtor?
+                order.update(has_creditor_signed: approval_params[:approve]) if current_user.creditor?
+                order.update(has_pa_signed: approval_params[:approve]) if current_user.collateral_owner?
+            end
+
+            if approval_params[:submit]
                 order.update(status: :approval)
             end
         end
@@ -43,8 +49,17 @@ class Api::V1::DocumentsController < ApplicationController
         begin
             order = Order.find params[:order_id]
             if order.present? && params[:html_content].present?
-                order.update(html_content: params[:html_content])
-                return json_response(  {message: "Document content updated!"}, :ok)
+                if order.status == Order::statuses[:partial]
+                    order.update(html_content: params[:html_content], status: :claim)
+                    if order.document_type == Api::V1::OrdersController::DOCTYPE_FIDUSIA
+                        return json_response(  {message: "Agunan telah selesai dibebankan Hak Tanggungan pada Kanwil Kemenkumham provinsi"}, :ok)
+                    else
+                        return json_response(  {message: "Agunan telah selesai dibebankan Hak Tanggungan pada BPN Kota"}, :ok)
+                    end
+                else
+                    order.update(html_content: params[:html_content], status: :revision)
+                    return json_response(  {message: "Document content updated!"}, :ok)
+                end
         
             end
         rescue Exception
@@ -90,7 +105,8 @@ class Api::V1::DocumentsController < ApplicationController
     def approval_params
         params.permit(
             :order_id,
-            :approval
+            :approve,
+            :submit
         )
     end
 
