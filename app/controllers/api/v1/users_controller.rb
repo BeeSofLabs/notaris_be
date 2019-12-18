@@ -24,10 +24,10 @@ class Api::V1::UsersController < ApplicationController
 
   def search_debitor
     ActiveRecord::Base.transaction do
-        result = User.debitur.where("name LIKE ?", "%#{params[:owner]}%")
+        result = User.debtor.where("name LIKE ?", "%#{params[:owner]}%")
         
         return json_response({message: "ok", 
-        debitors: 
+        debtors: 
             result.map do |user|
               {
                 id: user.id,
@@ -44,7 +44,7 @@ class Api::V1::UsersController < ApplicationController
 
   def search_creditor
     ActiveRecord::Base.transaction do
-        result = User.kreditur.where("name LIKE ?", "%#{params[:owner]}%")
+        result = User.creditor.where("name LIKE ?", "%#{params[:owner]}%")
         
         return json_response({message: "ok", 
         creditors: 
