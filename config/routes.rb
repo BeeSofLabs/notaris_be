@@ -17,7 +17,7 @@ Rails.application.routes.draw do
 				get 'orders', 								to: 'orders#index'
 				get 'orders/show/:order_id', 						to: 'orders#show'
 				post 'users/status', 					to: "users#privy_status"
-				
+
 				get 'users/collateral',				to: "users#search_collateral_owner"
 				get 'users/debitor',					to: "users#search_debitor"
 				get 'users/creditor',					to: "users#search_creditor"
@@ -41,7 +41,11 @@ Rails.application.routes.draw do
 				post 'document/parties',	 		to: 'documents#parties'
 				post 'document/approval',	 		to: 'documents#approval'
 
-        resource :chats, only: [:show, :create, :destroy]
+        resource :chats, only: [:show, :create, :destroy] do
+          collection do
+            put 'close_room/:id', to: 'chats#close_room'
+          end
+        end
         # resource :carts, only: [:index]
 				get 'carts', to: 'carts#index'
 
@@ -49,8 +53,8 @@ Rails.application.routes.draw do
 				get "payment/bank", 					to: "payment#bank"
 				post "payment/bank/transfer", to: "payment#bank_transfer"
 				post "payment/ovo/transfer", 	to: "payment#ovo_transfer"
-				
-			
+
+
 
 		end
 	end

@@ -24,6 +24,22 @@ class Api::V1::ChatsController < ApplicationController
     end
   end
 
+  def close_room
+    chat_room = ChatRoom.find_by(id: params[:id])
+
+    if chat_room.present?
+      if chat_room.update(is_closed: true, close_date: Date.today)
+        chat_room.order.update(status: "done")
+
+        json_response({ message: 'Chat room closed', chat_room: chat_room }, :ok)
+      else
+        json_response({ message: chat_room.errors, chat_room: ChatRoom.find_by(id: params[:chat_room_id]) }, :unprocessable_entity)
+      end
+    else
+      json_response({ message: 'Room not found' }, :not_found)
+    end
+  end
+
   private
 
     def chat_params
