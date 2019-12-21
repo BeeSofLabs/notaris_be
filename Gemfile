@@ -42,6 +42,9 @@ gem 'rack-cors'
 gem 'cloudinary'
 gem 'mailgun_rails'
 gem 'indonesia', '~> 0.5.0'
+gem 'delayed_job_active_record'
+gem 'daemons'
+
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 
