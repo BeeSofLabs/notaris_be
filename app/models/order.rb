@@ -67,7 +67,7 @@ class Order < ApplicationRecord
 	has_and_belongs_to_many :movable_collaterals
 
 	enum :document_type => { "fidusia": "fidusia", "skmht": "skmht", "apht": "apht", "skmht_apht": "skmht_apht" }
-	
+
 	enum :status => {"draft":0, "submission": 1, "revision": 2, "approval":3, "paid":4, "partial": 5,
 	"claim":6, "expired":9,  "cancel":10, "deleted": 11,"done": 20, "completed": 21}
 
@@ -80,9 +80,9 @@ class Order < ApplicationRecord
 
 	def self.create_order_with_movable_collateral(user, params, order_id, movable_collateral_ids)
 		ActiveRecord::Base.transaction do
-			
+
 			unless Order.exists?(order_id)
-				order = self.create(params) 
+				order = self.create(params)
 				order.update(
 					status: Order.statuses[params[:status]],
 					tgl_jatuh_tempo: Time.now + 24.hours,
@@ -94,16 +94,16 @@ class Order < ApplicationRecord
 				order = Order.find(order_id)
 				order.update(params)
 			end
-			
+
 			order
 		end
 	end
 
 	def self.create_order_with_immovable_collateral(user, params, order_id, immovable_collateral_ids)
 		ActiveRecord::Base.transaction do
-			
+
 			unless Order.exists?(order_id)
-				order = self.create(params) 
+				order = self.create(params)
 				no_request_order = params[:no_request_order].present? ? params[:no_request_order] : "RO-#{Time.now.to_i}"
 				order.update(
 					status: Order.statuses[params[:status]],
@@ -140,6 +140,17 @@ class Order < ApplicationRecord
 
   def chat_room_id
     @chat_room_id = self.chat_room.try(:id)
+  end
+
+  def check_status
+    new_order_object = Order.find_by(id: self.id)
+    Rails.logger.info "========== self order object: #{self.inspect}"
+    Rails.logger.info "========== new order object: #{new_order_object.inspect}"
+    Rails.logger.info "========== status is submission: #{new_order_object.status.eql?('submission')}"
+
+    if new_order_object.present?
+      new_order_object.update(is_deleted: true) if new_order_object.status.eql?('submission')
+    end
   end
 
 	private

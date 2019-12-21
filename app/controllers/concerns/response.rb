@@ -12,6 +12,7 @@ module Response
     serialized_object = ActiveModelSerializers::SerializableResource.new(set_object(object), options)
     serialized_object.serialization_scope = current_user
     # serialized_object.serialization_scope_name = "current_user"
+    # serialized_object.serialization_scope = current_user
     serialized_object = serialized_object.as_json
 
     # serialized_object2 = ActiveModelSerializers::SerializableResource.new(set_object_page(page), options)

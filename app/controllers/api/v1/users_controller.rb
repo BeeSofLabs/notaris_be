@@ -1,13 +1,14 @@
 class Api::V1::UsersController < ApplicationController
 	skip_before_action :authorize_request, only: [:create, :roles, :notaris, :forgot, :reset, :notaris_detail]
+  # serialization_scope :current_user
 
   def search_collateral_owner
     ActiveRecord::Base.transaction do
         result = User.collateral_owner.where("name LIKE ?", "%#{params[:owner]}%")
         response = { message: "Ok", collateral_owners: result}
-        
-        return json_response({message: "ok", 
-          collateral_owners: 
+
+        return json_response({message: "ok",
+          collateral_owners:
             result.map do |user|
               {
                 id: user.id,
@@ -25,9 +26,9 @@ class Api::V1::UsersController < ApplicationController
   def search_debitor
     ActiveRecord::Base.transaction do
         result = User.debtor.where("name LIKE ?", "%#{params[:owner]}%")
-        
-        return json_response({message: "ok", 
-        debtors: 
+
+        return json_response({message: "ok",
+        debtors:
             result.map do |user|
               {
                 id: user.id,
@@ -45,9 +46,9 @@ class Api::V1::UsersController < ApplicationController
   def search_creditor
     ActiveRecord::Base.transaction do
         result = User.creditor.where("name LIKE ?", "%#{params[:owner]}%")
-        
-        return json_response({message: "ok", 
-        creditors: 
+
+        return json_response({message: "ok",
+        creditors:
             result.map do |user|
               {
                 id: user.id,
@@ -154,9 +155,12 @@ class Api::V1::UsersController < ApplicationController
 
   def notaris
     # users = User.notaris
-    users = User.joins(:roles).where("roles.name = ?", "notaris")
-    users = User.filter(params, users)
-    json_response(users)
+    # check_last_locked_times = user_services.check_last_locked(current_user)
+    UserServices.check_locked(current_user)
+    notaries = User.joins(:roles).where("roles.name = ?", "notaris")
+    notaries = User.filter(params, notaries, current_user)
+    json_response(notaries)
+    # json_response_with_serializer(notaries, { adapter: :json, root: "user" })
   end
 
   def notaris_detail

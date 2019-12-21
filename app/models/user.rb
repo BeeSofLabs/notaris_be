@@ -29,6 +29,7 @@
 #  komparisi                  :text
 #  komparisi_companion        :text
 #  komparisi_ppat             :text
+#  last_locked_search_time    :datetime
 #  lat                        :float
 #  lat_companion              :float
 #  lat_ppat                   :float
@@ -56,6 +57,7 @@
 #  province                   :string
 #  reset_password_sent_at     :datetime
 #  reset_password_token       :string
+#  search_count               :integer          default(0)
 #  selfie_image               :string
 #  skmht_price                :decimal(, )      default(0.0)
 #  status_companion           :string
@@ -171,12 +173,12 @@ class User < ApplicationRecord
 		end
 	end
 
-  def self.filter(params, users)
-    users = users.where("lower(users.name) like lower(?)", "%#{params[:name]}%") if params[:name].present?
-    users = users.joins(:indonesia_city).where("lower(indonesia_cities.city_name) like lower(?)", "%#{params[:area]}%") if params[:area].present?
-    users = users.joins(:notary_services).where(notary_services: { service_type: params[:doc_type] }) if params[:doc_type].present?
-    users = users.joins(:notary_services).where(notary_services: { price: params[:range_lower]..params[:range_higher] }) if params[:range_lower].present? && params[:range_higher].present?
-    users
+  def self.filter(params, notaries)
+    notaries = notaries.where("lower(users.name) like lower(?)", "%#{params[:name]}%") if params[:name].present?
+    notaries = notaries.joins(:indonesia_city).where("lower(indonesia_cities.city_name) like lower(?)", "%#{params[:area]}%") if params[:area].present?
+    notaries = notaries.joins(:notary_services).where(notary_services: { service_type: params[:doc_type] }) if params[:doc_type].present?
+    notaries = notaries.joins(:notary_services).where(notary_services: { price: params[:range_lower]..params[:range_higher] }) if params[:range_lower].present? && params[:range_higher].present?
+    notaries
   end
 
   def update_profile(params)

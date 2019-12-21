@@ -29,6 +29,7 @@
 #  komparisi                  :text
 #  komparisi_companion        :text
 #  komparisi_ppat             :text
+#  last_locked_search_time    :datetime
 #  lat                        :float
 #  lat_companion              :float
 #  lat_ppat                   :float
@@ -56,6 +57,7 @@
 #  province                   :string
 #  reset_password_sent_at     :datetime
 #  reset_password_token       :string
+#  search_count               :integer          default(0)
 #  selfie_image               :string
 #  skmht_price                :decimal(, )      default(0.0)
 #  status_companion           :string
