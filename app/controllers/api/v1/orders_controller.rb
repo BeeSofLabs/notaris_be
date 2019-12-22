@@ -20,7 +20,7 @@ class Api::V1::OrdersController < ApplicationController
   def show
     order = Order.find params[:order_id]
     if order
-      json_response({message: "order found!", order: OrderSerializer.new(order)}, :show)
+      json_response({message: "order found!", order: OrderSerializer.new(order)}, :ok)
     else
       json_response({message: "Invalid order", order: {}}, :not_found)
     end
@@ -38,6 +38,7 @@ class Api::V1::OrdersController < ApplicationController
 
         #  checking order valid or not
         if order.present?
+          order.delay(run_at: 24.hours.from_now).check_status('submission')
           json_response({message: "order created!", order: order}, :created)
         else
           json_response({message: "Invalid service", order: {}}, :unprocessable_entity)

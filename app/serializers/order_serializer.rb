@@ -42,17 +42,49 @@
 #
 
 class OrderSerializer < ActiveModel::Serializer
-  	attributes 	:id,
-				# :grand_total,
+	  attributes 	:id,
+	  			:no_request_order,
+				:no_perjanjian,
+				:plafond,
+				:tgl_akad,
+				:tgl_jatuh_tempo,
+				:jangka_waktu,
+				:agunan_pokok,
+				:angsuran_bunga, 
 				:document_type,
+				:url_document_privy,
+				:doc_token_privy,
+				:doc_filename,
+				:has_pa_signed,
+				:has_creditor_signed,
+				:has_debtor_signed,
 				:status,
 				:created_at,
 				:updated_at,
-				:notary_id,
-				:user_id
+				:notary_user,
+				:debtor_user,
+				:creditor_user,
+				:collateral_user
 
 	# has_many :collaterals
 	has_many :immovable_collaterals  
 	has_many :movable_collaterals  
-    has_one :chat_room
+	has_one :chat_room
+	
+	def notary_user
+		NotarySerializer.new(object.notary)
+	end
+
+	def debtor_user
+		DebtorSerializer.new(object.debtor)
+	end
+
+	def creditor_user
+		CreditorSerializer.new(object.creditor)
+	end
+
+	def collateral_user
+		CollateralSerializer.new(object.collateral_owner)
+	end
+
 end
