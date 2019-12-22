@@ -156,9 +156,10 @@ class Api::V1::UsersController < ApplicationController
   def notaris
     # users = User.notaris
     # check_last_locked_times = user_services.check_last_locked(current_user)
-    UserServices.check_locked(current_user)
+    user = User.find_by(id: params[:user_id])
+    UserServices.check_locked(user) if user.present?
     notaries = User.joins(:roles).where("roles.name = ?", "notaris")
-    notaries = User.filter(params, notaries, current_user)
+    notaries = User.filter(params, notaries)
     json_response(notaries)
     # json_response_with_serializer(notaries, { adapter: :json, root: "user" })
   end
