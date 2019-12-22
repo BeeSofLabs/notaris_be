@@ -48,11 +48,30 @@ class OrderSerializer < ActiveModel::Serializer
 				:status,
 				:created_at,
 				:updated_at,
-				:notary_id,
-				:user_id
+				:notary_user,
+				:debtor_user,
+				:creditor_user,
+				:collateral_user
 
 	# has_many :collaterals
 	has_many :immovable_collaterals  
 	has_many :movable_collaterals  
-    has_one :chat_room
+	has_one :chat_room
+	
+	def notary_user
+		NotarySerializer.new(object.notary)
+	end
+
+	def debtor_user
+		DebtorSerializer.new(object.debtor)
+	end
+
+	def creditor_user
+		CreditorSerializer.new(object.creditor)
+	end
+
+	def collateral_user
+		CollateralSerializer.new(object.collateral_owner)
+	end
+
 end

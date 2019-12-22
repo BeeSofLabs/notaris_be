@@ -20,7 +20,7 @@ class Api::V1::OrdersController < ApplicationController
   def show
     order = Order.find params[:order_id]
     if order
-      json_response({message: "order found!", order: OrderSerializer.new(order)}, :show)
+      json_response({message: "order found!", order: OrderSerializer.new(order)}, :ok)
     else
       json_response({message: "Invalid order", order: {}}, :not_found)
     end
