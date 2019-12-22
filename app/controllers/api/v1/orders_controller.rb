@@ -38,6 +38,7 @@ class Api::V1::OrdersController < ApplicationController
 
         #  checking order valid or not
         if order.present?
+          order.delay(run_at: 24.hours.from_now).check_status('submission')
           json_response({message: "order created!", order: order}, :created)
         else
           json_response({message: "Invalid service", order: {}}, :unprocessable_entity)
