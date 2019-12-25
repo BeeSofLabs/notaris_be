@@ -47,17 +47,18 @@ class Api::V1::DocumentsController < ApplicationController
 
     def upload
         begin
+            
             order = Order.find params[:order_id]
-            if order.present? && params[:html_content].present?
-                if order.status == Order::statuses[:partial]
-                    order.update(html_content: params[:html_content], status: :claim)
+            if order.present? && params[:content].present?
+                if order.read_attribute_before_type_cast(:status) == Order::statuses[:partial]
+                    order.update(covernote_content: params[:content], status: :claim)
                     if order.document_type == Api::V1::OrdersController::DOCTYPE_FIDUSIA
                         return json_response(  {message: "Agunan telah selesai dibebankan Hak Tanggungan pada Kanwil Kemenkumham provinsi"}, :ok)
                     else
                         return json_response(  {message: "Agunan telah selesai dibebankan Hak Tanggungan pada BPN Kota"}, :ok)
                     end
-                else
-                    order.update(html_content: params[:html_content], status: :revision)
+                elsif order.read_attribute_before_type_cast(:status) < Order::statuses[:partial]
+                    order.update(html_content: params[:content], status: :revision)
                     return json_response(  {message: "Document content updated!"}, :ok)
                 end
         

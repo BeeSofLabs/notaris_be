@@ -42,12 +42,13 @@
 #
 
 class OrderSerializer < ActiveModel::Serializer
-	  attributes 	:id,
+	  attributes :id,
 	  			:no_request_order,
 				:no_perjanjian,
 				:plafond,
 				:tgl_akad,
 				:tgl_jatuh_tempo,
+				:tarif_bunga,
 				:jangka_waktu,
 				:agunan_pokok,
 				:angsuran_bunga, 
