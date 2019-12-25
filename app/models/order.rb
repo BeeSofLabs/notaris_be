@@ -72,7 +72,7 @@ class Order < ApplicationRecord
 	"claim":6, "expired":9,  "cancel":10, "deleted": 11,"done": 20, "completed": 21}
 
 	before_create :assign_default_value
-  	after_create :create_chat_room, :if => :allow_chat_room?
+  after_create :create_chat_room, :if => :allow_chat_room?
 
 	def allow_chat_room?
 		self.document_type != "skmht"
