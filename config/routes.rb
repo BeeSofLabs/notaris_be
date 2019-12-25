@@ -36,6 +36,7 @@ Rails.application.routes.draw do
 
 				resource :collateral, only: [:show, :create, :destroy]
 				resource :document, only: [:show]
+				resource :notification, only: [:show, :create, :destroy]
 				post 'document/upload', 			to: 'documents#upload'
 				post 'document/generate', 		to: 'documents#generate_pdf'
 				post 'document/parties',	 		to: 'documents#parties'
