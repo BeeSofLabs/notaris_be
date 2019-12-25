@@ -4,7 +4,7 @@ class Api::V1::DocumentsController < ApplicationController
         order = Order.find params[:order_id]
         unless order
             return json_response({message: "invalid document"}, :not_found)
-        else    
+        else
             if approval_params[:approve]
                 order.update(has_debtor_signed: approval_params[:approve]) if current_user.debtor?
                 order.update(has_creditor_signed: approval_params[:approve]) if current_user.creditor?
@@ -30,7 +30,7 @@ class Api::V1::DocumentsController < ApplicationController
 
     def show
         template = ::Document.content_template(params[:doctype])
-        
+
         unless template
             return json_response({message: "invalid document type"}, :not_found)
         else
@@ -49,9 +49,13 @@ class Api::V1::DocumentsController < ApplicationController
         begin
             
             order = Order.find params[:order_id]
+
             if order.present? && params[:content].present?
                 if order.read_attribute_before_type_cast(:status) == Order::statuses[:partial]
-                    order.update(covernote_content: params[:content], status: :claim)
+                    if order.update(covernote_content: params[:content], status: :claim)
+                      order.delay(run_at: 48.hours.from_now).check_status('claim')
+                    end
+
                     if order.document_type == Api::V1::OrdersController::DOCTYPE_FIDUSIA
                         return json_response(  {message: "Agunan telah selesai dibebankan Hak Tanggungan pada Kanwil Kemenkumham provinsi"}, :ok)
                     else
@@ -61,7 +65,7 @@ class Api::V1::DocumentsController < ApplicationController
                     order.update(html_content: params[:content], status: :revision)
                     return json_response(  {message: "Document content updated!"}, :ok)
                 end
-        
+
             end
         rescue Exception
         end
@@ -72,28 +76,28 @@ class Api::V1::DocumentsController < ApplicationController
     def generate_pdf
         begin
             privy = nil
-            
+
             pdf_path = Order.build_file(params[:order_id]).to_s
             if params[:with_privy]
                 order = Order.find params[:order_id]
-                
+
                 privy = PrivyModule::upload_document(
-                    order.document_type.camelcase, 
-                    order.creditor.privy_id, 
-                    "TE4455", 
+                    order.document_type.camelcase,
+                    order.creditor.privy_id,
+                    "TE4455",
                     File.new(pdf_path))
-                
+
 
                 if privy[:data].present?
                     order.update(
                         doc_token_privy: privy[:data][:docToken],
                         url_document_privy: privy[:data][:urlDocument])
                 end
-                
+
             end
-            return json_response( 
-                {   message: "Document generated in pdf format!", 
-                    path: "#{pdf_path}",    
+            return json_response(
+                {   message: "Document generated in pdf format!",
+                    path: "#{pdf_path}",
                     privy: privy }, :ok)
         rescue Exception
         end
