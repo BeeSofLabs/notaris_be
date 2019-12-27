@@ -38,6 +38,7 @@ class Api::V1::OrdersController < ApplicationController
 
         #  checking order valid or not
         if order.present?
+          order.delay(run_at: 24.hours.from_now).check_status('submission')
           json_response({message: "order created!", order: order}, :created)
         else
           json_response({message: "Invalid service", order: {}}, :unprocessable_entity)
@@ -108,6 +109,7 @@ class Api::V1::OrdersController < ApplicationController
       :plafond,
       :tgl_akad,
       :tgl_jatuh_tempo,
+      :tarif_bunga,
       :jangka_waktu,
       :agunan_pokok,
       :angsuran_bunga,
@@ -128,6 +130,7 @@ class Api::V1::OrdersController < ApplicationController
       :plafond,
       :tgl_akad,
       :tgl_jatuh_tempo,
+      :tarif_bunga,
       :valid_expired_datetime,
       :document_type,
       :no_request_order,

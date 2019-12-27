@@ -72,7 +72,7 @@ class Order < ApplicationRecord
 	"claim":6, "expired":9,  "cancel":10, "deleted": 11,"done": 20, "completed": 21}
 
 	before_create :assign_default_value
-  	after_create :create_chat_room, :if => :allow_chat_room?
+  after_create :create_chat_room, :if => :allow_chat_room?
 
 	def allow_chat_room?
 		self.document_type != "skmht"
@@ -142,14 +142,15 @@ class Order < ApplicationRecord
     @chat_room_id = self.chat_room.try(:id)
   end
 
-  def check_status
+  def check_status(order_status)
     new_order_object = Order.find_by(id: self.id)
     Rails.logger.info "========== self order object: #{self.inspect}"
     Rails.logger.info "========== new order object: #{new_order_object.inspect}"
-    Rails.logger.info "========== status is submission: #{new_order_object.status.eql?('submission')}"
+    Rails.logger.info "========== status is #{order_status} : #{new_order_object.status.eql?(order_status)}"
 
     if new_order_object.present?
-      new_order_object.update(is_deleted: true) if new_order_object.status.eql?('submission')
+      new_order_object.update(is_deleted: true) if new_order_object.status.eql?('submission') && order_status.eql?('submission')
+      new_order_object.update(status: 'done') if new_order_object.status.eql?('claim') && order_status.eql?('claim') && new_order_object.chats.count < 1
     end
   end
 
