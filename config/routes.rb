@@ -55,6 +55,7 @@ Rails.application.routes.draw do
 				post "payment/bank/transfer", to: "payment#bank_transfer"
 				post "payment/ovo/transfer", 	to: "payment#ovo_transfer"
 
+				resource :notification, only: [:show, :create]
 
 
 		end

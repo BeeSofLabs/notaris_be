@@ -1,12 +1,12 @@
 class CreateTableUserNotifications < ActiveRecord::Migration[5.2]
   def change
     create_table :notifications do |t|
-      t.integer :action
+      t.integer :action_name
       t.string  :title
       t.string  :description
       t.string  :url_action
 
-      t.references :users, foreign_key: true
+      t.references :user, foreign_key: true
       t.timestamps
     end
   end
