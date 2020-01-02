@@ -1,7 +1,7 @@
 class CreateTableUserNotifications < ActiveRecord::Migration[5.2]
   def change
     create_table :notifications do |t|
-      t.integer :action
+      t.integer :action_type
       t.string  :title
       t.string  :description
       t.string  :url_action
