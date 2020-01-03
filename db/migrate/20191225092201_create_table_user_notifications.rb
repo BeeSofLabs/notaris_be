@@ -5,6 +5,7 @@ class CreateTableUserNotifications < ActiveRecord::Migration[5.2]
       t.string  :title
       t.string  :description
       t.string  :url_action
+      t.boolean :is_read, default: false
 
       t.references :user, foreign_key: true
       t.timestamps

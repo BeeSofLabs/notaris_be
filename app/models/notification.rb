@@ -60,7 +60,9 @@ class Notification < ApplicationRecord
 
         end
         
-        Notification.create({action_type: actions[action_type], user_id: user_id, title: title, description: description, url_action: url_action})
+        Notification.create(
+            {action_type: actions[action_type], user_id: user_id, title: title, 
+            description: description, url_action: url_action})
 
     end
 end
