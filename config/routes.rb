@@ -36,6 +36,7 @@ Rails.application.routes.draw do
 
 				resource :collateral, only: [:show, :create, :destroy]
 				resource :document, only: [:show]
+				resource :notification, only: [:show, :create, :destroy]
 				post 'document/upload', 			to: 'documents#upload'
 				post 'document/generate', 		to: 'documents#generate_pdf'
 				post 'document/parties',	 		to: 'documents#parties'
@@ -54,6 +55,7 @@ Rails.application.routes.draw do
 				post "payment/bank/transfer", to: "payment#bank_transfer"
 				post "payment/ovo/transfer", 	to: "payment#ovo_transfer"
 
+				resource :notification, only: [:show, :create]
 
 
 		end

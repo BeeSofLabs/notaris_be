@@ -101,6 +101,7 @@ class User < ApplicationRecord
 
 	has_many :movable_collaterals
 	has_many :immovable_collaterals
+	has_many :notifications
 
   belongs_to :indonesia_city, optional: true
 	has_one :indonesia_province, through: :indonesia_city

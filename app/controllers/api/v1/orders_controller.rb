@@ -69,6 +69,9 @@ class Api::V1::OrdersController < ApplicationController
     if order.present?
 
       order.update(status: :done)
+      Notification.build("notif_done", order.debtor_id, "Dokument anda telah selesai")
+      Notification.build("notif_done", order.creditor_id, "Dokument anda telah selesai")
+      Notification.build("notif_done", order.notary_id, "Dokument anda telah selesai")
       json_response({message: "Document order done!", order: order}, :ok)
 
     else
@@ -81,6 +84,7 @@ class Api::V1::OrdersController < ApplicationController
     if order.present?
 
       order.update(status: :completed)
+      Notification.build("notif_completed", order.notary_id, "Pembayaran jasa dokumen telah dibayarkan")
       json_response({message: "order complete!", order: order}, :ok)
 
     else

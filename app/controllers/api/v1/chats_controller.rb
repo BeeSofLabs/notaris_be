@@ -30,7 +30,9 @@ class Api::V1::ChatsController < ApplicationController
     if chat_room.present?
       if chat_room.update(is_closed: true, close_date: Date.today)
         chat_room.order.update(status: "done")
-
+        Notification.build("notif_claim", order.creditor_id, "Klaim Dokumen ditutup")
+        Notification.build("notif_claim", order.notary_id, "Klaim Dokumen ditutup")
+        
         json_response({ message: 'Chat room closed', chat_room: chat_room }, :ok)
       else
         json_response({ message: chat_room.errors, chat_room: ChatRoom.find_by(id: params[:chat_room_id]) }, :unprocessable_entity)

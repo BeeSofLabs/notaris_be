@@ -71,7 +71,7 @@ class Api::V1::UsersController < ApplicationController
       auth_token = AuthenticateUser.new(user.email, user.password).call
 
       res = nil
-      if(user_params[:user_tipe] != 'bpn')
+      # if(user_params[:user_tipe] != 'bpn')
 
         res = PrivyModule::registration(
           user.email,
@@ -87,12 +87,14 @@ class Api::V1::UsersController < ApplicationController
           privy_token = res[:data][:userToken]
           privy_status = res[:data][:status]
           user.insert_privy_token(privy_token, privy_status)
+
+          Notification.build("notif_registration", user.id, "Akun anda telah dibuat")
         else
           # raise Exception
           raise(ExceptionHandler::DuplicateRecord, { message: res })
           # json_response({ message: res }, :unprocessable_entity)
         end
-      end
+      # end
 
       response = { message: Message.account_created, auth_token: auth_token, privy: res}
       json_response(response, :created)
