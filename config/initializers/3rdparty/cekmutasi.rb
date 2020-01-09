@@ -52,7 +52,7 @@ module CekMutasiModule
     end
 
     # OVO
-    def self.ovo_inquiry(source_no, phone)
+    def self.ovo_inquiry(source_no, destination_phone)
         url = ENV["CEKMUTASI_API_URL"] + ENV["cekmutasi_api_ovo_inquiry_url"]
         request = Typhoeus::Request.new(
             url,
@@ -60,7 +60,7 @@ module CekMutasiModule
             headers: { 'Api-Key' => ENV["CEKMUTASI_API_KEY"], 'Accept' => "application/json" },
             body: {
                 source_number: source_no,
-                phone: phone
+                phone: destination_phone
             }
         )
 
@@ -68,15 +68,15 @@ module CekMutasiModule
         return JSON.parse(response.response_body, {:symbolize_names => true})
     end
 
-    def self.ovo_transfer(soucer_no, phone, amount)
+    def self.ovo_transfer(source_no, destination_phone, amount)
         url = ENV["CEKMUTASI_API_URL"] + ENV["cekmutasi_api_ovo_send_url"]
         request = Typhoeus::Request.new(
             url,
             method: :post,
             headers: { 'Api-Key' => ENV["CEKMUTASI_API_KEY"], 'Accept' => "application/json" },
             body: {
-                source_number: soucer_no,
-                phone: phone,
+                source_number: source_no,
+                phone: destination_phone,
                 amount: amount
             }
         )

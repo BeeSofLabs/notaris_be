@@ -9,6 +9,7 @@
 #  address_companion          :string
 #  address_in_idcard_bpn      :string
 #  address_ppat               :string
+#  apht_price                 :decimal(, )      default(0.0)
 #  approved                   :boolean          default(FALSE)
 #  bank_account_notaris       :string
 #  bank_name                  :string
@@ -19,6 +20,7 @@
 #  email                      :string
 #  fax                        :string
 #  fax_ppat                   :string
+#  fidusia_price              :decimal(, )      default(0.0)
 #  gender                     :string
 #  gender_companion           :string
 #  idcard_number_companion    :string
@@ -27,6 +29,7 @@
 #  komparisi                  :text
 #  komparisi_companion        :text
 #  komparisi_ppat             :text
+#  last_locked_search_time    :datetime
 #  lat                        :float
 #  lat_companion              :float
 #  lat_ppat                   :float
@@ -49,11 +52,14 @@
 #  password_digest            :string
 #  phone                      :string
 #  pob                        :string
+#  privy_status               :string
 #  privy_token                :string
 #  province                   :string
 #  reset_password_sent_at     :datetime
 #  reset_password_token       :string
+#  search_count               :integer          default(0)
 #  selfie_image               :string
+#  skmht_price                :decimal(, )      default(0.0)
 #  status_companion           :string
 #  tgl_akta                   :string
 #  tgl_akta_ppat              :string
@@ -66,29 +72,23 @@
 #  updated_at                 :datetime         not null
 #  indonesia_city_id          :integer
 #  indonesia_village_id       :integer
+#  privy_id                   :string
 #
 
 class UserSerializer < ActiveModel::Serializer
-	attributes	:id,
-				:approved,
-				:dob,
-				:email,
-				:gender,
-				:identity_image,
-				:identity_number,
-				:name,
-				:organizational_status,
-				:phone,
-				:identity_number,
-				:privy_token,
-				:user_tipe,
-				:lat,
-				:lng, 
-				:active
-				
+	attributes	:id, :approved, :dob, :email, :gender, :identity_image, :identity_number, :name, :organizational_status, :phone, :identity_number, :privy_token, :user_tipe, :lat, :lng, :active, :indonesia_village, :indonesia_district, :indonesia_city, :indonesia_province, :address, :address_bpn, :address_companion, :address_in_idcard_bpn, :address_ppat, :fax, :fax_ppat, :no_akta, :no_akta_ppat, :no_sk_notaris, :no_sk_notaris_ppat, :tgl_akta, :tgl_akta_ppat, :tgl_sk_notaris, :tgl_sk_ppat, :price_min, :price_max, :last_locked_search_time, :search_count
+
 	has_many 	:notary_services, if: :notaris?
 
 	def notaris?
 		object.has_role?(:notaris)
 	end
+
+  def price_min
+    object.has_role?(:notaris) ? object.notary_services.minimum(:price) : 0
+  end
+
+  def price_max
+    object.has_role?(:notaris) ? object.notary_services.maximum(:price) : ""
+  end
 end

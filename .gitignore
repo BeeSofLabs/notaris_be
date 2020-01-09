@@ -9,7 +9,7 @@
 # Ignore bundler config.
 /.bundle
 /public/uploads/*
-config/*
+# config/*
 
 # Ignore all logfiles and tempfiles.
 /log/*
@@ -24,6 +24,7 @@ config/*
 /node_modules
 /yarn-error.log
 
+/public/pdfs
 /public/assets
 .byebug_history
 

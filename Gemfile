@@ -42,6 +42,9 @@ gem 'rack-cors'
 gem 'cloudinary'
 gem 'mailgun_rails'
 gem 'indonesia', '~> 0.5.0'
+gem 'delayed_job_active_record'
+gem 'daemons'
+
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 
@@ -57,7 +60,9 @@ gem "figaro"
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
-
+# pdf generator
+gem "wicked_pdf"
+gem 'wkhtmltopdf-binary'
 
 
 group :development, :test do
@@ -84,3 +89,11 @@ group :test do
   # Easy installation and use of chromedriver to run system tests with Chrome
   gem 'chromedriver-helper'
 end
+
+gem 'capistrano', '~> 3.7', '>= 3.7.1'
+gem 'capistrano-rails', '~> 1.2'
+gem 'capistrano-passenger', '~> 0.2.0'
+gem 'capistrano-rbenv', '~> 2.1'
+gem 'capistrano-rails-console', require: false
+
+gem 'rails-admin'

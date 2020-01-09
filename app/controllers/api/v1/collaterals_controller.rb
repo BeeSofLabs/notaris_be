@@ -1,16 +1,23 @@
 class Api::V1::CollateralsController < ApplicationController
 
     def show
-        if current_user.immovable_collaterals.present?
-            
-            json_response({
-                message: "agunan listed!", 
-                immovable_collaterals: current_user.immovable_collaterals,
-                movable_collaterals: current_user.movable_collaterals}, :listed)
+        
+        if(params[:user_id].present?)
+            user = User.find(params[:user_id])
         else
-            json_response({message: "Invalid service", collaterals: {}}, :s)
+            user = current_user
         end
 
+        
+        if user.present?
+            return json_response({
+                message: "Collateral listed!", 
+                immovable_collaterals: user.immovable_collaterals,
+                movable_collaterals: user.movable_collaterals})
+            
+        end
+
+        json_response({message: "Invalid service", collaterals: {}}, :not_found)
     end
 
     def create
@@ -42,13 +49,13 @@ class Api::V1::CollateralsController < ApplicationController
         if params[:collateral_type] == 'movable'
             if params.present? && valid_collateral_owner(params)
                 if MovableCollateral.delete(params[:id])
-                    return json_response({message: "collateral deleted!"}, :deleted)
+                    return json_response({message: "collateral deleted!"})
                 end
             end
         elsif params[:collateral_type] == 'immovable'
             if params.present?
-                if ImovableCollateral.delete(params[:id])
-                    return json_response({message: "collateral deleted!"}, :deleted)
+                if ImmovableCollateral.delete(params[:id])
+                    return json_response({message: "collateral deleted!"})
                 end
             end
         end
@@ -108,7 +115,8 @@ class Api::V1::CollateralsController < ApplicationController
             :no_land_identity,
             :letter_of_pbbtax,
             :nop,
-            :binding_value
+            :binding_value,
+            :collateral_value
         )
     end
 end

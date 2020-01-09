@@ -1,5 +1,67 @@
 class Api::V1::UsersController < ApplicationController
-	skip_before_action :authorize_request, only: [:create, :roles, :notaris, :forgot, :reset]
+	skip_before_action :authorize_request, only: [:create, :roles, :notaris, :forgot, :reset, :notaris_detail]
+  # serialization_scope :current_user
+
+  def search_collateral_owner
+    ActiveRecord::Base.transaction do
+        result = User.collateral_owner.where("name LIKE ?", "%#{params[:owner]}%")
+        response = { message: "Ok", collateral_owners: result}
+
+        return json_response({message: "ok",
+          collateral_owners:
+            result.map do |user|
+              {
+                id: user.id,
+                name: user.name,
+                email: user.email
+              }
+            end
+          }, :ok)
+    end
+
+    json_response({message: "invalid action", collateral_owners: []}, :invalid)
+
+  end
+
+  def search_debitor
+    ActiveRecord::Base.transaction do
+        result = User.debtor.where("name LIKE ?", "%#{params[:owner]}%")
+
+        return json_response({message: "ok",
+        debtors:
+            result.map do |user|
+              {
+                id: user.id,
+                name: user.name,
+                email: user.email
+              }
+            end
+          }, :ok)
+    end
+
+    json_response({message: "invalid action", debitors: []}, :invalid)
+
+  end
+
+  def search_creditor
+    ActiveRecord::Base.transaction do
+        result = User.creditor.where("name LIKE ?", "%#{params[:owner]}%")
+
+        return json_response({message: "ok",
+        creditors:
+            result.map do |user|
+              {
+                id: user.id,
+                name: user.name,
+                email: user.email
+              }
+            end
+          }, :ok)
+    end
+
+    json_response({message: "invalid action", creditors: []}, :invalid)
+
+  end
 
   def create
     ActiveRecord::Base.transaction do
@@ -8,13 +70,9 @@ class Api::V1::UsersController < ApplicationController
       user.set_user_role(user_params[:user_tipe])
       auth_token = AuthenticateUser.new(user.email, user.password).call
 
-      # identity_image = File.new(user.image_content(user.identity_image))
-      # selfie_image = File.new(user.image_content(user.selfie_image))
-
-
       res = nil
-      if(user_params[:user_tipe] != 'bpn')
-        
+      # if(user_params[:user_tipe] != 'bpn')
+
         res = PrivyModule::registration(
           user.email,
           user.phone,
@@ -24,16 +82,19 @@ class Api::V1::UsersController < ApplicationController
           File.new(user.image_content(user.selfie_image))
         )
 
-      
+
         if privy_success_registration?(res)
           privy_token = res[:data][:userToken]
-          user.insert_privy_token(privy_token)
+          privy_status = res[:data][:status]
+          user.insert_privy_token(privy_token, privy_status)
+
+          Notification.build("notif_registration", user.id, "Akun anda telah dibuat")
         else
           # raise Exception
           raise(ExceptionHandler::DuplicateRecord, { message: res })
           # json_response({ message: res }, :unprocessable_entity)
         end
-      end
+      # end
 
       response = { message: Message.account_created, auth_token: auth_token, privy: res}
       json_response(response, :created)
@@ -45,9 +106,10 @@ class Api::V1::UsersController < ApplicationController
       unless current_user.privy_token.present?
         response = {msg: "privy token not found", privy: {}}
       else
-        res = Privy.new(current_user).registration_status
-        current_user.privy_approved if privy_approved?(res)
-        response = {msg: res["data"]["status"], privy: res}
+        # res = Privy.new(current_user).registration_status
+        res = PrivyModule.status_of_registration(current_user.privy_token)
+        current_user.privy_approved(res[:data][:status], res[:data][:privyId]) if privy_approved?(res)
+        response = {msg: current_user.privy_status, privy: res}
       end
     else
       response = {msg: "approved", privy: {}}
@@ -60,14 +122,14 @@ class Api::V1::UsersController < ApplicationController
 	end
 
 	def edit
-		current_user.update(edit_params)
+		current_user.update_profile(edit_params)
 		json_response(current_user)
 	end
 
   def forgot
     puts "=============================="
     puts "FORGOT PASSWORD YOU SHOULD HERE GOD DAMN IT!"
-    puts "forgot params is #{forgot_paramsss}"
+    puts "forgot params is #{forgot_params}"
     puts "email is: #{forgot_params[:email]}"
     puts "=============================="
     user = User.find_by!(email: forgot_params[:email])
@@ -94,9 +156,19 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def notaris
-    users = User.notaris
-    users = User.filter(params, users)
-    json_response(users)
+    # users = User.notaris
+    # check_last_locked_times = user_services.check_last_locked(current_user)
+    user = User.find_by(id: params[:user_id])
+    UserServices.check_locked(user) if user.present?
+    notaries = User.joins(:roles).where("roles.name = ?", "notaris")
+    notaries = User.filter(params, notaries)
+    json_response(notaries)
+    # json_response_with_serializer(notaries, { adapter: :json, root: "user" })
+  end
+
+  def notaris_detail
+    notaris = User.joins(:roles).where("roles.name = ? and users.id = ?", "notaris", params[:id])
+    json_response(notaris)
   end
 
 
@@ -184,15 +256,38 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def edit_params
-  	params.permit(
-  		:name,
-      :dob,
-      :identity_image,
-      :identity_number,
-      :organizational_status,
-      :phone,
-      :selfie_image
-	)
+ #  	params.permit(
+ #  		:name,
+ #      :dob,
+ #      :identity_image,
+ #      :identity_number,
+ #      :organizational_status,
+ #      :phone,
+ #      :selfie_image
+	# )
+    params.permit(
+      users: [
+        :name,
+        :dob,
+        :identity_image,
+        :identity_number,
+        :organizational_status,
+        :phone,
+        :selfie_image,
+        :address,
+        :address_bpn,
+        :address_companion,
+        :address_in_idcard_bpn,
+        :address_ppat,
+        :indonesia_city_id,
+        :indonesia_village_id,
+        :active
+      ],
+      services: [
+        :id,
+        :price
+      ]
+    )
   end
 
   def privy_approved?(res)

@@ -9,6 +9,7 @@
 #  address_companion          :string
 #  address_in_idcard_bpn      :string
 #  address_ppat               :string
+#  apht_price                 :decimal(, )      default(0.0)
 #  approved                   :boolean          default(FALSE)
 #  bank_account_notaris       :string
 #  bank_name                  :string
@@ -19,6 +20,7 @@
 #  email                      :string
 #  fax                        :string
 #  fax_ppat                   :string
+#  fidusia_price              :decimal(, )      default(0.0)
 #  gender                     :string
 #  gender_companion           :string
 #  idcard_number_companion    :string
@@ -27,6 +29,7 @@
 #  komparisi                  :text
 #  komparisi_companion        :text
 #  komparisi_ppat             :text
+#  last_locked_search_time    :datetime
 #  lat                        :float
 #  lat_companion              :float
 #  lat_ppat                   :float
@@ -49,11 +52,14 @@
 #  password_digest            :string
 #  phone                      :string
 #  pob                        :string
+#  privy_status               :string
 #  privy_token                :string
 #  province                   :string
 #  reset_password_sent_at     :datetime
 #  reset_password_token       :string
+#  search_count               :integer          default(0)
 #  selfie_image               :string
+#  skmht_price                :decimal(, )      default(0.0)
 #  status_companion           :string
 #  tgl_akta                   :string
 #  tgl_akta_ppat              :string
@@ -66,6 +72,7 @@
 #  updated_at                 :datetime         not null
 #  indonesia_city_id          :integer
 #  indonesia_village_id       :integer
+#  privy_id                   :string
 #
 
 class User < ApplicationRecord
@@ -79,7 +86,7 @@ class User < ApplicationRecord
 	validates_uniqueness_of :phone
 
 	enum organizational_status: ["perorangan", "badan_usaha"]
-	enum user_tipe: [ "debitur", "kreditur","collateral_owner", "notaris", "bpn"]
+	enum user_tipe: [ "debtor", "creditor","collateral_owner", "notaris", "bpn"]
 
 	mount_base64_uploader :identity_image, ImageUploader
 	mount_base64_uploader :selfie_image, ImageUploader
@@ -88,20 +95,25 @@ class User < ApplicationRecord
 	has_many :debtor_orders, class_name: 'Order', foreign_key: 'debtor_id', dependent: :nullify
 	has_many :collateral_owner_orders, class_name: 'Order', foreign_key: 'collateral_owner_id', dependent: :nullify
 	has_many :creditor_orders, class_name: 'Order', foreign_key: 'user_id', dependent: :nullify
-	has_many :notary_services
+  has_many :notary_services
+
+  has_many :chats, dependent: :nullify
 
 	has_many :movable_collaterals
 	has_many :immovable_collaterals
+	has_many :notifications
 
-	belongs_to :indonesia_city, optional: true
-	belongs_to :indonesia_village, optional: true
+  belongs_to :indonesia_city, optional: true
+	has_one :indonesia_province, through: :indonesia_city
+  belongs_to :indonesia_village, optional: true
+	has_one :indonesia_district, through: :indonesia_village
 
-	def insert_privy_token(privy_token)
-		update!(privy_token: privy_token)
+	def insert_privy_token(privy_token, privy_status)
+		update!(privy_token: privy_token, privy_status: privy_status)
 	end
 
-	def privy_approved
-		update!(approved: true)
+	def privy_approved(status, privy_id)
+		update!(approved: true, privy_status: status, privy_id: privy_id)
 	end
 
 	def image_content(image)
@@ -162,12 +174,36 @@ class User < ApplicationRecord
 		end
 	end
 
-  def self.filter(params, users)
-    users = users.where("lower(users.name) like lower(?)", "%#{params[:name]}%") if params[:name].present?
-    users = users.joins(:indonesia_city).where("lower(indonesia_cities.city_name) like lower(?)", "%#{params[:area]}%") if params[:area].present?
-    users = users.joins(:notary_services).where(notary_services: { service_type: params[:doc_type] }) if params[:doc_type].present?
-    users = users.joins(:notary_services).where(notary_services: { price: params[:range_lower]..params[:range_higher] }) if params[:range_lower].present? && params[:range_higher].present?
-    users
+  def self.filter(params, notaries)
+    notaries = notaries.where("lower(users.name) like lower(?)", "%#{params[:name]}%") if params[:name].present?
+    notaries = notaries.joins(:indonesia_city).where("lower(indonesia_cities.city_name) like lower(?)", "%#{params[:area]}%") if params[:area].present?
+    notaries = notaries.joins(:notary_services).where(notary_services: { service_type: params[:doc_type] }) if params[:doc_type].present?
+    notaries = notaries.joins(:notary_services).where(notary_services: { price: params[:range_lower]..params[:range_higher] }) if params[:range_lower].present? && params[:range_higher].present?
+    notaries
+  end
+
+  def update_profile(params)
+    self.update(params[:users])
+    # services_params = params[:services].map { |serv|  } if params[:services].present?
+    if params[:services].present?
+      services_params = Hash[params[:services].map { |serv| [serv[:id], { price: serv[:price] }] }]
+      self.notary_services.update(services_params.keys, services_params.values)
+    end
+  end
+
+  def get_orders(params)
+    if params[:search_type].eql?('list')
+      self.notary_orders + self.debtor_orders + self.collateral_owner_orders + self.creditor_orders
+    else
+      self.notary_orders.where(created_at: params[:start_time]..params[:end_time]) + self.debtor_orders.where(created_at: params[:start_time]..params[:end_time]) + self.collateral_owner_orders.where(created_at: params[:start_time]..params[:end_time]) + self.creditor_orders.where(created_at: params[:start_time]..params[:end_time])
+    end
+    # orders = notary_orders + debtor_orders + collateral_owner_orders + creditor_orders
+  end
+
+  def get_carts(params)
+    order_list = get_orders(params)
+    # order_list.group_by(&:document_type)
+    order_list.group_by(&:document_type).map {|k,v| Hash[k, v.length]}
   end
 
 	private
