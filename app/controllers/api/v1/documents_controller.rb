@@ -13,6 +13,9 @@ class Api::V1::DocumentsController < ApplicationController
 
             if approval_params[:submit]
                 order.update(status: :approval)
+                Notification.build("notif_approval", order.debtor_id, "Order Dokument anda telah dibuat")
+                Notification.build("notif_approval", order.creditor_id, "Order Dokument anda telah dibuat")
+                Notification.build("notif_approval", order.notary_id, "Order Dokument anda telah dibuat")
             end
         end
         json_response(  {message: "Order approval", status: order.status}, :ok)
@@ -47,12 +50,15 @@ class Api::V1::DocumentsController < ApplicationController
 
     def upload
         begin
+            
             order = Order.find params[:order_id]
-            if order.present? && params[:html_content].present?
-                if order.status == Order::statuses[:partial]
 
-                    if order.update(html_content: params[:html_content], status: :claim)
-                      order.delay(run_at: 48.hours.from_now).check_status('claim')
+            if order.present? && params[:content].present?
+                if order.read_attribute_before_type_cast(:status) == Order::statuses[:partial]
+                    if order.update(covernote_content: params[:content], status: :claim)
+                        Notification.build("notif_claim", order.creditor_id, "Dokumen di klaim")
+                        Notification.build("notif_claim", order.notary_id, "Dokumen di klaim")
+                        order.delay(run_at: 48.hours.from_now).check_status('claim')
                     end
 
                     if order.document_type == Api::V1::OrdersController::DOCTYPE_FIDUSIA
@@ -60,8 +66,8 @@ class Api::V1::DocumentsController < ApplicationController
                     else
                         return json_response(  {message: "Agunan telah selesai dibebankan Hak Tanggungan pada BPN Kota"}, :ok)
                     end
-                else
-                    order.update(html_content: params[:html_content], status: :revision)
+                elsif order.read_attribute_before_type_cast(:status) < Order::statuses[:partial]
+                    order.update(html_content: params[:content], status: :revision)
                     return json_response(  {message: "Document content updated!"}, :ok)
                 end
 
