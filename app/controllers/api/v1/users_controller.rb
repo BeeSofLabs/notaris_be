@@ -2,6 +2,20 @@ class Api::V1::UsersController < ApplicationController
 	skip_before_action :authorize_request, only: [:create, :roles, :notaris, :forgot, :reset, :notaris_detail]
   # serialization_scope :current_user
 
+  def verify
+    result = User.find_by_email(params[:email])
+    if result
+      return json_response({message: "Not Valid email"}, :not_found)
+    end
+
+    result = User.find_by_phone(params[:phone])
+    if result
+      return json_response({message: "Not Valid phone"}, :not_found)
+    end
+
+    json_response({message: "Valid"}, :ok)
+  end
+
   def search_collateral_owner
     ActiveRecord::Base.transaction do
         result = User.collateral_owner.where("name LIKE ?", "%#{params[:owner]}%")
