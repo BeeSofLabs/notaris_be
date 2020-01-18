@@ -8,7 +8,11 @@ class Api::V1::OrdersController < ApplicationController
   def index
     orders = current_user.get_orders({ search_type: 'list' })
 
-    json_response_with_serializer(orders, { adapter: :json, root: "order" })
+    if params[:request_type].eql?('csv')
+      send_data Order.to_csv(orders), filename: "orders-#{Date.today}.csv"
+    else
+      json_response_with_serializer(orders, { adapter: :json, root: "order" })
+    end
     # json_response({ orders: {
     #   notary_orders: current_user.notary_orders,
     #   debtor_orders: current_user.debtor_orders,

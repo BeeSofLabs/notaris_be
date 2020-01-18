@@ -29,6 +29,7 @@ Rails.application.routes.draw do
 				put 'users/edit', 						to: 'users#edit'
 				post 'users/forgot', 					to: 'users#forgot'
 				post 'users/reset', 					to: 'users#reset'
+				post 'users/verify', 					to: 'users#verify'
 				get 'provinces/all', 					to: 'indonesias#provinces'
 				get 'cities/:province_id', 		to: 'indonesias#cities'
 				get 'districts/:city_id', 		to: 'indonesias#districts'
