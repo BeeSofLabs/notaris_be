@@ -155,6 +155,18 @@ class Order < ApplicationRecord
     end
   end
 
+  def self.to_csv(orders)
+    attributes = %w{ agunan_pokok angsuran_bunga doc_filename doc_token_privy document_type has_creditor_signed has_debtor_signed has_pa_signed html_content is_deleted jangka_waktu no_order no_perjanjian no_request_order plafond status tgl_akad tgl_jatuh_tempo total_price url_document_privy valid_expired_datetime created_at updated_at collateral_owner_id creditor_id debtor_id notary_id user_id}
+
+    CSV.generate(headers: true) do |csv|
+      csv << attributes
+
+      orders.each do |order|
+        csv << attributes.map{ |attr| order.send(attr) }
+      end
+    end
+  end
+
 	private
 		def assign_default_value
 			self.status = "draft"
